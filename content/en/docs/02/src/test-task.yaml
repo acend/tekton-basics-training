@@ -1,0 +1,19 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: test
+spec:
+  params:
+    - default: Raffael
+      name: name
+      type: string
+  results:
+    - description: Greeting message
+      name: greet
+  steps:
+    - image: bash:latest
+      name: clone
+      resources: {}
+      script: |
+        #!/usr/bin/env bash
+        printf "Hello, %s" "$(params.name)" > "$(results.greet.path)"
