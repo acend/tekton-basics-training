@@ -1,0 +1,22 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: test
+spec:
+  tasks:
+    - name: inline
+      taskSpec:
+        params:
+        - default: Chuck Norris
+          name: name
+          type: string
+        steps:
+        - image: bash:latest
+          name: echo
+          resources: {}
+          script: |
+            #!/usr/bin/env bash
+            printf "Hello, %s" "$(params.name)"
+    - name: testref
+      taskRef:
+        name: test

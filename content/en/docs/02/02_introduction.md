@@ -7,7 +7,7 @@ sectionnumber: 2
 Tekton brings the CI/CD world closer to the cloud native ecosystem. It is a powerful continuous integration and continuous delivery engine integrated in your well-known Kubernetes stack! In this chapter, we will get to know the building blocks on which Tekton is built upon.
 
 
-## Task {{% param sectionnumber %}}.1: Basic Concepts
+## {{% param sectionnumber %}}.1: Basic Concepts
 
 Tekton is based on already familiar concepts. All the elements needed for building efficient pipelines are available as custom resource definitions [CRD](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/)) in your Kubernetes cluster. Let's take a look at them and familiarize ourselves with their terminologies:
 

@@ -1,0 +1,16 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: test
+spec:
+  params:
+  - default: Chuck Norris
+    name: name
+    type: string
+  steps:
+  - image: bash:latest
+    name: echo
+    resources: {}
+    script: |
+      #!/usr/bin/env bash
+      printf "Hello, %s" "$(params.name)"

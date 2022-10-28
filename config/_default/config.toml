@@ -72,14 +72,13 @@ github_repo = "https://github.com/acend/tekton-basics-training"
 github_branch = "main"
 
 
-enabledModule = "base"
+enabledModule = "base openshift"
 tektonUrl = "tekton.labapp.acend.ch"
 giteaUrl = "gitea.labapp.acend.ch"
 appDomain= "labapp.acend.ch"
 
 cliToolName = "kubectl"
 distroName = "Rancher"
-argoInfraNamespace = "tekton"
 
 # Enable Lunr.js offline search
 offlineSearch = true
