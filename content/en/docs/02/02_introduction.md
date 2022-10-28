@@ -20,7 +20,7 @@ Pipelines and tasks should be generic and must never define possible variables -
 
 [Workspaces](https://redhat-scholars.github.io/tekton-tutorial/tekton-tutorial/workspaces.html) are used to share the data between Tasks and Steps.
 
-![Static Pipeline Definition](../concept-tasks-pipelines.png.png)
+![Static Pipeline Definition](../concept-tasks-pipelines.png)
 *Static definition of a Pipeline*
 
 For each task, a pod will be allocated and for each step inside this task, a container will be used.
