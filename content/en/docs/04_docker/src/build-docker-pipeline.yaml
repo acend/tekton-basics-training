@@ -1,0 +1,53 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: build-go-2
+spec:
+  params:
+  - default: https://github.com/acend/awesome-apps
+    description: Repository to checkout
+    name: repository
+    type: string
+  - default: go
+    description: Application subpath in repository
+    name: application
+    type: string
+  - default: ttl.sh/<uuid>:1h # TODO: Replace me
+    description: The image including the registry and tag
+    name: image
+    type: string
+  - default: "."
+    name: context
+    description: Docker context to build
+    type: string
+  - default: Dockerfile
+    name: dockerfile
+    description: Location of the dockerfile
+    type: string
+  tasks:
+  - name: git-clone
+    params:
+    - name: url
+      value: $(params.repository)
+    taskRef:
+      kind: ClusterTask
+      name: git-clone
+    workspaces:
+    - name: output
+      workspace: ws-1
+  - name: buildah
+    params:
+    - name: CONTEXT
+      value: $(params.context)
+    - name: DOCKERFILE
+      value: $(params.dockerfile)
+    - name: IMAGE
+      value: $(params.image)
+    taskRef:
+      kind: ClusterTask
+      name: buildah
+    workspaces:
+    - name: source
+      workspace: ws-1
+  workspaces:
+  - name: ws-1
