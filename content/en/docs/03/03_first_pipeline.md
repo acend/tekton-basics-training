@@ -53,7 +53,7 @@ oc -n $USER create -f test-task.yaml
 kubectl -n $USER create -f test-task.yaml
 ```
 
-{{% /onlyWhen %}}
+{{% /onlyWhenNot %}}
 
 Your task resource should be created and ready in your namespace! Verify the creation of the resource:
 
@@ -70,7 +70,7 @@ oc -n $USER get tasks
 kubectl -n $USER get tasks
 ```
 
-{{% /onlyWhen %}}
+{{% /onlyWhenNot %}}
 
 After creating and verifying the resource you should be all set to start your first task. To start the task we utilize the `tkn` Tekton CLI:
 
@@ -107,7 +107,7 @@ oc -n $USER delete task test
 kubectl -n $USER delete task test
 ```
 
-{{% /onlyWhen %}}
+{{% /onlyWhenNot %}}
 
 
 ## Task {{% param sectionnumber %}}.2: Utilizing parameters
@@ -300,4 +300,4 @@ kubectl -n $USER delete pipeline test
 kubectl -n $USER delete task test
 ```
 
-{{% /onlyWhen %}}
+{{% /onlyWhenNot %}}
