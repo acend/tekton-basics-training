@@ -277,7 +277,8 @@ spec:
 ```
 
 {{% /details %}}
-TODO: Text
+
+If you want to verify your approach, or simply need some additional hints, check the example solution:
 
 {{% details title="Solution Pipeline" %}}
 
@@ -310,3 +311,16 @@ spec:
 ```
 
 {{% /details %}}
+
+When you have created your **PipelineRun** resource and created it in your namespace, you will instantly see that a pipeline will be running. Check the logs and verify if your image was built correctly!
+
+
+## Task {{% param sectionnumber %}}.8: Cleanup
+
+Delete all the resources created during this capter in your namespace.
+
+```bash
+
+{{% onlyWhen openshift %}}oc{{% /onlyWhen %}}{{% onlyWhenNot openshift %}}kubectl{{% /onlyWhenNot %}} delete pipeline build-go
+
+```
