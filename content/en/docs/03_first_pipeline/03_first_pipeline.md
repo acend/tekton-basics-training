@@ -40,37 +40,15 @@ spec:
 
 Create the test Task in your namespace:
 
-{{% onlyWhen openshift %}}
-
 ```bash
-oc -n $USER create -f test-task.yaml
+{{% onlyWhen openshift %}}oc{{% /onlyWhen %}}{{% onlyWhenNot openshift %}}kubectl{{% /onlyWhenNot %}} -n $USER create -f test-task.yaml
 ```
-
-{{% /onlyWhen %}}
-{{% onlyWhenNot openshift %}}
-
-```bash
-kubectl -n $USER create -f test-task.yaml
-```
-
-{{% /onlyWhenNot %}}
 
 Your task resource should be created and ready in your namespace! Verify the creation of the resource:
 
-{{% onlyWhen openshift %}}
-
 ```bash
-oc -n $USER get tasks
+{{% onlyWhen openshift %}}oc{{% /onlyWhen %}}{{% onlyWhenNot openshift %}}kubectl{{% /onlyWhenNot %}} -n $USER get tasks
 ```
-
-{{% /onlyWhen %}}
-{{% onlyWhenNot openshift %}}
-
-```bash
-kubectl -n $USER get tasks
-```
-
-{{% /onlyWhenNot %}}
 
 After creating and verifying the resource you should be all set to start your first task. To start the task we utilize the `tkn` Tekton CLI:
 
@@ -94,20 +72,9 @@ You should see that the tasks greets us, just like we declared it to.
 
 Remove your created task again:
 
-{{% onlyWhen openshift %}}
-
 ```bash
-oc -n $USER delete task test
+{{% onlyWhen openshift %}}oc{{% /onlyWhen %}}{{% onlyWhenNot openshift %}}kubectl{{% /onlyWhenNot %}} -n $USER delete task test
 ```
-
-{{% /onlyWhen %}}
-{{% onlyWhenNot openshift %}}
-
-```bash
-kubectl -n $USER delete task test
-```
-
-{{% /onlyWhenNot %}}
 
 
 ## Task {{% param sectionnumber %}}.2: Utilizing parameters
@@ -285,19 +252,8 @@ tkn pipelinerun logs $pipelinerun -f -n $USER
 
 Clean up all `Task` and `Pipeline` resources created in this chapter:
 
-{{% onlyWhen openshift %}}
 
 ```bash
-oc -n $USER delete pipeline test
-oc -n $USER delete task test
+{{% onlyWhen openshift %}}oc{{% /onlyWhen %}}{{% onlyWhenNot openshift %}}kubectl{{% /onlyWhenNot %}} -n $USER delete pipeline test
+{{% onlyWhen openshift %}}oc{{% /onlyWhen %}}{{% onlyWhenNot openshift %}}kubectl{{% /onlyWhenNot %}} -n $USER delete task test
 ```
-
-{{% /onlyWhen %}}
-{{% onlyWhenNot openshift %}}
-
-```bash
-kubectl -n $USER delete pipeline test
-kubectl -n $USER delete task test
-```
-
-{{% /onlyWhenNot %}}

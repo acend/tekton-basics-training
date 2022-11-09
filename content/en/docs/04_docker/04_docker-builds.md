@@ -32,22 +32,10 @@ Your task as the new CI officer is to implement the first step of your pipeline 
 
 Check if the task is already defined and available in either the cluster or your namespace:
 
-{{% onlyWhen openshift %}}
-
 ```bash
-oc -n $USER get task git-clone
-oc -n $USER get clustertask git-clone
+{{% onlyWhen openshift %}}oc{{% /onlyWhen %}}{{% onlyWhenNot openshift %}}kubectl{{% /onlyWhenNot %}} -n $USER get task git-clone
+{{% onlyWhen openshift %}}oc{{% /onlyWhen %}}{{% onlyWhenNot openshift %}}kubectl{{% /onlyWhenNot %}} -n $USER get clustertask git-clone
 ```
-
-{{% /onlyWhen %}}
-{{% onlyWhenNot openshift %}}
-
-```bash
-kubectl -n $USER get task git-clone
-kubectl -n $USER get clustertask git-clone
-```
-
-{{% /onlyWhenNot %}}
 
 {{% /details %}}
 
