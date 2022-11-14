@@ -209,3 +209,10 @@ In this section you are going to adopt a classic java build pipeline in Tekton. 
 * Deployment
   
 We integrate now two parts of pipelines in our scenario: integration and delivery!
+
+
+## Task {{% param sectionnumber %}}.3: Fire
+
+```bash
+curl -X POST -d '{ "repository": "https://github.com/acend/awesome-apps", "application": "java-quarkus", "image": "ttl.sh/$(uuidgen):1h", "context": "/workspace/source/java-quarkus", "dockerfile": "./Dockerfile" }' <trigger-host>
+```
