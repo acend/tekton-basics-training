@@ -1,0 +1,29 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: java-pr-
+spec:
+  params:
+  - name: repository
+    value: https://github.com/acend/awesome-apps
+  - name: application
+    value: java-quarkus
+  - name: image
+    value: ttl.sh/$(uuidgen):1h
+  - name: application
+    value: go
+  - name: context
+    value: /workspace/source/go/.
+  - name: dockerfile
+    value: ./Dockerfile
+  pipelineRef:
+    name: java-pipeline
+  workspaces:
+    - name: ws-1 # this workspace name must be declared in the Pipeline
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce # access mode may affect how you can use this volume in parallel tasks
+          resources:
+            requests:
+              storage: 1Gi

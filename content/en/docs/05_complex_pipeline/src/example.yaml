@@ -1,0 +1,144 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tekton-trigger
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: tekton-triggers-example-minimal
+rules:
+# Permissions for every EventListener deployment to function
+- apiGroups: ["triggers.tekton.dev"]
+  resources: ["eventlisteners", "triggerbindings", "triggertemplates"]
+  verbs: ["get"]
+- apiGroups: [""]
+  # secrets are only needed for Github/Gitlab interceptors, serviceaccounts only for per trigger authorization
+  resources: ["configmaps", "secrets", "serviceaccounts"]
+  verbs: ["get", "list", "watch"]
+# Permissions to create resources in associated TriggerTemplates
+- apiGroups: ["tekton.dev"]
+  resources: ["pipelineruns", "pipelineresources", "taskruns"]
+  verbs: ["get", "list", "watch", "patch", "delete", "create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: tekton-trigger
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: tekton-triggers-example-minimal
+subjects:
+- kind: ServiceAccount
+  name: tekton-trigger
+  namespace: pitc-rhe-tekton 
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: java-pipeline
+spec:
+  params:
+    - name: repository
+      description: Repository to checkout
+      default: https://github.com/acend/awesome-apps
+    - name: application
+      description: Application subpath in repository
+      default: java-quarkus
+  tasks:
+    - name: git-clone
+      params:
+      - name: url
+        value: $(params.repository)
+      workspaces:
+      - name: output
+        workspace: ws-1
+      taskRef:
+        name: git-clone
+        kind: ClusterTask
+  workspaces:
+  - name: ws-1
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: getting-started-triggertemplate
+  namespace: pitc-rhe-tekton
+spec:
+  params:
+    - name: repository
+      description: Repository to checkout
+      default: https://github.com/acend/awesome-apps
+    - name: application
+      description: Application subpath in repository
+      default: java-quarkus
+    - name: image
+      description: Image name
+      default: ttl.sh/$(uuidgen):1h
+    - name: context
+      description: Docker context
+      default: /workspace/source/go/.
+    - name: dockerfile
+      description: Dockerfile location
+      default: ./Dockerfile
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: java-pr-
+        namespace: pitc-rhe-tekton
+      spec:
+        params:
+        - name: repository
+          value: $(tt.params.repository)
+        - name: application
+          value: $(tt.params.application)
+        - name: image
+          value: $(tt.params.image)
+        - name: context
+          value: $(tt.params.context)
+        - name: dockerfile
+          value: $(tt.params.dockerfile)
+        pipelineRef:
+          name: java-pipeline
+        workspaces:
+          - name: ws-1 # this workspace name must be declared in the Pipeline
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                  - ReadWriteOnce # access mode may affect how you can use this volume in parallel tasks
+                resources:
+                  requests:
+                    storage: 1Gi
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: getting-started-pipelinebinding
+  namespace: pitc-rhe-tekton
+spec:
+  params:
+    - name: repository
+      value: $(body.repository)
+    - name: application
+      value: $(body.application)
+    - name: image
+      value: $(body.image)
+    - name: context
+      value: $(body.context)
+    - name: dockerfile
+      value: $(body.dockerfile)
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: getting-started-listener
+  namespace: pitc-rhe-tekton
+spec:
+  serviceAccountName: tekton-trigger
+  triggers:
+    - bindings:
+      - ref: getting-started-pipelinebinding
+      template:
+        ref: getting-started-triggertemplate
