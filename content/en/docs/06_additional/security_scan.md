@@ -44,9 +44,26 @@ spec:
         - "$(params.ARGS)"
 ```
 
+Lets create the task ressource first
+
+```bash
+oc apply -f task.yaml -n $USER
+```
+
 
 ## {{% param sectionnumber %}}.2: Security Scan Pipeline
 
+Create a new *Pipeline* ressource which reference the task from above (`trivy-scanner`)
+Add one parameter to the pipeline
+
+* `image`: Parameter which defines the image to be scanned by Trivy
+
+Then add two parameters to the `trivy-scanner` task.
+
+* `ARGS`: Parameter array for the Trivy scanner arguments. Use the argument `image` to configure Trivy for image scanning
+* `IMAGE_PATH`: Define which image name should be scanned. Reference the value from the pipeline param (`$(params.image)`)
+
+{{% details title="Solution" %}}
 ```yaml
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
@@ -56,7 +73,7 @@ spec:
   params:
     - name: image
       description: image to scan
-      default: java-quarkus
+      default: alpine
   tasks:
     - name: trivy-scanner
       params:
@@ -68,6 +85,13 @@ spec:
         name: trivy-scanner
         kind: Task
 ```
+
+Next create the pipeline ressource
+
+```bash
+oc apply -f pipeline.yaml -n $USER
+```
+{{% /details %}}
 
 
 ## Task {{% param sectionnumber %}}.2: Trigger pipeline with PipelineRun resource
@@ -95,7 +119,9 @@ spec:
 
 Check the PipelineRun log output with following command:
 
-`tkn pipelinerun logs trivy-scanner-run`
+```bash
+tkn pipelinerun logs trivy-scanner-run
+```
 
 You should see following output
 
