@@ -4,6 +4,7 @@ weight: 68
 sectionnumber: 6.8
 ---
 
+
 ## {{% param sectionnumber %}}.1: Security Scan Task
 
 In this short section we will show you how tom implement a security scan for your built image. For this we are going to use the Aquasecurity Trivy scanner. Trivy is a simple and comprehensive scanner for vulnerabilities in container images.
@@ -43,6 +44,7 @@ spec:
         - "$(params.ARGS)"
 ```
 
+
 ## {{% param sectionnumber %}}.2: Security Scan Pipeline
 
 ```yaml
@@ -66,6 +68,7 @@ spec:
         name: trivy-scanner
         kind: Task
 ```
+
 
 ## Task {{% param sectionnumber %}}.2: Trigger pipeline with PipelineRun resource
 
@@ -96,23 +99,22 @@ Check the PipelineRun log output with following command:
 
 You should see following output
 
-{{< highlight console >}}
+```bash
 Running trivy task with command below
 trivy image alpine
-2022-11-18T10:53:33.387Z	INFO	Need to update DB
-2022-11-18T10:53:33.387Z	INFO	DB Repository: ghcr.io/aquasecurity/trivy-db
-2022-11-18T10:53:33.387Z	INFO	Downloading DB...
-2022-11-18T10:53:35.932Z	INFO	Vulnerability scanning is enabled
-2022-11-18T10:53:35.932Z	INFO	Secret scanning is enabled
-2022-11-18T10:53:35.932Z	INFO	If your scanning is slow, please try '--security-checks vuln' to disable secret scanning
-2022-11-18T10:53:35.932Z	INFO	Please see also https://aquasecurity.github.io/trivy/v0.34/docs/secret/scanning/#recommendation for faster secret detection
-2022-11-18T10:53:37.577Z	INFO	Detected OS: alpine
-2022-11-18T10:53:37.577Z	INFO	Detecting Alpine vulnerabilities...
-2022-11-18T10:53:37.578Z	INFO	Number of language-specific files: 0
+2022-11-18T10:53:33.387Z  INFO  Need to update DB
+2022-11-18T10:53:33.387Z  INFO  DB Repository: ghcr.io/aquasecurity/trivy-db
+2022-11-18T10:53:33.387Z  INFO  Downloading DB...
+2022-11-18T10:53:35.932Z  INFO  Vulnerability scanning is enabled
+2022-11-18T10:53:35.932Z  INFO  Secret scanning is enabled
+2022-11-18T10:53:35.932Z  INFO  If your scanning is slow, please try '--security-checks vuln' to disable secret scanning
+2022-11-18T10:53:35.932Z  INFO  Please see also https://aquasecurity.github.io/trivy/v0.34/docs/secret/scanning/#recommendation for faster secret detection
+2022-11-18T10:53:37.577Z  INFO  Detected OS: alpine
+2022-11-18T10:53:37.577Z  INFO  Detecting Alpine vulnerabilities...
+2022-11-18T10:53:37.578Z  INFO  Number of language-specific files: 0
 
 alpine (alpine 3.16.3)
 ======================
 Total: 0 (UNKNOWN: 0, LOW: 0, MEDIUM: 0, HIGH: 0, CRITICAL: 0)
-{{< / highlight >}}
-
+```
 {{% /details %}}
