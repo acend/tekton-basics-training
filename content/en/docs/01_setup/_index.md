@@ -79,16 +79,16 @@ Operator version: v0.60.1
 ### Task {{% param sectionnumber %}}.1.3: Lab Setup
 
 
-Most of the labs will be done inside the {{% param distroName %}} project with your username. Verify that your oc tool is configured to point to the right project:
+Most of the labs will be done inside the {{% param distroName %}} project with your username. Create a new project and verify that your oc tool is configured to point to the right project:
 
 
 ```s
-oc project $USER
+oc new-project $USER
 ```
 
 
 ```
-Using project "<username>" on server "https://<theClusterAPIURL>".
+Now using project "<username>" on server "https://<theClusterAPIURL>".
 ```
 
 The returned project name should correspond to your username.
