@@ -28,10 +28,8 @@ The Web IDE Pod consists of the following tools:
 * kubectl
 * kustomize
 * helm
-* kubectx
-* kubens
+* argocd
 * tekton cli
-* odo
 
 The files in the home directory under `/home/project` are stored in a persistence volume, so please make sure to store all your persistence data in this directory.
 
@@ -51,25 +49,46 @@ mkdir tekton-training && cd tekton-training
 
 You can access Tekton via Web UI (URL and Credentials are provided by your teacher) or using the CLI. The Tekton CLI Tool is already installed on the web IDE.
 
+{{% onlyWhen openshift %}}
+
+* Open a seperate Browser Tab and login to the OpenShift [Webconsole]({{% param webConsoleURL %}}) using your `<username>` and `<password>`
+* Open the menu behind your username in the top right corner
+* Hit `Copy Login Command`
+* Display the Token and copy the command
+* Execute the command in your Webshell terminal.
+{{% /onlyWhen %}}
+
+Verify if the tekton CLI can access the cluster with the following command
+
 ```bash
-// TODO: Update
+tkn version
 ```
+
+which should result in something similar to
+
+```
+Client version: 0.26.1
+Pipeline version: v0.37.5
+Triggers version: v0.20.2
+Operator version: v0.60.1
+```
+
 {{% onlyWhen openshift %}}
 
 
 ### Task {{% param sectionnumber %}}.1.3: Lab Setup
 
 
-Most of the labs will be done inside the {{% param distroName %}} project with your username. Verify that your oc tool is configured to point to the right project:
+Most of the labs will be done inside the {{% param distroName %}} project with your username. Create a new project and verify that your oc tool is configured to point to the right project:
 
 
 ```s
-oc project
+oc new-project $USER
 ```
 
 
 ```
-Using project "<username>" on server "https://<theClusterAPIURL>".
+Now using project "<username>" on server "https://<theClusterAPIURL>".
 ```
 
 The returned project name should correspond to your username.
@@ -91,4 +110,61 @@ tkn --help
 
 You will see a list with the available commands and flags. If you prefer to browse the manual in the browser you'll find it in the [online documentation](https://tekton.dev/docs/cli/).
 
-TODO: Update
+```
+CLI for tekton pipelines
+
+Usage:
+tkn [flags]
+tkn [command]
+
+Available Commands:
+  bundle                Manage Tekton Bundles
+  chain                 Manage Chains
+  clustertask           Manage ClusterTasks
+  clustertriggerbinding Manage ClusterTriggerBindings
+  eventlistener         Manage EventListeners
+  hub                   Interact with tekton hub
+  pipeline              Manage pipelines
+  pipelinerun           Manage PipelineRuns
+  resource              Manage pipeline resources
+  task                  Manage Tasks
+  taskrun               Manage TaskRuns
+  triggerbinding        Manage TriggerBindings
+  triggertemplate       Manage TriggerTemplates
+
+Other Commands:
+  completion            Prints shell completion scripts
+  version               Prints version information
+
+Flags:
+  -h, --help   help for tkn
+
+Use "tkn [command] --help" for more information about a command.
+```
+
+
+### Task {{% param sectionnumber %}}.1: Autocompletion
+
+{{% alert title="Note" color="primary" %}}This step is only needed, when you're **not** working with the Web IDE we've provided. The autocompletion is already installed in the Web IDE{{% /alert %}}
+
+If you are using the Tekton CLI on Linux or Mac OS X you can enable the autocompletion feature. With autocompletion it's even easier to learn the commands, subcommands and their flags. Last but not least it improves the productivity while using Tekton.
+
+The autocompletion feature can be enabled for `bash`, `zsh` and `fish`.
+
+The following example enables autocompletion in the current `bash`:
+
+```bash
+source <(tkn completion bash)
+```
+
+After typing `tkn` you can autocomplete the commands and subcommands with a double tap the tabulator key. This works even for installed releases on the cluster: A double tab after `tkn task` prints out all sub commands for the task command.
+
+To install autocompletion permanently for `bash` you can use the following command:
+
+```bash
+echo "source <(tkn completion bash)" >> ~/.bashrc
+source ~/.bashrc
+```
+
+This appends the command `source <(tkn completion bash)` to the end of file `~/.bashrc` which will be sourced on launch of the `bash`.
+
