@@ -63,7 +63,7 @@ spec:
 apiVersion: triggers.tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
-  name: getting-started-triggertemplate
+  name: java-pipeline-triggertemplate
   namespace: pitc-rhe-tekton
 spec:
   params:
@@ -115,7 +115,7 @@ spec:
 apiVersion: triggers.tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
-  name: getting-started-pipelinebinding
+  name: java-pipeline-pipelinebinding
   namespace: pitc-rhe-tekton
 spec:
   params:
@@ -133,12 +133,12 @@ spec:
 apiVersion: triggers.tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: getting-started-listener
+  name: java-pipeline-listener
   namespace: pitc-rhe-tekton
 spec:
   serviceAccountName: tekton-trigger
   triggers:
     - bindings:
-      - ref: getting-started-pipelinebinding
+      - ref: java-pipeline-pipelinebinding
       template:
-        ref: getting-started-triggertemplate
+        ref: java-pipeline-triggertemplate
