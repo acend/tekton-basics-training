@@ -147,7 +147,7 @@ Use "tkn [command] --help" for more information about a command.
 
 {{% alert title="Note" color="primary" %}}This step is only needed, when you're **not** working with the Web IDE we've provided. The autocompletion is already installed in the Web IDE{{% /alert %}}
 
-If you are using the Tekton CLI on Linux or Mac OS X you can enable the autocompletion feature. With autocompletion it's even easier to learn the commands, subcommands and their flags. Last but not least it improves the productivity while using Helm.
+If you are using the Tekton CLI on Linux or Mac OS X you can enable the autocompletion feature. With autocompletion it's even easier to learn the commands, subcommands and their flags. Last but not least it improves the productivity while using Tekton.
 
 The autocompletion feature can be enabled for `bash`, `zsh` and `fish`.
 
