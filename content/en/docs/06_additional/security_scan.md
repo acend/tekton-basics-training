@@ -15,6 +15,8 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: trivy-scanner
+  labels:
+    ch.acend/lab: "tekton-basics"
 spec:
   description: >-
     Trivy image scanner
@@ -47,11 +49,11 @@ spec:
 Lets create the task ressource first
 
 ```bash
-oc apply -f task.yaml -n $USER
+{{% param cliToolName %}} apply -f task.yaml -n $USER
 ```
 
 
-## {{% param sectionnumber %}}.2: Security Scan Pipeline
+## {{% param sectionnumber %}}.2: Create Security Scan Pipeline
 
 Create a new *Pipeline* ressource which reference the task from above (`trivy-scanner`)
 Add one parameter to the pipeline
@@ -69,6 +71,8 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: trivy-scanner-pipeline
+  labels:
+    ch.acend/lab: "tekton-basics"
 spec:
   params:
     - name: image
@@ -89,7 +93,7 @@ spec:
 Next create the pipeline ressource
 
 ```bash
-oc apply -f pipeline.yaml -n $USER
+{{% param cliToolName %}} apply -f pipeline.yaml -n $USER
 ```
 {{% /details %}}
 
@@ -109,12 +113,19 @@ apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
   name: trivy-scanner-run
+  labels:
+    ch.acend/lab: "tekton-basics"
 spec:
   pipelineRef:
     name: trivy-scanner-pipeline
   params:
   - name: image
     value: "alpine"
+```
+
+Create the *PipelineRun* ressource
+```bash
+{{% param cliToolName %}} apply -f pipeline.yaml -n $USER
 ```
 
 Check the PipelineRun log output with following command:
@@ -144,3 +155,14 @@ alpine (alpine 3.16.3)
 Total: 0 (UNKNOWN: 0, LOW: 0, MEDIUM: 0, HIGH: 0, CRITICAL: 0)
 ```
 {{% /details %}}
+
+
+## Task {{% param sectionnumber %}}.3: Cleanup
+
+Clean up all `Task` and `Pipeline` resources created in this chapter:
+
+
+```bash
+{{% param cliToolName %}} -n $USER delete pipeline test
+{{% param cliToolName %}} -n $USER delete task test
+```
