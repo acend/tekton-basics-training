@@ -76,6 +76,7 @@ enabledModule = "base openshift"
 tektonUrl = "tekton.labapp.acend.ch"
 giteaUrl = "gitea.labapp.acend.ch"
 appDomain= "labapp.acend.ch"
+webConsoleURL = "null"
 
 cliToolName = "kubectl"
 distroName = "Rancher"
