@@ -9,42 +9,8 @@ sectionnumber: 6.8
 
 In this short section we will show you how tom implement a security scan for your built image. For this we are going to use the Aquasecurity Trivy scanner. Trivy is a simple and comprehensive scanner for vulnerabilities in container images.
 
+{{< highlight yaml >}}{{< readfile file="src/security/task.yaml" >}}{{< /highlight >}}
 
-```yaml
-apiVersion: tekton.dev/v1beta1
-kind: Task
-metadata:
-  name: trivy-scanner
-  labels:
-    ch.acend/lab: "tekton-basics"
-spec:
-  description: >-
-    Trivy image scanner
-  workspaces:
-    - name: manifest-dir
-  params:
-    - name: ARGS
-      description: The Arguments to be passed to Trivy command.
-      type: array
-    - name: TRIVY_IMAGE
-      default: docker.io/aquasec/trivy:latest
-      description: Trivy scanner image to be used
-    - name: IMAGE_PATH
-      description: Image or Path to be scanned by trivy.
-      type: string
-  steps:
-    - name: trivy-scan
-      image: $(params.TRIVY_IMAGE)
-      workingDir: $(workspaces.manifest-dir.path)
-      script: |
-        #!/usr/bin/env sh
-          cmd="trivy $* $(params.IMAGE_PATH)"
-          echo "Running trivy task with command below"
-          echo "$cmd"
-          eval "$cmd"
-      args:
-        - "$(params.ARGS)"
-```
 
 Lets create the task ressource first
 
@@ -66,29 +32,7 @@ Then add two parameters to the `trivy-scanner` task.
 * `IMAGE_PATH`: Define which image name should be scanned. Reference the value from the pipeline param (`$(params.image)`)
 
 {{% details title="Solution" %}}
-```yaml
-apiVersion: tekton.dev/v1beta1
-kind: Pipeline
-metadata:
-  name: trivy-scanner-pipeline
-  labels:
-    ch.acend/lab: "tekton-basics"
-spec:
-  params:
-    - name: image
-      description: image to scan
-      default: alpine
-  tasks:
-    - name: trivy-scanner
-      params:
-      - name: ARGS
-        value: ["image"]
-      - name: IMAGE_PATH
-        value:  $(params.image)
-      taskRef:
-        name: trivy-scanner
-        kind: Task
-```
+{{< highlight yaml >}}{{< readfile file="src/security/pipeline.yaml" >}}{{< /highlight >}}
 
 Next create the pipeline ressource
 
@@ -108,20 +52,7 @@ Create a new file `security-scan-pr.yaml` and define the **PipelineRun** to have
 
 {{% details title="Solution" %}}
 
-```yaml
-apiVersion: tekton.dev/v1beta1
-kind: PipelineRun
-metadata:
-  name: trivy-scanner-run
-  labels:
-    ch.acend/lab: "tekton-basics"
-spec:
-  pipelineRef:
-    name: trivy-scanner-pipeline
-  params:
-  - name: image
-    value: "alpine"
-```
+{{< highlight yaml >}}{{< readfile file="src/security/pipeline-run.yaml" >}}{{< /highlight >}}
 
 Create the *PipelineRun* ressource
 ```bash

@@ -1,0 +1,12 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: trivy-scanner-run
+  labels:
+    ch.acend/lab: "tekton-basics"
+spec:
+  pipelineRef:
+    name: trivy-scanner-pipeline
+  params:
+  - name: image
+    value: "alpine"

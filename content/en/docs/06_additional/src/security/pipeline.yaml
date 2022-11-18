@@ -1,0 +1,21 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: trivy-scanner-pipeline
+  labels:
+    ch.acend/lab: "tekton-basics"
+spec:
+  params:
+    - name: image
+      description: image to scan
+      default: alpine
+  tasks:
+    - name: trivy-scanner
+      params:
+      - name: ARGS
+        value: ["image"]
+      - name: IMAGE_PATH
+        value:  $(params.image)
+      taskRef:
+        name: trivy-scanner
+        kind: Task
