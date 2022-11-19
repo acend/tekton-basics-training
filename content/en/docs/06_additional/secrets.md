@@ -5,7 +5,7 @@ sectionnumber: 6.3
 ---
 
 
-## {{% param sectionnumber %}}.1: Task with Secrets
+## {{% param sectionnumber %}}.1: A Task with a Secret
 
 In lab 3 we learned how to build a parametrized *Task*. In this first section of this lab we are going to show you how to use Kubernetes native secrets for your tasks.
 
@@ -13,7 +13,9 @@ In lab 3 we learned how to build a parametrized *Task*. In this first section of
 {{< highlight yaml >}}{{< readfile file="../03_first_pipeline/src/test-parameterized-task.yaml" >}}{{< /highlight >}}
 
 
-{{< highlight yaml >}}{{< readfile file="src/secrets/task.yaml" >}}{{< /highlight >}}
+```yaml
+{{< readfile file="src/secrets/task.yaml" >}}
+```
 
 
 ```bash
