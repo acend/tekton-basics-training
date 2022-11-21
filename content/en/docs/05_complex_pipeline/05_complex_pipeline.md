@@ -154,7 +154,7 @@ Create a **EventListener** called *java-pipeline-listener* resource binding a **
 After you have created the **EventListener** you should see that there was already a service created for you.
 
 ```yaml
-{{% param cliTool %}} get svc
+{{% param cliToolName %}} get svc
 ```
 
 This should list the service `el-java-pipeline-listener` created for you in your namespace.
