@@ -1,0 +1,6 @@
+[params]
+enabledModule = "base openshift"
+distroName = "OpenShift"
+cliToolName = "oc"
+appDomain = "training.openshift.ch"
+webConsoleURL = "https://console.training.openshift.ch/"
