@@ -1,1 +1,0 @@
-curl -X POST -d '{ "repository": "https://github.com/acend/awesome-apps", "application": "java-quarkus", "image": "ttl.sh/9f1f7c01-b0dd-457f-a622-235af7cee112:1h", "context": "/workspace/source/java-quarkus", "dockerfile": "./Dockerfile" }' trigger-tekton.ocp-staging.cloudscale.puzzle.ch
