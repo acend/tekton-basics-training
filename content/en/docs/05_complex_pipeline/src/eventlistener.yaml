@@ -1,0 +1,13 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  labels:
+    ch.acend/lab: "tekton-basics"
+  name: java-pipeline-listener
+spec:
+  serviceAccountName: tekton-trigger
+  triggers:
+    - bindings:
+      - ref: java-pipeline-pipelinebinding
+      template:
+        ref: java-pipeline-triggertemplate

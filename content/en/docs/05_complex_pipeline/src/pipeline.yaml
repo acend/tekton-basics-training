@@ -1,0 +1,27 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  labels:
+    ch.acend/lab: "tekton-basics"
+  name: java-pipeline
+spec:
+  params:
+    - name: repository
+      description: Repository to checkout
+      default: https://github.com/acend/awesome-apps
+    - name: application
+      description: Application subpath in repository
+      default: java-quarkus
+  tasks:
+    - name: git-clone
+      params:
+      - name: url
+        value: $(params.repository)
+      workspaces:
+      - name: output
+        workspace: ws-1
+      taskRef:
+        name: git-clone
+        kind: ClusterTask
+  workspaces:
+  - name: ws-1

@@ -1,0 +1,53 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  labels:
+    ch.acend/lab: "tekton-basics"
+  name: java-pipeline-triggertemplate
+spec:
+  params:
+    - name: repository
+      description: Repository to checkout
+      default: https://github.com/acend/awesome-apps
+    - name: application
+      description: Application subpath in repository
+      default: java-quarkus
+    - name: image
+      description: Image name
+      default: ttl.sh/$(uuidgen):1h
+    - name: context
+      description: Docker context
+      default: /workspace/source/go/.
+    - name: dockerfile
+      description: Dockerfile location
+      default: ./Dockerfile
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: java-pr-
+        labels:
+          ch.acend/lab: "tekton-basics"
+      spec:
+        params:
+        - name: repository
+          value: $(tt.params.repository)
+        - name: application
+          value: $(tt.params.application)
+        - name: image
+          value: $(tt.params.image)
+        - name: context
+          value: $(tt.params.context)
+        - name: dockerfile
+          value: $(tt.params.dockerfile)
+        pipelineRef:
+          name: java-pipeline
+        workspaces:
+          - name: ws-1 # this workspace name must be declared in the Pipeline
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                  - ReadWriteOnce # access mode may affect how you can use this volume in parallel tasks
+                resources:
+                  requests:
+                    storage: 1Gi
