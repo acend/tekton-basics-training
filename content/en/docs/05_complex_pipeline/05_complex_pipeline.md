@@ -114,6 +114,8 @@ Custom resource:
 apiVersion: triggers.tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
+  labels:
+    ch.acend/lab: "tekton-basics"
   name: pipeline-binding
 spec:
   params:
@@ -126,86 +128,90 @@ spec:
 ```
 
 
-## Task {{% param sectionnumber %}}.X: Create the pipeline
+## Task {{% param sectionnumber %}}.2: Create the pipeline
 
 Create a *Pipeline* resource `java-pipeline` with a single step to checkout the [awesome-apps](https://github.com/acend/awesome-apps) repository. We can again reuse the already predefined *Task* **git-clone**. Try to parameterize as much as possible already, create parameters for the repository's URL and the corresponding subfolder (this time we will build the application in the `java-quarkus` subfolder).
 
 {{% details title="Solution Pipeline" %}}
 
-```yaml
-apiVersion: tekton.dev/v1beta1
-kind: Pipeline
-metadata:
-  name: java-pipeline
-spec:
-  params:
-    - name: repository
-      description: Repository to checkout
-      default: https://github.com/acend/awesome-apps
-    - name: application
-      description: Application subpath in repository
-      default: java-quarkus
-  tasks:
-    - name: git-clone
-      params:
-      - name: url
-        value: $(params.repository)
-      taskRef:
-        name: git-clone
-        kind: ClusterTask
-```
+{{< highlight yaml >}}{{< readfile file="src/pipeline.yaml" >}}{{< /highlight >}}
 
 {{% /details %}}
 
-After creating the pipeline, create a *PipelineRun* object similar to the one created in the previous chapter.
 
-{{% details title="Solution PipelineRun" %}}
+## Task {{% param sectionnumber %}}.3: Define Trigger and Bindings
 
-```yaml
-apiVersion: tekton.dev/v1beta1
-kind: PipelineRun
-metadata:
-  generateName: java-pr-
-spec:
-  params:
-  - name: repository
-    value: https://github.com/acend/awesome-apps
-  - name: application
-    value: java-quarkus
-  - name: image
-    value: ttl.sh/$(uuidgen):1h
-  - name: application
-    value: go
-  - name: context
-    value: /workspace/source/go/.
-  - name: dockerfile
-    value: ./Dockerfile
-  pipelineRef:
-    name: java-pipeline
-  workspaces:
-    - name: ws-1 # this workspace name must be declared in the Pipeline
-      volumeClaimTemplate:
-        spec:
-          accessModes:
-            - ReadWriteOnce # access mode may affect how you can use this volume in parallel tasks
-          resources:
-            requests:
-              storage: 1Gi
-```
+The entire functionality of CI/CD automation comes from reacting to certain events. As a day to day example let's imagine we created a webhook from Github or any alternative to trigger our pipeline.
+
+Create a **EventListener** called *java-pipeline-listener* resource binding a **TriggerBinding** *java-pipeline-pipelinebinding* and defining the **TriggerTemplate** *java-pipeline-triggertemplate* you are going to create.
+
+{{% details title="Solution EventListener" %}}
+
+{{< highlight yaml >}}{{< readfile file="src/eventlistener.yaml" >}}{{< /highlight >}}
 
 {{% /details %}}
 
-If you have your *Pipeline* and *PipelineRun* resources created on the cluster, check the logs of the *PipelineRun* to verify that the repository was cloned successfully!
+After you have created the **EventListener** you should see that there was already a service created for you.
+
+```yaml
+{{% param cliToolName %}} get svc
+```
+
+This should list the service `el-java-pipeline-listener` created for you in your namespace.
+
+If you take a closer look at the object, you can see there is a **ServiceAccount** *tekton-triggered* defined in the EventListener above. Of course the cluster has to react to certain event. To do that it needs to observe and even create some resources. For example the **PipelineRun** created from the event.
+
+We have a minimialistic ServiceAccount with Role and RoleBinding for you to enable you to cover all the default use cases:
+
+{{< highlight yaml >}}{{< readfile file="src/sa.yaml" >}}{{< /highlight >}}
+
+After creating the needed ServiceAccounts with it's Role and RoleBinding, we are going to take a look at the **TriggerBinding**. Create the **TriggerBinding** *java-pipeline-pipelinebinding* binding the REST body's fields `repository`, `application`, `context` and `dockerfile` to the trigger. An example incoming HTTP request to trigger your Pipeline could look like this:
+
+```json
+{ 
+  "repository": "https://github.com/acend/awesome-apps", 
+  "application": "java-quarkus", 
+  "image": "ttl.sh/$(uuidgen):1h", 
+  "context": "/workspace/source/java-quarkus", 
+  "dockerfile": "./Dockerfile" 
+}
+```
+
+If you don't remember how the **TriggerBinding** should look like, take a look at section {{% param sectionnumber %}}.1.3.
+
+{{% details title="Solution TriggerBinding" %}}
+
+{{< highlight yaml >}}{{< readfile file="src/triggerbinding.yaml" >}}{{< /highlight >}}
+
+{{% /details %}}
+
+At last, create the **TriggerTemplate** bringing it all together to trigger the **PipelineRun** defined above!
+
+{{% details title="Solution TriggerTemplate" %}}
+
+{{< highlight yaml >}}{{< readfile file="src/triggertemplate.yaml" >}}{{< /highlight >}}
+
+{{% /details %}}
 
 
-## Task {{% param sectionnumber %}}.2: Classic Java
+## Task {{% param sectionnumber %}}.4: Fire
 
-In this section you are going to adopt a classic java build pipeline in Tekton. It should consist of the following stages:
+Expose the service created by the **EventListener** and fire a HTTP request against the endpoint created!
 
-* Checkout
-* Test
-* Package
-* Container build
-* Deployment
-  
-We integrate now two parts of pipelines in our scenario: integration and delivery!
+```bash
+{{% param cliToolName %}} -n $USER expose svc el-java-pipeline-listener --hostname='trigger-$USER.labapp.acend.ch'
+```
+
+```bash
+curl -X POST -d '{ "repository": "https://github.com/acend/awesome-apps", "application": "java-quarkus", "image": "ttl.sh/$(uuidgen):1h", "context": "/workspace/source/java-quarkus", "dockerfile": "./Dockerfile" }' trigger-$USER.labapp.acend.ch
+```
+
+
+## Task {{% param sectionnumber %}}.5: Cleanup
+
+Remove all the resources created in this lab again:
+
+```bash
+{{% param cliToolName %}} -n $USER delete pipeline,eventlistener,serviceaccount,role,rolebinding,triggerbinding,triggertemplate --selector='ch.acend/lab="tekton-basics"'
+
+```

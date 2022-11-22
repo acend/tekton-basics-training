@@ -1,0 +1,33 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: trivy-scanner
+  labels:
+    ch.acend/lab: "tekton-basics"
+spec:
+  description: >-
+    Trivy image scanner
+  workspaces:
+    - name: manifest-dir
+  params:
+    - name: ARGS
+      description: The Arguments to be passed to Trivy command.
+      type: array
+    - name: TRIVY_IMAGE
+      default: docker.io/aquasec/trivy:latest
+      description: Trivy scanner image to be used
+    - name: IMAGE_PATH
+      description: Image or Path to be scanned by trivy.
+      type: string
+  steps:
+    - name: trivy-scan
+      image: $(params.TRIVY_IMAGE)
+      workingDir: $(workspaces.manifest-dir.path)
+      script: |
+        #!/usr/bin/env sh
+          cmd="trivy $* $(params.IMAGE_PATH)"
+          echo "Running trivy task with command below"
+          echo "$cmd"
+          eval "$cmd"
+      args:
+        - "$(params.ARGS)"
