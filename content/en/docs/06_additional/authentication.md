@@ -1,7 +1,7 @@
 ---
-title: "6.4 Authentication"
-weight: 64
-sectionnumber: 6.4
+title: "6.3 Authentication"
+weight: 63
+sectionnumber: 6.3
 ---
 
 ## {{% param sectionnumber %}}.1: Authentication concepts
@@ -62,21 +62,21 @@ stringData:
 ```
 
 
-## Example {{% param sectionnumber %}}.2: How to authenticate to Git with SSH
+## Example {{% param sectionnumber %}}.2: Configure SSH authentication for Git
 
 A common use case is authentication in Git with an private shh key. In this example we are going to create a SSH keypair and configure our Gitea account to allow cloning private repositories with this particular key.
 
 First create a new SSH keypair with following command:
 
 ```bash
-mkdir ~/.ssh && ssh-keygen -t rsa -C "$USER" -f "$HOME/.ssh/id_rsa" -P "" -q
+mkdir ~/.ssh && ssh-keygen -t ed25519 -C "$USER" -f "$HOME/.ssh/id_ed25519" -P "" -q
 ```
 
 Next create a Kubernetes secret which contains our private shh key and annotate the secret.
 
 ```bash
-{{% param cliToolName %}} create secret generic git-ssh-key --from-file=ssh-privatekey=$HOME/.ssh/id_rsa --type=kubernetes.io/ssh-auth -n $USER
-{{% param cliToolName %}} annotate secrets git-ssh-key tekton.dev/git-0={{% param giteaUrl %}} -n $USER
+{{% param cliToolName %}} create secret generic git-ssh-key --from-file=ssh-privatekey=$HOME/.ssh/id_ed25519 --type=kubernetes.io/ssh-auth -n $USER
+{{% param cliToolName %}} annotate secrets git-ssh-key tekton.dev/git-0=ssh.{{% param giteaUrl %}}:2222 -n $USER
 ```
 
 Afterwards open Gitea in your browser and add your public key to your personal account. For this, copy the public key which we created before:
@@ -84,7 +84,7 @@ Afterwards open Gitea in your browser and add your public key to your personal a
 Display and copy the public key with following command:
 
 ```bash
-cat "$HOME/.ssh/id_rsa.pub"
+cat "$HOME/.ssh/id_ed25519.pub"
 ```
 
 Open Gitea (https://{{% param giteaUrl %}}) in your browser, log in with your credentials, then click on your profile in the top right corner and navigate to `Settings` and click on `SHH-/PGP Keys` in the menu bar.
@@ -93,3 +93,32 @@ Now add a new key with `Add Key`. Set a name for the key and paste your public k
 ![Add SSH Key in Gitea](../ssh.gif)
 
 Now your Gitea account is configured to work with your new created SSH key.
+
+The last thing we need is to link our Kubernetes secret to the pipelines Service Account.
+Enter following command to add the `git-ssh-key` secret to the `pipeline` service account.
+
+```bash
+{{% param cliToolName %}}  patch serviceaccount pipeline -p '{"secrets": [{"name": "git-ssh-key"}]}'
+```
+
+
+## Example {{% param sectionnumber %}}.2: Clone Git repository with SSH in Pipeline
+
+Now we have configured the authentication for our Git repository. Let's build a pipeline which uses the private key authentication to clone the repository.
+
+First create a new file for the pipeline `pipeline.yaml` with a simple Git clone task.
+{{< highlight yaml >}}{{< readfile file="src/authentication/pipeline.yaml" >}}{{< /highlight >}}
+
+
+```bash
+{{% param cliToolName %}} apply -f pipeline.yaml
+```
+
+
+Next create the file for the pipeline run `pipelinerun.yaml`.
+{{< highlight yaml >}}{{< readfile file="src/authentication/pipelinerun.yaml" >}}{{< /highlight >}}
+
+
+```bash
+{{% param cliToolName %}} create -f pipelinerun.yaml
+```

@@ -1,0 +1,30 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: test-when
+spec:
+  tasks:
+    - name: inline
+      taskSpec:
+        params:
+        - default: Chuck Norris
+          name: name
+          type: string
+        steps:
+        - image: bash:latest
+          name: echo
+          when:
+          - input: "$(params.name)"
+            operator: notin
+            values: ["Captain Awesome", "Captain Obvious"]
+          resources: {}
+          script: |
+            #!/usr/bin/env bash
+            printf "Hello, %s" "$(params.name)"
+    - name: testref
+      taskRef:
+        name: test
+      when:
+      - input: "$(params.name)"
+        operator: in
+        values: ["Chuck Norris"]
