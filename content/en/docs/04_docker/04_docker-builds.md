@@ -282,10 +282,8 @@ spec:
   params:
   - name: image
     value: ttl.sh/<uuid>:1h # TODO: Replace me
-  - name: application
-    value: go
   - name: context
-    value: /workspace/source/go/.
+    value: ./go/
   - name: dockerfile
     value: ./Dockerfile
   pipelineRef:
