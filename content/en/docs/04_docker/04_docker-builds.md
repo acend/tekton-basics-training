@@ -319,7 +319,5 @@ and choose the last run.
 Delete all the resources created during this chapter in your namespace.
 
 ```bash
-
 {{% param cliToolName %}} --namespace $USER delete pipeline build-go
-
 ```
