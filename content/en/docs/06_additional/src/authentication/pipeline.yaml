@@ -1,15 +1,12 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: private-build-go
+  name: build-go
 spec:
   params:
     - name: repository
       description: Repository to checkout
-      default: ssh://gitea@gitea.training.openshift.ch:2022/user5/awesome-apps.git
-    - name: application
-      description: Application subpath in repository
-      default: go
+      default: ssh://1000820005@ssh.gitea.training.openshift.ch/user5555/awesome-apps.git
   workspaces:
   - name: ws-1
   tasks:
@@ -22,4 +19,3 @@ spec:
         value: $(params.repository)
       taskRef:
         name: git-clone
-        kind: ClusterTask

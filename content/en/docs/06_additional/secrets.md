@@ -1,7 +1,7 @@
 ---
-title: "6.3 Secrets"
-weight: 63
-sectionnumber: 6.3
+title: "6.4 Secrets"
+weight: 64
+sectionnumber: 6.4
 ---
 
 

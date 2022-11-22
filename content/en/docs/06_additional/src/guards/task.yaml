@@ -1,0 +1,12 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: test-when
+spec:
+  steps:
+  - image: bash:latest
+    name: echo
+    resources: {}
+    script: |
+      #!/usr/bin/env bash
+      printf "Hello, world"
