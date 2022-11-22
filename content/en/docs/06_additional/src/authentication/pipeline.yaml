@@ -1,24 +1,17 @@
 apiVersion: tekton.dev/v1beta1
-kind: PipelineRun
+kind: Pipeline
 metadata:
-  name: test
+  name: private-build-go
 spec:
-  pipelineRef:
-    name: build-go
   params:
     - name: repository
       description: Repository to checkout
-      default: https://github.com/acend/awesome-apps
+      default: ssh://gitea@gitea.training.openshift.ch:2022/user5/awesome-apps.git
     - name: application
       description: Application subpath in repository
       default: go
-    - name: IMAGE
-      description: Image name
-      default: ttl.sh/7322287e-9120-4d59-be03-4f4739000517:2h
   workspaces:
   - name: ws-1
-    emptyDir: {}
-    mountPath: ""
   tasks:
     - name: git-clone
       workspaces:
@@ -30,4 +23,3 @@ spec:
       taskRef:
         name: git-clone
         kind: ClusterTask
-      
