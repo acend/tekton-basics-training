@@ -9,7 +9,7 @@ Tekton brings the CI/CD world closer to the cloud native ecosystem. It is a powe
 
 ## {{% param sectionnumber %}}.1: Basic Concepts
 
-Tekton is based on already familiar concepts. All the elements needed for building efficient pipelines are available as custom resource definitions [CRD](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/)) in your Kubernetes cluster. Let's take a look at them and familiarize ourselves with their terminologies:
+Tekton is based on already familiar concepts. All the elements needed for building efficient pipelines are available as custom resource definitions [CRD](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/) in your Kubernetes cluster. Let's take a look at them and familiarize ourselves with their terminologies:
 
 * [Task](https://github.com/tektoncd/pipeline/blob/master/docs/tasks.md): A collection of steps that perform a specific task.
 * [Pipeline](https://github.com/tektoncd/pipeline/blob/master/docs/pipelines.md): A series of tasks, combined to work together in a defined (structured) way

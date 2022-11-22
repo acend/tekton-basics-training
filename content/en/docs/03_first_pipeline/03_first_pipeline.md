@@ -9,18 +9,17 @@ In the first chapter we familiarized ourselves with the different building block
 
 ## Task {{% param sectionnumber %}}.1: Create our first task
 
-We start by implementing a simple first task to echo a good old "hello, world" to our standard out. Create a new file `test-task.yaml` containing a `Task` resource which uses a `bash:latest` image to print "Hello, world" to standard out.
+We start by implementing a simple first task to echo a good old "hello, world" to our standard out.
 
-{{% details title="Hint" %}}
+First create a new directory `lab03` for lab 3 in your workspace directory.
 
-Consider looking at the example task in the previous chapter.
+```bash
+mkdir lab03
+```
 
-{{% /details %}}
-
-{{% details title="Solution" %}}
+Then create a new file `lab03/test-task.yaml` containing a `Task` resource which uses a `bash:latest` image to print `Hello, world` to standard out, with the following content:
 
 ```yaml
-
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
@@ -33,59 +32,165 @@ spec:
     script: |
       #!/usr/bin/env bash
       printf "Hello, world"
-
 ```
-
-{{% /details %}}
 
 Create the test Task in your namespace:
 
 ```bash
-{{% onlyWhen openshift %}}oc{{% /onlyWhen %}}{{% onlyWhenNot openshift %}}kubectl{{% /onlyWhenNot %}} -n $USER create -f test-task.yaml
+{{% param cliToolName %}} --namespace $USER apply -f lab03/test-task.yaml
 ```
 
 Your task resource should be created and ready in your namespace! Verify the creation of the resource:
 
 ```bash
-{{% onlyWhen openshift %}}oc{{% /onlyWhen %}}{{% onlyWhenNot openshift %}}kubectl{{% /onlyWhenNot %}} -n $USER get tasks
+{{% param cliToolName %}} --namespace $USER get tasks
 ```
+
+Instead of using `{{% param cliToolName %}}` you can also list the task using the Tekton CLI:
+
+```bash
+tkn --namespace $USER task list
+```
+
+which will result in something similar to:
+
+```bash
+NAME   DESCRIPTION   AGE
+test                 12 seconds ago
+```
+
+Use the following command to get a list of subcommands the task command provides:
+
+```bash
+tkn --namespace $USER task --help
+```
+
+{{% alert title="Note" color="primary" %}}Again always make sure to specify the namespace you're working in explicitly by passing the `--namespace, -n` parameter{{% /alert %}}
+
+
+## Task {{% param sectionnumber %}}.2: Run your first Task
 
 After creating and verifying the resource you should be all set to start your first task. To start the task we utilize the `tkn` Tekton CLI:
 
 ```bash
-tkn task start test
+tkn --namespace $USER task start test
+```
+which will result in something similar to:
+
+```bash
+TaskRun started: test-run-<pod>
+
+In order to track the TaskRun progress run:
+tkn taskrun logs test-run-<pod> -f -n <username>
 ```
 
 Remember the resource `TaskRun` which is an instantiation of a `Task` running on your cluster? You can see your run by listing all `TaskRun` resources with the `tkn` command:
 
 ```bash
-tkn taskrun list
+tkn --namespace $USER taskrun list
 ```
 
 To inspect the logs and verify that our task has done everything we wanted it to we use:
 
 ```bash
-tkn taskrun logs $TASKRUN -f -n $USER
+tkn taskrun logs <taskrun-name> -f -n $USER
 ```
 
 You should see that the tasks greets us, just like we declared it to.
 
-Remove your created task again:
-
 ```bash
-{{% onlyWhen openshift %}}oc{{% /onlyWhen %}}{{% onlyWhenNot openshift %}}kubectl{{% /onlyWhenNot %}} -n $USER delete task test
+[echo] Hello, world
 ```
 
 
-## Task {{% param sectionnumber %}}.2: Utilizing parameters
+## Task {{% param sectionnumber %}}.3: What just happened? (optional)
 
-In the next task you will alter the test `Task` created before to personalize your greeting with your name.
+When we started our first `Task` in the previous chapter, the Tekton operator in the background took our `Task` definition and translated it into a `Pod`, which ran in our namespace.
 
-Add a parameter in the task's `spec.params` map to accept a parameter of type `string` with the name `name`. With the added parameter, alter the step to print "Hello, $NAME" to the console!
+```bash
+{{% param cliToolName %}} -n $USER get pod
+```
 
-{{% details title="Hint" %}}
+You should find one completed `Pod` in your namespace:
 
-Parameters can be added in the `spec.params` map like the following:
+```bash
+NAME                     READY   STATUS      RESTARTS   AGE
+test-run-<taskrun>-pod   0/1     Completed   0          12m
+```
+
+As you can see, the name of the pod corresponds to the **name** of the `TaskRun`.
+
+And since the `TaskRun` is a `Pod` we can also have a look at the pod logs with the following command:
+
+```bash
+{{% param cliToolName %}} -n $USER logs test-run-<taskrun>-pod
+```
+
+And also explore the `Pod` resource
+
+```bash
+{{% param cliToolName %}} -n $USER describe pod test-run-<taskrun>-pod
+```
+
+Under `Init Containers` you will find the `place-scripts` container, which is responsible to copy the actually script from our `Task` to a mounted persistent volume (`/tekton/scripts`).
+The container `step-echo` will then execute this script.
+
+If we have a closer look at the Arguments within the `place-scripts` init container, you'll find a base 64 encoded string:
+
+```bash
+  place-scripts:
+    Container ID:  cri-o://6dd45a5282941e4861322888970b01d1036d2045173ed82bd687080266661537
+    Image:         registry.redhat.io/ubi8/ubi-minimal@sha256:c7b45019f4db32e536e69e102c4028b66bf5cde173cfff4ffd3281ccf7bb3863
+    Image ID:      registry.redhat.io/ubi8/ubi-minimal@sha256:2c8e091b26cc5a73cc7c61f4baee718021cfe5bd2fbc556d1411499c9a99ccdb
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sh
+    Args:
+      -c
+      scriptfile="/tekton/scripts/script-0-gx7fs"
+      touch ${scriptfile} && chmod +x ${scriptfile}
+      cat > ${scriptfile} << '_EOF_'
+      IyEvdXNyL2Jpbi9lbnYgYmFzaApwcmludGYgIkhlbGxvLCB3b3JsZCIK
+      _EOF_
+      /tekton/bin/entrypoint decode-script "${scriptfile}"
+```
+
+Containing our `Hello World` code
+
+```bash
+echo "IyEvdXNyL2Jpbi9lbnYgYmFzaApwcmludGYgIkhlbGxvLCB3b3JsZCIK" |base64 -d
+```
+
+```
+#!/usr/bin/env bash
+printf "Hello, world"
+```
+
+
+Enough background for now.
+
+
+## Task {{% param sectionnumber %}}.4: Cleanup
+
+Remove your created task again:
+
+```bash
+{{% param cliToolName %}} -n $USER delete task test
+```
+
+or us the Tekton CLI, to achieve the same:
+
+```bash
+tkn -n $USER task delete test
+```
+
+
+## Task {{% param sectionnumber %}}.5: Utilizing parameters
+
+In the next task you will create a new Task  `Task` similar to the previous one and personalize your greeting with your name.
+
+As we've learned in [lab 1](../../02_introduction/02_introduction/), parameters can be added in the `spec.params` map like the following:
 
 ```yaml
   params:
@@ -96,16 +201,16 @@ Parameters can be added in the `spec.params` map like the following:
 
 and again referenced in the step with `$(params.name)`.
 
-{{% /details %}}
+Create a new file with the name `lab03/test-task-param.yaml`.
 
-{{% details title="Solution" %}}
+We add a parameter in the task's `spec.params` map to accept a parameter of type `string` with the name `name`. The added parameter is used in the step to print "Hello, $NAME" to the console!
 
 ```yaml
 
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: test
+  name: test-param
 spec:
   params:
   - default: Chuck Norris
@@ -118,26 +223,65 @@ spec:
     script: |
       #!/usr/bin/env bash
       printf "Hello, %s" "$(params.name)"
-
 ```
 
-{{% /details %}}
+Again create the Task:
 
-Run the task again and verify your greeting with your name.
+```bash
+{{% param cliToolName %}} --namespace $USER apply -f lab03/test-task-param.yaml
+```
+
+And run it, if you want you can overwrite the default value, with your value:
+
+```bash
+tkn --namespace $USER task start test-param
+```
+
+And check the logs, whether the correct name was used
+
+```bash
+tkn taskrun logs <taskrun> -f -n $USER
+```
+
+Consult the `tkn task start` help, to find out how you could pass a parameter directly to the cli.
+
+```bash
+tkn task start --help
+```
+
+Start the task again and say `Hello, acend`
+
+```bash
+tkn --namespace $USER task start test-param -p name=acend
+```
+
+Check the logs for verification.
 
 
-## Task {{% param sectionnumber %}}.3: Pipeline
+{{% alert title="Note" color="primary" %}}Instead of passing the explicit `taskrun` to the `logs` command, just leave the taskrun out, which allows you to choose the taskrun with your arrow keys
+
+```bash
+tkn --namespace $USER taskrun logs -f
+```
+```bash
+? Select taskrun:  [Use arrows to move, type to filter]
+> test-pipeline-run-rd7np-inline started 7 minutes ago
+  test-pipeline-run-rd7np-testref started 7 minutes ago
+  test-pipeline-run-xj7xv-inline started 9 minutes ago
+  test-pipeline-run-xj7xv-testref started 9 minutes ago
+  test-param-run-bblbh started 21 minutes ago
+```
+
+{{% /alert %}}
+
+
+## Task {{% param sectionnumber %}}.6: Pipeline
 
 Tekton is all about pipelines, now let us create a pipeline from our first task created! The `Pipeline` custom resource of the Tekton API is pretty straight forward.
 
-The `Pipeline` resource has an list of tasks defined in the `spec.tasks` section. We can either create `Tasks` from scratch in the Pipeline resource itself as `taskSpec` elements or reference them as a `taskRef`.
+The `Pipeline` resource has a list of tasks defined in the `spec.tasks` section. We can either create `Tasks` from scratch in the Pipeline resource itself as `taskSpec` elements or reference them as a `taskRef`.
 
-Create a pipeline running your test task created from before. Try to define the task in the pipeline itself and reference it as a task reference.
-
-
-{{% details title="Hint" %}}
-
-Create the task in the pipeline's `spec.tasks` section or reference it:
+We now create a pipeline running your `test-param` task created from before. We define the task both in the pipeline itself and reference it as a task reference:
 
 ```yaml
   spec:
@@ -147,27 +291,23 @@ Create the task in the pipeline's `spec.tasks` section or reference it:
         # TASK SECTION
     - name: testref
       taskRef:
-        name: test
+        name: test-param
 ```
 
-and again referenced in the step with `$(params.name)`.
+Create a new file with the name `lab03/first-pipeline.yaml` and the following content:
 
-{{% /details %}}
-
-{{% details title="Solution" %}}
 
 ```yaml
-
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: test
+  name: test-pipeline
 spec:
   tasks:
     - name: inline
       taskSpec:
         params:
-        - default: Chuck Norris
+        - default: Chuck Norris (inline)
           name: name
           type: string
         steps:
@@ -179,40 +319,60 @@ spec:
             printf "Hello, %s" "$(params.name)"
     - name: testref
       taskRef:
-        name: test
-
+        name: test-param
 ```
 
-{{% /details %}}
+Let's now create the pipeline and apply it to the cluster:
+
+```bash
+{{% param cliToolName %}} --namespace $USER apply -f lab03/first-pipeline.yaml
+```
+
+Use the following command to verify, whether the pipeline was created:
+```bash
+tkn --namespace $USER pipeline list
+```
 
 Similar to the `TaskRun` creation we can start pipelines with the `tkn` cli:
 
 ```bash
-tkn pipeline start test
+tkn --namespace $USER pipeline start test-pipeline
 ```
 
-Start your pipeline and verify the output!
+Start your pipeline and verify the output. Copy the command from the pipeline start command output, which looks similar to:
+
+```bash
+PipelineRun started: <pipelinerun>
+
+In order to track the PipelineRun progress run:
+tkn pipelinerun logs <pipelinerun> -f -n <username>
+```
+
+The logoutput should then look similar to:
+
+```bash
+[testref : echo] Hello, Chuck Norris
+
+[inline : echo] Hello, Chuck Norris Pipeline
+```
 
 
-## Task {{% param sectionnumber %}}.4: Parameterize the pipeline
+## Task {{% param sectionnumber %}}.7: Parameterize the pipeline
 
-We have seen how we can use parameters in the task's `spec.params` section. In the `Pipeline` resource the parameters can be applied exactly in the same way. Define the desired parameters in the pipeline's `spec.params` section.
+We have seen how we can use parameters in the task's `spec.params` section. In the `Pipeline` resource the parameters can be applied exactly in the same way. Let's define the desired parameters in the pipeline's `spec.params` section.
 
 Alter your pipeline to accept parameters to override the task's parameter `name`.
-
-
-{{% details title="Solution" %}}
 
 ```yaml
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: test
+  name: test-pipeline
 spec:
   params:
     - name: name
       description: The name to be greeted as
-      default: Chuck Norris
+      default: Chuck Norris (inline)
   tasks:
     - name: inline
       params:
@@ -231,29 +391,38 @@ spec:
             printf "Hello, %s" "$(params.name)"
     - name: testref
       taskRef:
-        name: test
+        name: test-param
       params:
       - name: name
         value: $(params.name)
 ```
 
-{{% /details %}}
+Apply the changes:
+
+```bash
+{{% param cliToolName %}} --namespace $USER apply -f lab03/first-pipeline.yaml
+```
+
 
 Run the pipeline and see if your parameters apply to your results printed out to the console!
 
 ```bash
-tkn pipeline start test
+tkn --namespace $USER pipeline start test-pipeline
 
 tkn pipelinerun logs $pipelinerun -f -n $USER
 ```
 
+{{% alert title="Note" color="primary" %}}Similar to the `task start` command, you can directly pass the parameters using the `-p` option: `tkn --namespace $USER pipeline start test-pipeline -p name=Pipelineparam`
 
-## Task {{% param sectionnumber %}}.5: Cleanup
+{{% /alert %}}
+
+
+## Task {{% param sectionnumber %}}.8: Cleanup
 
 Clean up all `Task` and `Pipeline` resources created in this chapter:
 
 
 ```bash
-{{% onlyWhen openshift %}}oc{{% /onlyWhen %}}{{% onlyWhenNot openshift %}}kubectl{{% /onlyWhenNot %}} -n $USER delete pipeline test
-{{% onlyWhen openshift %}}oc{{% /onlyWhen %}}{{% onlyWhenNot openshift %}}kubectl{{% /onlyWhenNot %}} -n $USER delete task test
+{{% param cliToolName %}} --namespace $USER delete pipeline test-pipeline
+{{% param cliToolName %}} --namespace $USER delete task test-param
 ```
