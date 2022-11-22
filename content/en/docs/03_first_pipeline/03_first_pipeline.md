@@ -412,9 +412,7 @@ tkn --namespace $USER pipeline start test-pipeline
 tkn pipelinerun logs $pipelinerun -f -n $USER
 ```
 
-{{% alert title="Note" color="primary" %}}Similar to the `task start` command, you can directly pass the parameters using the `-p` option: `tkn --namespace $USER pipeline start test-pipeline -p name=Pipelineparam`
-
-{{% /alert %}}
+Similar to the `task start` command, you can directly pass the parameters using the `-p` option: `tkn --namespace $USER pipeline start test-pipeline -p name=Pipelineparam` or use the option `--use-param-defaults` to use the default values.
 
 
 ## Task {{% param sectionnumber %}}.8: Cleanup

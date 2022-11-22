@@ -6,12 +6,35 @@ sectionnumber: 4
 
 In the last chapter we made a short dive into building first tasks and wrap them in pipelines. One of the most common tasks in modern continuous integration and delivery pipelines is building applications and containers. We will take a look at how we can implement a basic application and docker build in a Tekton pipeline.
 
+The pipeline will consist out of two basic tasks:
+
+1. clone a git repository with the source code
+1. build the container image
+
 Starting from scratch, we need an application code first. We will checkout the [repository](https://github.com/acend/awesome-apps) and build the go application located in the `go/` subfolder.
 
 
 ## Task {{% param sectionnumber %}}.1: Create your pipeline
 
-Create a new file `build-go-pipeline.yaml` containing a **Pipeline**. The pipeline should contain at first one step, which will checkout the repository from [Github](https://github.com/acend/awesome-apps). At the moment, keep the tasks section empty and read on.
+First create a new directory `lab04`.
+
+```bash
+mkdir lab04
+```
+
+Now create a new file `lab04/build-go-pipeline.yaml` containing a **Pipeline**. The pipeline should contain at first one step, which will checkout the repository from [Github](https://github.com/acend/awesome-apps). At the moment, keep the tasks section empty and read on.
+
+Add the following content:
+
+```yaml
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: build-go
+spec:
+  params:
+  tasks:
+```
 
 
 ## {{% param sectionnumber %}}.2: Tasks and ClusterTasks
@@ -28,20 +51,17 @@ Read the definition of the *git-clone* task already defined in the [hub](https:/
 
 Your task as the new CI officer is to implement the first step of your pipeline with the pre-defined task **git-clone**.
 
-{{% details title="Hint 1" %}}
-
-Check if the task is already defined and available in either the cluster or your namespace:
+Let's check if the task is already defined and available in either the cluster or your namespace:
 
 ```bash
-{{% onlyWhen openshift %}}oc{{% /onlyWhen %}}{{% onlyWhenNot openshift %}}kubectl{{% /onlyWhenNot %}} -n $USER get task git-clone
-{{% onlyWhen openshift %}}oc{{% /onlyWhen %}}{{% onlyWhenNot openshift %}}kubectl{{% /onlyWhenNot %}} -n $USER get clustertask git-clone
+{{% param cliToolName %}} --namespace $USER get clustertask git-clone
 ```
 
-{{% /details %}}
+The git-clone task is available as clustertask.
 
-Add the task reference to your pipeline and parameterize the pipeline to checkout your repository!
+To stay as generic as possible, we define the repository to checkout as pipeline parameter `repository`. This parameter we'll be using to configure our referenced `git-clone` ClusterTask.
 
-{{% details title="Solution" %}}
+Add the params and task to your pipeline:
 
 ```yaml
 apiVersion: tekton.dev/v1beta1
@@ -53,9 +73,6 @@ spec:
     - name: repository
       description: Repository to checkout
       default: https://github.com/acend/awesome-apps
-    - name: application
-      description: Application subpath in repository
-      default: go
   tasks:
     - name: git-clone
       params:
@@ -66,7 +83,25 @@ spec:
         kind: ClusterTask
 ```
 
-{{% /details %}}
+Create the pipeline
+
+```bash
+{{% param cliToolName %}} --namespace $USER apply -f lab04/build-go-pipeline.yaml
+```
+
+and run it
+
+```bash
+tkn --namespace $USER pipeline start build-go
+```
+
+The pipeline will fail, with the following error:
+
+```bash
+task git-clone has failed: declared workspace "output" is required but has not been bound
+```
+
+Our predefined task seems to have some dependencies. Let's move on.
 
 
 ## {{% param sectionnumber %}}.4: Workspaces
@@ -99,9 +134,8 @@ spec:
 
 ## Task {{% param sectionnumber %}}.5: Add workspaces
 
-In the previous section we learned how **Workspaces** can be added to Pipelines and Tasks. Add a workspace to your pipeline created in the chapter before. This way, the *git-clone* Task can clone the repository into your workspace.
+In the previous section we learned how **Workspaces** can be added to Pipelines and Tasks. We now add a workspace to your pipeline created in the chapter before. This way, the *git-clone* Task can clone the repository into the required workspace (referenced by `output`) and therefore be shared between tasks.
 
-{{% details title="Solution" %}}
 
 ```yaml
 apiVersion: tekton.dev/v1beta1
@@ -113,9 +147,6 @@ spec:
     - name: repository
       description: Repository to checkout
       default: https://github.com/acend/awesome-apps
-    - name: application
-      description: Application subpath in repository
-      default: go
   workspaces:
   - name: ws-1
   tasks:
@@ -131,27 +162,36 @@ spec:
         kind: ClusterTask
 ```
 
-{{% /details %}}
+Again apply your changes
+
+```bash
+{{% param cliToolName %}} --namespace $USER apply -f lab04/build-go-pipeline.yaml
+```
+
+and run it, with the following configuration
+
+```bash
+tkn --namespace $USER pipeline start build-go \
+    --workspace name=ws-1,emptyDir= \
+    --use-param-defaults
+```
+
+{{% alert title="Note" color="primary" %}}We configure the workspace as an emptyDir for test purposes and to show how to configure pipelineruns via CLI. You will learn about pipelineruns soon.{{% /alert %}}
 
 
 ## Task {{% param sectionnumber %}}.6: Create the docker image
 
-We have now a pipeline with a task that clones a git repository to our workspace. It is your job now to alter the pipeline to build a docker container with the predefined **Task**/**ClusterTask** called *buildah*. You can read the documentation again on the [Tekton Hub](https://hub.tekton.dev/tekton/task/buildah). Verify if the task is already defined on the cluster, then update your pipeline definition and build your container!
+We have now a pipeline with a task that clones a git repository to our workspace. It is your job now to alter the pipeline to build a docker container with the predefined **Task**/**ClusterTask** called *buildah*. You can read the documentation again on the [Tekton Hub](https://hub.tekton.dev/tekton/task/buildah).
 
-{{% details title="Hint" %}}
+The buildah task is available as Cluster Task:
 
 ```bash
-
-{{% onlyWhen openshift %}}oc{{% /onlyWhen %}}{{% onlyWhenNot openshift %}}kubectl{{% /onlyWhenNot %}} get task buildah
-{{% onlyWhen openshift %}}oc{{% /onlyWhen %}}{{% onlyWhenNot openshift %}}kubectl{{% /onlyWhenNot %}} get clustertask buildah
-
+{{% param cliToolName %}} get clustertask buildah
 ```
 
-{{% /details %}}
+Use the predefined *buildah* ClusterTask to enhance your pipeline to build and push a docker image. Add the task to your already defined pipeline *build-go*.
 
-Use the predefined *buildah* Task / ClusterTask to enhance your pipeline to build and push a docker image. Add the task to your already defined pipeline *build-go*.
-
-{{% details title="Solution Pipeline" %}}
+Make sure to replace `<uuid>` with a corresponding uuid.
 
 ```yaml
 apiVersion: tekton.dev/v1beta1
@@ -160,31 +200,32 @@ metadata:
   name: build-go
 spec:
   params:
-  - default: https://github.com/acend/awesome-apps
-    description: Repository to checkout
-    name: repository
-    type: string
-  - default: go
-    description: Application subpath in repository
-    name: application
-    type: string
-  - default: ttl.sh/<uuid>:1h # TODO: Replace me
-    description: The image including the registry and tag
-    name: image
-    type: string
-  - default: "."
-    name: context
-    description: Docker context to build
-    type: string
-  - default: Dockerfile
-    name: dockerfile
-    description: Location of the dockerfile
-    type: string
+    - name: repository
+      description: Repository to checkout
+      default: https://github.com/acend/awesome-apps
+    - name: image
+      description: The image including the registry and tag
+      default: ttl.sh/<uuid>:1h # TODO: Replace me
+      type: string
+    - name: context
+      description: Docker context to build
+      default: "./go/"
+      type: string
+    - name: dockerfile
+      description: Location of the dockerfile
+      default: ./Dockerfile
+      type: string
+  workspaces:
+  - name: ws-1
   tasks:
   - name: git-clone
     params:
     - name: url
       value: $(params.repository)
+    - name: subdirectory
+      value: ""
+    - name: deleteExisting
+      value: "true"
     taskRef:
       kind: ClusterTask
       name: git-clone
@@ -205,12 +246,13 @@ spec:
     workspaces:
     - name: source
       workspace: ws-1
-  workspaces:
-  - name: ws-1
-
 ```
 
-{{% /details %}}
+Again apply your changes
+
+```bash
+{{% param cliToolName %}} --namespace $USER apply -f lab04/build-go-pipeline.yaml
+```
 
 We can trigger the pipeline by creating a **PipelineRun** resource, referencing our created pipeline *build-go*.
 
@@ -219,56 +261,17 @@ We can trigger the pipeline by creating a **PipelineRun** resource, referencing 
 
 So far we have triggered the pipelines with the `tkn` cli. This time we are going to create a **PipelineRun** resource to define how this pipeline will be instantiated.
 
-Create a new file `build-docker-pr.yaml` and define the **PipelineRun** to have:
+We need to define the **PipelineRun** to have:
 
 * A `metadata.generateName: build-go-pr-` which defines how generated *PipelineRuns* will be called (similar to the *StatefulSet*)
 * `spec.params` a map of all the parameters, overriding the defaults in the *Pipeline*
 * `pipelineRef` referencing the already defined *Pipeline*
 * `workspaces` defining all the workspaces needed in this *Pipeline* (in this case one `ws-1`)
+  * To also specify a PVC which will give us persistence
 
-{{% details title="Hint name" %}}
+Create a new file `lab04/build-docker-pipelinerun.yaml` with the following content:
 
-Start your file like the following:
-
-```yaml
-apiVersion: tekton.dev/v1beta1
-kind: PipelineRun
-metadata:
-  generateName: build-go-pr-
-```
-
-{{% /details %}}
-
-{{% details title="Hint params" %}}
-
-Specify the parameters like the following:
-
-```yaml
-spec:
-  params:
-  - name: param1
-    value: value1
-  - name: param2
-    value: value2
-```
-
-{{% /details %}}
-
-{{% details title="Hint `pipelineRef`" %}}
-
-Reference the pipeline:
-
-```yaml
-spec:
-  pipelineRef:
-    name: build-go
-```
-
-{{% /details %}}
-
-If you want to verify your approach, or simply need some additional hints, check the example solution:
-
-{{% details title="Solution Pipeline" %}}
+Again, make sure to replace `<uuid>` with a corresponding uuid.
 
 ```yaml
 apiVersion: tekton.dev/v1beta1
@@ -278,7 +281,7 @@ metadata:
 spec:
   params:
   - name: image
-    value: ttl.sh/02a77e8d-d633-4686-a401-cc92129e2270:1h
+    value: ttl.sh/<uuid>:1h # TODO: Replace me
   - name: application
     value: go
   - name: context
@@ -298,17 +301,25 @@ spec:
               storage: 1Gi
 ```
 
-{{% /details %}}
+Let's create the `PipelineRun` which will instantly start our pipeline:
 
-When you have created your **PipelineRun** resource and created it in your namespace, you will instantly see that a pipeline will be running. Check the logs and verify if your image was built correctly!
+```bash
+{{% param cliToolName %}} --namespace $USER create -f lab04/build-docker-pipelinerun.yaml
+```
+
+Check the logs and verify if your image was built correctly!
+```bash
+tkn --namespace $USER pipelinerun logs
+```
+and choose the last run.
 
 
 ## Task {{% param sectionnumber %}}.8: Cleanup
 
-Delete all the resources created during this capter in your namespace.
+Delete all the resources created during this chapter in your namespace.
 
 ```bash
 
-{{% onlyWhen openshift %}}oc{{% /onlyWhen %}}{{% onlyWhenNot openshift %}}kubectl{{% /onlyWhenNot %}} delete pipeline build-go
+{{% param cliToolName %}} --namespace $USER delete pipeline build-go
 
 ```
