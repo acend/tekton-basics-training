@@ -1,6 +1,8 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
+  labels:
+    ch.acend/lab: "tekton-basics"
   name: java-pipeline
 spec:
   params:
@@ -15,6 +17,11 @@ spec:
       params:
       - name: url
         value: $(params.repository)
+      workspaces:
+      - name: output
+        workspace: ws-1
       taskRef:
         name: git-clone
         kind: ClusterTask
+  workspaces:
+  - name: ws-1
