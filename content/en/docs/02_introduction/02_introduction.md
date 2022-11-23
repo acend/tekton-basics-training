@@ -20,7 +20,7 @@ Pipelines and tasks should be generic and must never define possible variables -
 
 [Workspaces](https://redhat-scholars.github.io/tekton-tutorial/tekton-tutorial/workspaces.html) are used to share the data between Tasks and Steps.
 
-![Static Pipeline Definition](../concept-tasks-pipelines.png.png)
+![Static Pipeline Definition](../concept-tasks-pipelines.png)
 *Static definition of a Pipeline*
 
 For each task, a pod will be allocated and for each step inside this task, a container will be used.
@@ -135,7 +135,7 @@ For more details check the official [documentation](https://tekton.dev/docs/pipe
 
 ## {{% param sectionnumber %}}.3: TaskRun
 
-The TaskRun is the single run representation of a Task - see it as an instantiation of your Task definition. It specifies one or more Step that will execute conatiner images and perform a defined piece of build work. They are executed in the order of definition until all Steps have executed successfully or one failure occured.
+The TaskRun is the single run representation of a Task - see it as an instantiation of your Task definition. It specifies one or more Step that will execute container images and perform a defined piece of build work. They are executed in the order of definition until all Steps have executed successfully or one failure occured.
 
 For more details check the official [documentation](https://tekton.dev/docs/pipelines/taskruns/).
 
