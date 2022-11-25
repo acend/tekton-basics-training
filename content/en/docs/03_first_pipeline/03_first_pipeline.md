@@ -360,9 +360,9 @@ tkn pipelinerun logs <pipelinerun> -f -n <username>
 The logoutput should then look similar to:
 
 ```bash
-[testref : echo] Hello, Chuck Norris
+[inline : echo] Hello, Chuck Norris (inline)
 
-[inline : echo] Hello, Chuck Norris Pipeline
+[testref : echo] Hello, Chuck Norris
 ```
 
 
