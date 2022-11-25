@@ -6,20 +6,9 @@ sectionnumber: 6.5
 
 In pipeline automation workflow control is key. Certain steps can be run in parallel, others should run after eachother. Tekton allows you to create relations between separated steps to control your workflow.
 
+*Tasks* in Tekton can be connected in a *Pipeline* to build a **Directed Acyclic Graph** (DAG). Each *Task* in a *Pipeline* becomes a node on the graph that can be connected with an edge so that one will run before another and the execution of the *Pipeline* progresses to completion without getting stuck in an infinite loop.
 
-```
-Configuring the Task execution order
-
-You can connect Tasks in a Pipeline so that they execute in a Directed Acyclic Graph (DAG). Each Task in the Pipeline becomes a node on the graph that can be connected with an edge so that one will run before another and the execution of the Pipeline progresses to completion without getting stuck in an infinite loop.
-
-This is done using:
-
-* resource dependencies:
-        results of one Task being passed into params or when expressions of another
-
-* ordering dependencies:
-        runAfter clauses on the corresponding Tasks
-```
+In this lab we are going to dive into the possibilities to control the flow of your *Pipelines*
 
 
 ## {{% param sectionnumber %}}.1: Step sequence
