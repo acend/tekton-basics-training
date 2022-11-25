@@ -139,5 +139,5 @@ spec:
 
 ## {{% param sectionnumber %}}.2 Artifcat promotion
 
-A common question is `How can I store my artifacts like test reposrt in Tekton?`
+A common question is `How can I store my artifacts like test reports in Tekton?`
 Unfortunately Tekton doesn't offer artifact managment. If you want to store your artefacts (e.g. Test or security scan reports, build artifacts) you have to do this by yourself. For example store your reports on a S3 compatible storage.

@@ -3,6 +3,10 @@ kind: Pipeline
 metadata:
   name: test-when
 spec:
+  params:
+    - name: name
+      type: string
+      default: "Chuck Norris"
   tasks:
     - name: inline
       taskSpec:
@@ -12,18 +16,18 @@ spec:
           type: string
         steps:
         - image: bash:latest
-          name: echo
-          when:
-          - input: "$(params.name)"
-            operator: notin
-            values: ["Captain Awesome", "Captain Obvious"]
+          name: task-1
           resources: {}
           script: |
             #!/usr/bin/env bash
             printf "Hello, %s" "$(params.name)"
-    - name: testref
+      when:
+      - input: "$(params.name)"
+        operator: notin
+        values: ["Captain Awesome", "Captain Obvious"]
+    - name: task-2
       taskRef:
-        name: test
+        name: test-when
       when:
       - input: "$(params.name)"
         operator: in

@@ -52,14 +52,62 @@ Remeber the simple example from our first pipeline in lab 3?
 
 {{< highlight yaml >}}{{< readfile file="../03_first_pipeline/src/test-pipeline.yaml" >}}{{< /highlight >}}
 
-One of the most commun use cases is to controll which *Task* should run on which branches. For example in a real world scenario you don't want to execute all End-to-End test when you commit to a develop branch. Lets add a Task Guards to the Tasks to controll their execution based on an input parameter.
+One of the most commun use cases is to controll which *Task* should run on which branches. For example in a real world scenario you don't want to execute all End-to-End test when you commit to a develop branch.
+
+Lets add a Task Guards to the Tasks to controll their execution based on an input parameter.
 
 * Rename the *Task* to `test-guard`
 * Rename the *Pipeline* to `test-guard`
-* Add a `when` condition to the first task with following condition:
-* Add a `when` condition to the second task with following condition:
+* Add a `when` condition to the first task with following condition: Only run this task if the paramater `name` **is not equal** with one of `Captain Awesome` or  `Captain Obvious`
+* Add a `when` condition to the second task with following condition: Only run this task if the paramater `name` is equal `Chuck Norris`
 
 
 {{< highlight yaml >}}{{< readfile file="src/guards/task.yaml" >}}{{< /highlight >}}
 
 {{< highlight yaml "hl_lines=17-19 28-30" >}}{{< readfile file="src/guards/pipeline.yaml" >}}{{< /highlight >}}
+
+Enter follwing commands to create the *Task* and the *Pipeline*
+
+```bash
+{{% param cliToolName %}} -f task.yaml -n $USER
+{{% param cliToolName %}} -f pipeline.yaml -n $USER
+```
+
+Now er are going to start the pipeline direct from the cli. For this you can use following command:
+After that the Tekton CLI ask you to provide the parameters
+
+```bash
+tkn p start test-when --showlog
+```
+
+As you can see, with the paramater value `Chuck Norris`, both tasks are executed.
+
+```bash
+tkn p start test-when --showlog
+
+? Value for param `name` of type `string`? (Default is `Chuck Norris`) Chuck Norris
+PipelineRun started: test-when-run-g59fv
+Waiting for logs to be available...
+[task-2 : echo] Hello, world
+
+[inline : task-1] Hello, Chuck Norris
+```
+
+Now try with another parmater value, for example `Nelson Mandela`. In this case only the first task `task-1` is executed.
+
+```bash
+tkn p start test-when --showlog
+
+? Value for param `name` of type `string`? (Default is `Chuck Norris`) Nelson Mandela
+PipelineRun started: test-when-run-2r4d8
+Waiting for logs to be available...
+[inline : task-1] Hello, Chuck Norris
+```
+
+
+## Task {{% param sectionnumber %}}.4: Cleanp
+
+```bash
+{{% param cliToolName %}} delete -f task.yaml -n $USER
+{{% param cliToolName %}} delete -f pipeline.yaml -n $USER
+```
