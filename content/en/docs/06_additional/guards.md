@@ -84,6 +84,7 @@ As you can see, with the paramater value `Chuck Norris`, both tasks are executed
 
 ```bash
 tkn p start test-when --showlog
+
 ? Value for param `name` of type `string`? (Default is `Chuck Norris`) Chuck Norris
 PipelineRun started: test-when-run-g59fv
 Waiting for logs to be available...
@@ -96,9 +97,17 @@ Now try with another parmater value, for example `Nelson Mandela`. In this case 
 
 ```bash
 tkn p start test-when --showlog
+
 ? Value for param `name` of type `string`? (Default is `Chuck Norris`) Nelson Mandela
 PipelineRun started: test-when-run-2r4d8
 Waiting for logs to be available...
 [inline : task-1] Hello, Chuck Norris
+```
 
+
+## Task {{% param sectionnumber %}}.4: Cleanp
+
+```bash
+{{% param cliToolName %}} delete -f task.yaml -n $USER
+{{% param cliToolName %}} delete -f pipeline.yaml -n $USER
 ```

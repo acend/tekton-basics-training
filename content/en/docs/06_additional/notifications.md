@@ -61,3 +61,12 @@ Further as you can see we making use of Pipelines Variable substitution in the m
 
 {{< highlight yaml >}}{{< readfile file="src/notifications/pr.yaml" >}}{{< /highlight >}}
 
+
+## Task {{% param sectionnumber %}}.4: Cleanp
+
+```bash
+{{% param cliToolName %}} delete -f https://api.hub.tekton.dev/v1/resource/tekton/task/send-to-webhook-slack/0.1/raw -n $USER
+{{% param cliToolName %}} delete -f taskrun.yaml -n $USER
+{{% param cliToolName %}} delete secret webhook-secret -n $USER
+{{% param cliToolName %}} delete -f pipelinerun.yaml -n $USER
+```
