@@ -9,7 +9,7 @@ sectionnumber: 6.8
 
 In this short section we will show you how tom implement a security scan for your built image. For this we are going to use the Aquasecurity Trivy scanner. Trivy is a simple and comprehensive scanner for vulnerabilities in container images.
 
-{{< highlight yaml >}}{{< readfile file="src/security/task.yaml" >}}{{< /highlight >}}
+{{< readfile file="src/security/task.yaml" code="true" lang="yaml"   >}}
 
 
 Lets create the task ressource first
@@ -31,15 +31,14 @@ Then add two parameters to the `trivy-scanner` task.
 * `ARGS`: Parameter array for the Trivy scanner arguments. Use the argument `image` to configure Trivy for image scanning
 * `IMAGE_PATH`: Define which image name should be scanned. Reference the value from the pipeline param (`$(params.image)`)
 
-{{% details title="Solution" %}}
-{{< highlight yaml >}}{{< readfile file="src/security/pipeline.yaml" >}}{{< /highlight >}}
+
+{{< readfile file="src/security/pipeline.yaml"  code="true" lang="yaml"  >}}
 
 Next create the pipeline ressource
 
 ```bash
 {{% param cliToolName %}} apply -f pipeline.yaml -n $USER
 ```
-{{% /details %}}
 
 
 ## Task {{% param sectionnumber %}}.2: Trigger pipeline with PipelineRun resource
@@ -52,7 +51,7 @@ Create a new file `security-scan-pr.yaml` and define the **PipelineRun** to have
 
 {{% details title="Solution" %}}
 
-{{< highlight yaml >}}{{< readfile file="src/security/pipeline-run.yaml" >}}{{< /highlight >}}
+{{< readfile file="src/security/pipeline-run.yaml"  code="true" lang="yaml"  >}}
 
 Create the *PipelineRun* ressource
 ```bash

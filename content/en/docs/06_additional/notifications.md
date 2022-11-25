@@ -39,7 +39,7 @@ Next create a secret which contains the URL for the Slack webhook. **Ask your te
 To check if everything is working as expected, create following task run to test the Slack notification.
 You can change the message text as you want.
 
-{{< highlight yaml >}}{{< readfile file="src/notifications/taskrun.yaml" >}}{{< /highlight >}}
+{{< readfile file="src/notifications/taskrun.yaml"  code="true" lang="yaml"  >}}
 
 Use following command to create a new *TaskRun*
 
@@ -59,7 +59,7 @@ Based on the exit condition `$(tasks.inline.status)` one of the two finally task
 You can find a complete list of all accessible *Task* variables [here](https://tekton.dev/docs/pipelines/variables/#variables-available-in-a-task)
 Further as you can see we making use of Pipelines Variable substitution in the message text. All available Pipeline variables are defined [here](https://tekton.dev/docs/pipelines/variables/#variables-available-in-a-pipeline)
 
-{{< highlight yaml >}}{{< readfile file="src/notifications/pr.yaml" >}}{{< /highlight >}}
+{{< readfile file="src/notifications/pr.yaml" code="true" lang="yaml"  >}}
 
 
 ## Task {{% param sectionnumber %}}.4: Cleanp

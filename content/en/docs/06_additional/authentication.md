@@ -107,7 +107,7 @@ Enter following command to add the `git-ssh-key` secret to the `pipeline` servic
 Now we have configured the authentication for our Git repository. Let's build a pipeline which uses the private key authentication to clone the repository.
 
 First create a new file for the pipeline `pipeline.yaml` with a simple Git clone task.
-{{< highlight yaml >}}{{< readfile file="src/authentication/pipeline.yaml" >}}{{< /highlight >}}
+{{< readfile file="src/authentication/pipeline.yaml"  code="true" lang="yaml" >}}
 
 
 ```bash
@@ -116,9 +116,9 @@ First create a new file for the pipeline `pipeline.yaml` with a simple Git clone
 
 
 Next create the file for the pipeline run `pipelinerun.yaml`.
-{{< highlight yaml >}}{{< readfile file="src/authentication/pipelinerun.yaml" >}}{{< /highlight >}}
+{{< readfile file="src/authentication/pipelinerun.yaml"  code="true" lang="yaml" >}}
 
-
+And then apply the newly create pipeline run to the cluster
 ```bash
 {{% param cliToolName %}} create -f pipelinerun.yaml
 ```
