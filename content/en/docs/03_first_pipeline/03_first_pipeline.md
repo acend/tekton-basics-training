@@ -239,6 +239,15 @@ tkn --namespace $USER task start test-param
 
 Check the logs, whether the correct name was used
 
+{{% alert title="Note" color="info" %}}
+The previous command output contains the command to check the logs.
+Otherwise you can find the taskrun ID by running:
+```
+tkn --namespace $USER taskrun list
+```
+{{% /alert %}}
+
+
 ```bash
 tkn taskrun logs <taskrun> -f -n $USER
 ```
