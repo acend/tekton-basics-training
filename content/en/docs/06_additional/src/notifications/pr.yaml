@@ -1,0 +1,41 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: pipelinerun-
+spec:
+  pipelineSpec:
+    tasks:
+    - name: inline
+      taskSpec:
+        steps:
+        - image: bash:latest
+          name: fifty-fifty
+          resources: {}
+          script: |
+            #!/usr/bin/env bash
+            exit $[ $RANDOM % 2 + 0 ]
+    finally:
+      - name: notify-build-failure
+        params:
+          - name: message
+            value: ":x: Pipeline `$(context.pipelineRun.name)` in namespace `$(context.pipelineRun.namespace)` *failed*"
+          - name: webhook-secret
+            value: webhook-secret
+        when:
+          - input: $(tasks.inline.status)
+            operator: in
+            values: ["Failed"]
+        taskRef:
+          name: send-to-webhook-slack
+      - name: notify-build-success
+        params:
+          - name: message
+            value: ":white_check_mark: Pipeline `$(context.pipelineRun.name)` in namespace `$(context.pipelineRun.namespace)` *succeeded*"
+          - name: webhook-secret
+            value: webhook-secret
+        when:
+          - input: $(tasks.inline.status)
+            operator: in
+            values: ["Succeeded"]
+        taskRef:
+          name: send-to-webhook-slack
