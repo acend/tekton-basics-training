@@ -1,0 +1,37 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  labels:
+    ch.acend/lab: "tekton-basics"
+  name: workflow-pipeline
+spec:
+  params:
+    - name: language
+      description: Programming language used
+      default: java
+    - name: repository
+      description: Repository to checkout
+      default: https://github.com/acend/awesome-apps
+    - name: application
+      description: Application subpath in repository
+      default: java-quarkus
+  tasks:
+    - name: random
+      taskSpec:
+        steps:
+        - image: bash:latest
+          script: |
+            #!/usr/bin/env bash
+            exit $(($RANDOM % 2))
+  # Step 4: Add random failure to catch events
+  finally:            
+    - name: catcher
+      taskSpec:
+        steps:
+        - image: bash:latest
+          script: |
+            #!/usr/bin/env bash
+            echo "I get invoked every time!"
+  workspaces:
+  - name: ws-1
+  - name: maven-settings
