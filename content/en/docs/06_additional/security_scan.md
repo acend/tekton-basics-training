@@ -9,19 +9,26 @@ sectionnumber: 6.8
 
 In this short section we will show you how tom implement a security scan for your built image. For this we are going to use the Aquasecurity Trivy scanner. Trivy is a simple and comprehensive scanner for vulnerabilities in container images.
 
+Start with a new directory lab068 in your workspace directory.
+
+```bash
+mkdir lab068
+```
+Then create a new file called `lab068/task.yaml` with following content
+
 {{< readfile file="src/security/task.yaml" code="true" lang="yaml"   >}}
 
 
 Lets create the task ressource first
 
 ```bash
-{{% param cliToolName %}} apply -f task.yaml -n $USER
+{{% param cliToolName %}} apply -f lab068/task.yaml -n $USER
 ```
 
 
 ## {{% param sectionnumber %}}.2: Create Security Scan Pipeline
 
-Create a new *Pipeline* ressource which reference the task from above (`trivy-scanner`)
+Create a new *Pipeline* ressource in `lab08/pipeline.yaml` which reference the task `trivy-scanner` from above
 Add one parameter to the pipeline
 
 * `image`: Parameter which defines the image to be scanned by Trivy
@@ -34,16 +41,16 @@ Then add two parameters to the `trivy-scanner` task.
 
 {{< readfile file="src/security/pipeline.yaml"  code="true" lang="yaml"  >}}
 
-Next create the pipeline ressource
+Next create the pipeline ressource, use following command for this
 
 ```bash
-{{% param cliToolName %}} apply -f pipeline.yaml -n $USER
+{{% param cliToolName %}} apply -f lab068/pipeline.yaml -n $USER
 ```
 
 
 ## Task {{% param sectionnumber %}}.2: Trigger pipeline with PipelineRun resource
 
-Create a new file `security-scan-pr.yaml` and define the **PipelineRun** to have:
+Create a new file `lab068/pipelinerun.yaml` and define the **PipelineRun** to have:
 
 * A `metadata.name: trivy-scanner-run`
 * `spec.params.image` parameter for the image wich is going to be scanned (in this case  `alpine`)
@@ -55,7 +62,7 @@ Create a new file `security-scan-pr.yaml` and define the **PipelineRun** to have
 
 Create the *PipelineRun* ressource
 ```bash
-{{% param cliToolName %}} apply -f pipeline.yaml -n $USER
+{{% param cliToolName %}} apply -f lab068/pipelinerun.yaml -n $USER
 ```
 
 Check the PipelineRun log output with following command:
@@ -65,6 +72,8 @@ tkn pipelinerun logs trivy-scanner-run
 ```
 
 You should see following output
+
+{{% alert title="Note" color="primary" %}}It can happen that the pipeline fails because Trivy find an unfixed CVE in the scanned image.{{% /alert %}}
 
 ```bash
 Running trivy task with command below
@@ -93,6 +102,7 @@ Clean up all `Task` and `Pipeline` resources created in this chapter:
 
 
 ```bash
-{{% param cliToolName %}} -n $USER delete pipeline test
-{{% param cliToolName %}} -n $USER delete task test
+{{% param cliToolName %}} -n $USER delete pipeline trivy-scanner-pipeline
+{{% param cliToolName %}} -n $USER delete pipelinerun trivy-scanner-run
+{{% param cliToolName %}} -n $USER delete task trivy-scanner
 ```

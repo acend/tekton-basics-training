@@ -20,7 +20,7 @@ spec:
       - name: notify-build-failure
         params:
           - name: message
-            value: ":x: Pipeline `$(context.pipelineRun.name)` in namespace `$(context.pipelineRun.namespace)` *failed*"
+            value: ":x: Pipeline `$(context.pipelineRun.name)` in namespace `$(context.pipelineRun.namespace)` *failed*. <https://console.training.openshift.ch/k8s/ns/$(context.pipelineRun.namespace)/tekton.dev~v1beta1~PipelineRun/$(context.pipelineRun.name)/logs|Log message>"
           - name: webhook-secret
             value: webhook-secret
         when:

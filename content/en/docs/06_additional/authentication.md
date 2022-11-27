@@ -64,12 +64,18 @@ stringData:
 
 ## Example {{% param sectionnumber %}}.2: Configure SSH authentication for Git
 
+Create a new directory lab063 for this in your workspace directory.
+
+```bash
+mkdir lab063
+```
+
 A common use case is authentication in Git with an private shh key. In this example we are going to create a SSH keypair and configure our Gitea account to allow cloning private repositories with this particular key.
 
 First create a new SSH keypair with following command:
 
 ```bash
-mkdir ~/.ssh && ssh-keygen -t ed25519 -C "$USER" -f "$HOME/.ssh/id_ed25519" -P "" -q
+mkdir $HOME/.ssh && ssh-keygen -t ed25519 -C "$USER" -f "$HOME/.ssh/id_ed25519" -P "" -q
 ```
 
 Next create a Kubernetes secret which contains our private shh key and annotate the secret.
@@ -111,7 +117,7 @@ First create a new file for the pipeline `pipeline.yaml` with a simple Git clone
 
 
 ```bash
-{{% param cliToolName %}} apply -f pipeline.yaml
+{{% param cliToolName %}} apply -f lab063/pipeline.yaml
 ```
 
 
@@ -120,5 +126,15 @@ Next create the file for the pipeline run `pipelinerun.yaml`.
 
 And then apply the newly create pipeline run to the cluster
 ```bash
-{{% param cliToolName %}} create -f pipelinerun.yaml
+{{% param cliToolName %}} create -f lab063/pipelinerun.yaml
+```
+
+
+## Task {{% param sectionnumber %}}.3: Cleanup
+
+Clean up all `Pipeline` and `PipelineRun` resources created in this chapter:
+
+```bash
+{{% param cliToolName %}} --namespace $USER delete -f lab063/pipeline.yaml
+{{% param cliToolName %}} --namespace $USER delete -f lab063/pipelinerun.yaml
 ```

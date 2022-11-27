@@ -2,6 +2,8 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: test-when
+  labels:
+    ch.acend/lab: "tekton-basics"
 spec:
   steps:
   - image: bash:latest
