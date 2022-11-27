@@ -2,6 +2,8 @@ apiVersion: tekton.dev/v1beta1
 kind: TaskRun
 metadata:
   name: run-send-to-webhook-slack
+  labels:
+    ch.acend/lab: "tekton-basics"
 spec:
   params:
   - name: webhook-secret

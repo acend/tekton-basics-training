@@ -46,6 +46,12 @@ tasks:
 
 ## Task {{% param sectionnumber %}}.2: Task Guards
 
+Create a new directory lab062 for this in your workspace directory.
+
+```bash
+mkdir lab062
+```
+
 Remeber the simple example from our first pipeline in lab 3?
 
 {{< readfile file="../03_first_pipeline/src/test-task.yaml"  code="true" lang="yaml" >}}
@@ -61,7 +67,11 @@ Lets add a Task Guards to the Tasks to controll their execution based on an inpu
 * Add a `when` condition to the first task with following condition: Only run this task if the paramater `name` **is not equal** with one of `Captain Awesome` or  `Captain Obvious`
 * Add a `when` condition to the second task with following condition: Only run this task if the paramater `name` is equal `Chuck Norris`
 
+Create a new file with the name `lab062/task.yaml` with following content
+
 {{< readfile file="src/guards/task.yaml"  code="true" lang="yaml" >}}
+
+Create a new file with the name `lab062/pipeline.yaml` with following content.
 
 {{< readfile file="src/guards/pipeline.yaml"  code="true" lang="yaml" >}}
 
@@ -69,11 +79,11 @@ Lets add a Task Guards to the Tasks to controll their execution based on an inpu
 Enter follwing commands to create the *Task* and the *Pipeline*
 
 ```bash
-{{% param cliToolName %}} -f task.yaml -n $USER
-{{% param cliToolName %}} -f pipeline.yaml -n $USER
+{{% param cliToolName %}} -f lab062/task.yaml -n $USER
+{{% param cliToolName %}} -f lab062/pipeline.yaml -n $USER
 ```
 
-Now er are going to start the pipeline direct from the cli. For this you can use following command:
+Now we are going to start the pipeline direct from the cli. For this you can use following command:
 After that the Tekton CLI ask you to provide the parameters
 
 ```bash
@@ -108,6 +118,6 @@ Waiting for logs to be available...
 ## Task {{% param sectionnumber %}}.4: Cleanp
 
 ```bash
-{{% param cliToolName %}} delete -f task.yaml -n $USER
-{{% param cliToolName %}} delete -f pipeline.yaml -n $USER
+{{% param cliToolName %}} delete -f lab062/task.yaml -n $USER
+{{% param cliToolName %}} delete -f lab062/pipeline.yaml -n $USER
 ```

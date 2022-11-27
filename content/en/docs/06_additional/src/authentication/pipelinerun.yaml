@@ -2,6 +2,8 @@ apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
   generateName: build-go-run-
+  labels:
+    ch.acend/lab: "tekton-basics"
 spec:
   pipelineRef:
     name: build-go
