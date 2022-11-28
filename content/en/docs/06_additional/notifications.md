@@ -1,16 +1,11 @@
 ---
-title: "6.6 Failures and Notifications"
+title: "6.6 Notifications"
 weight: 66
 sectionnumber: 6.6
 ---
 
 
-## {{% param sectionnumber %}}.1: Failures
-
-//TODO
-
-
-## {{% param sectionnumber %}}.2: Notifications
+## {{% param sectionnumber %}}.1: Notifications
 
 A common usecase is to notify your team about successfull or failed pipelines. In Tekton we can achieve this by adding sepcifiec Tasks which handle the notifications. There are lot of different community *Tasks* which you can use.
 
@@ -21,7 +16,7 @@ A common usecase is to notify your team about successfull or failed pipelines. I
 * [SMTP Mail](https://github.com/tektoncd/catalog/tree/main/task/sendmail)
 
 
-## Example {{% param sectionnumber %}}.3: Slack notifications
+## Example {{% param sectionnumber %}}.2: Slack notifications
 
 In this section we are going to show you how to implement s Slack channel notification for your pipelines.
 Start with a new directory lab066 in your workspace directory.

@@ -137,7 +137,9 @@ spec:
 ```
 
 
-## {{% param sectionnumber %}}.2 Artifcat promotion
+## {{% param sectionnumber %}}.2 Artifcat publishing
 
 A common question is `How can I store my artifacts like test reports in Tekton?`
 Unfortunately Tekton doesn't offer artifact managment. If you want to store your artefacts (e.g. Test or security scan reports, build artifacts) you have to do this by yourself. For example store your reports on a S3 compatible storage.
+
+Following example shows how to use a generic Task to store artifacts on our Gitea instance

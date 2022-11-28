@@ -1,0 +1,31 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: gitea-upload
+  labels:
+    ch.acend/lab: "tekton-basics"
+spec:
+  description: >-
+    This Task is to upload files to your Gitea instance.
+  params:
+  - name: file
+    description: "path to file"
+  - name: giteaUrl
+    description: "Url to gitea instance"
+    default: https://gitea.example.com
+  - name: username
+    description: "username"
+  - name: password
+    description: password
+  - name: version
+    description: "version of the published file"
+    default: "1.0.0"
+  - name: filename
+    description: "upload name of the file"
+  workspaces:
+  - name: source
+  steps:
+  - name: upload
+    image: docker.io/library/golang:alpine
+    args: ["--user $(params.username):$(params.password)", "--upload-file $(params.file)", "$(params.giteaUrl)/api/packages/$(params.username)/generic/test/$(params.version)/$(params.filename)"]
+    workingDir: $(workspaces.source.path)
