@@ -137,7 +137,46 @@ spec:
 ```
 
 
-## {{% param sectionnumber %}}.2 Artifcat promotion
+## {{% param sectionnumber %}}.2 Artifcat publishing
 
 A common question is `How can I store my artifacts like test reports in Tekton?`
 Unfortunately Tekton doesn't offer artifact managment. If you want to store your artefacts (e.g. Test or security scan reports, build artifacts) you have to do this by yourself. For example store your reports on a S3 compatible storage.
+
+Following example shows how to use a generic Task to store artifacts on our Gitea instance.
+
+First we are going to reuse the go build task from the previous lab. Create a new file called `lab061/build-task.yaml`
+
+{{< readfile file="src/matrix/task.yaml"  code="true" lang="yaml"  >}}
+
+Use following command to create a new *TaskRun*
+
+```bash
+{{% param cliToolName %}} apply -f lab061/build-task.yaml
+```
+
+Next create a new Task file named `lab061/upload-task.yaml` with following content:
+
+{{< readfile file="src/caching/publish-task.yaml"  code="true" lang="yaml"  >}}
+
+And apply the newly created file to the cluster with following command
+
+```bash
+{{% param cliToolName %}} apply -f lab061/upload-task.yaml
+```
+
+Finally we can create our Pipeline called `lab061/pipeline.yaml` ressource which executes the following tasks:
+
+* `git-clone` checkout our awesome app Repository
+* `build-task` build the go binary
+* `upload` upload the binary to our Gitea server
+
+All tasks are executed in sequence and share the same workspace
+
+{{< readfile file="src/caching/pipeline.yaml"  code="true" lang="yaml"  >}}
+
+And apply the pipeline to the cluster
+
+```bash
+{{% param cliToolName %}} apply -f lab061/pipeline.yaml
+```
+

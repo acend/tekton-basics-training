@@ -1,0 +1,73 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: build-go-matrix
+  labels:
+    ch.acend/lab: "tekton-basics"
+spec:
+  params:
+    - name: repository
+      description: Repository to checkout
+      default: https://github.com/acend/awesome-apps
+    - name: application
+      description: Application subpath in repository
+      default: go
+    - name: os
+      type: array
+      default:
+        - linux
+        - windows
+    - name: arch
+      type: array
+      default:
+        - amd64
+        - arm
+  workspaces:
+  - name: ws-1
+  tasks:
+    - name: git-clone
+      params:
+        - name: url
+          value: $(params.repository)
+      taskRef:
+        kind: ClusterTask
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: ws-1
+    - name: build-go
+      params:
+        - name: GOOS
+          value: linux
+        - name: GOARCH
+          value: amd64
+      runAfter:
+        - git-clone
+      taskRef:
+        kind: Task
+        name: golang-build
+      workspaces:
+        - name: source
+          workspace: ws-1
+    - name: upload
+      params:
+        - name: file
+          value: go/awesome-go
+        - name: giteaUrl
+          value: 'https://gitea.training.openshift.ch'
+        - name: username
+          value: <username>
+        - name: password
+          value: <password>
+        - name: version
+          value: 1.0.0
+        - name: filename
+          value: awesome-go-app
+      runAfter:
+        - build-go
+      taskRef:
+        kind: Task
+        name: gitea-upload
+      workspaces:
+        - name: source
+          workspace: ws-1

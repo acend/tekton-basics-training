@@ -1,0 +1,33 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: golang-build
+  labels:
+    ch.acend/lab: "tekton-basics"
+spec:
+  description: >-
+    This Task is Golang task to build Go projects.
+  params:
+  - name: GOOS
+    description: "running program's operating system target"
+    default: linux
+  - name: GOARCH
+    description: "running program's architecture target"
+    default: amd64
+  workspaces:
+  - name: source
+  steps:
+    - env:
+        - name: GOOS
+          value: $(params.GOOS)
+        - name: GOARCH
+          value: $(params.GOARCH)
+        - name: GO111MODULE
+          value: 'off'
+      image: 'docker.io/library/golang:alpine'
+      name: build
+      resources: {}
+      script: |
+        echo "building go for $(params.GOOS)/$(params.GOARCH)"
+        go build -o awesome-go main.go
+      workingDir: $(workspaces.source.path)/go
