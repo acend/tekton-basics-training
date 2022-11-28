@@ -1,0 +1,50 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: build-go-matrix
+  labels:
+    ch.acend/lab: "tekton-basics"
+spec:
+  params:
+    - name: repository
+      description: Repository to checkout
+      default: https://github.com/acend/awesome-apps
+    - name: application
+      description: Application subpath in repository
+      default: go
+    - name: os
+      type: array
+      default:
+        - linux
+        - windows
+    - name: arch
+      type: array
+      default:
+        - amd64
+        - arm
+  workspaces:
+  - name: ws-1
+  tasks:
+    - name: git-clone
+      workspaces:
+      - name: output
+        workspace: ws-1
+      params:
+      - name: url
+        value: $(params.repository)
+      taskRef:
+        name: git-clone
+        kind: ClusterTask
+    - name: build-go
+      workspaces:
+      - name: source
+        workspace: ws-1
+      matrix:
+        params:
+          - name: GOOS
+            value: $(params.os)
+          - name: GOARCH
+            value: $(params.arch)
+      taskRef:
+        name: golang-build
+        kind: Task
