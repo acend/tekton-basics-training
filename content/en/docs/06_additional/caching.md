@@ -7,9 +7,9 @@ sectionnumber: 6.1
 
 ## {{% param sectionnumber %}}.1: Workspaces
 
-As we already see in the previous labs, Tekton offers the possibility to use *Workspaces* for transferring data between different Tasks.
+As we have already seen in the previous labs, Tekton offers the possibility to use *Workspaces* for transferring data between different Tasks.
 
-At it’s base the Workspace is just another Kubernetes resource being shared and mounted to your Pods running the pipeline / tasks. In the definition of the Pipeline we can state all the Workspace resources used and in the definition of each Task we will define to which Workspace the pods have access to.
+At its base the Workspace is just another Kubernetes resource being shared and mounted to your Pods running the pipeline / tasks. In the definition of the Pipeline we can state all the Workspace resources used and in the definition of each Task we will define to which Workspace the pods have access to.
 
 You can use *Workspaces* for different use cases:
 
@@ -19,8 +19,8 @@ You can use *Workspaces* for different use cases:
 
 Here is an example how you can pass data between *Tasks* with *Claims*, *Secrets* and *ConfigMaps*
 
-Lets start with the Kubernetes basic ressources.
-First we can define a PVC for our workspace. PVCs are the first choice if you need to persist data between Tasks.
+Let's start with the Kubernetes basic ressources.
+First, we can define a PVC for our workspace. PVCs are the first choice if you need to persist data between Tasks.
 
 ```yaml
 apiVersion: v1
@@ -63,10 +63,10 @@ data:
 ```
 
 Now we are going to use the defined workspace within a *TaskRun*.
-In the example below you can see different Methods how to use and mount a *Workspace*
+In the example below you can see different methods how to use and mount a *Workspace* :
 
 * The *PersistentVolumeClaim* `my-pvc` is referenced two times in the *TaskRun* (With and without a SubPath)
-* There is an inline definition for a *PersistenVolumeClaim* `custom3`. It from the type emptyDir, this is nothingmore than an ephermal Workspace.
+* There is an inline definition for a *PersistenVolumeClaim* `custom3`. It is of the type emptyDir, which is nothing more than an ephermal Workspace.
 * The *Secret* `my-secret`is mounted two times.
 
 ```yaml

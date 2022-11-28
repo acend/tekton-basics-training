@@ -6,7 +6,7 @@ sectionnumber: 4
 
 In the last chapter we made a short dive into building first tasks and wrap them in pipelines. One of the most common tasks in modern continuous integration and delivery pipelines is building applications and containers. We will take a look at how we can implement a basic application and docker build in a Tekton pipeline.
 
-The pipeline will consist out of two basic tasks:
+The pipeline will consist of two basic tasks:
 
 1. clone a git repository with the source code
 1. build the container image
@@ -40,7 +40,7 @@ spec:
 ## {{% param sectionnumber %}}.2: Tasks and ClusterTasks
 
 
-For tasks which are often reused on a cluster's scale, Tekton introduces another construct called **ClusterTask**. A **ClusterTask** is built the same way as a normal **Task** but will be available cluster-wide.
+For tasks which are often reused on a cluster wide scale, Tekton introduces another construct called **ClusterTask**. A **ClusterTask** is built the same way as a normal **Task** but will be available cluster-wide.
 
 Another new feature we are going to take a look at is the [**Tekton Hub**](https://hub.tekton.dev/). The hub contains a collection of widely used definitions which can be installed and reused, similar to a Helm or Docker repository.
 
@@ -106,9 +106,9 @@ Our predefined task seems to have some dependencies. Let's move on.
 
 ## {{% param sectionnumber %}}.4: Workspaces
 
-So far we have worked with pipelines and tasks without stages. In reality CI pipelines are - obviously - state driven. To add state and volumes to your piplines and tasks we will take a short look at the concept of workspaces in Tekton. **Workspaces** can be Storage, ConfigMaps, Secrets and can be restricted to be read-only.
+So far, we have worked with pipelines and tasks without stages. In reality, CI pipelines are - obviously - state driven. To add state and volumes to your piplines and tasks we will take a short look at the concept of workspaces in Tekton. **Workspaces** can be Storage, ConfigMaps, Secrets and can be restricted to be read-only.
 
-At it's base the **Workspace** is just another Kubernetes resource being shared and mounted to your **Pods** running the pipeline / tasks. In the definition of the **Pipeline** we can state all the **Workspace** resources used and in the definition of each **Task** we will define to which **Workspace** the pods have access to. Take a look at the following example:
+At its base the **Workspace** is just another Kubernetes resource being shared and mounted to your **Pods** running the pipeline / tasks. In the definition of the **Pipeline** we can state all the **Workspace** resources used and in the definition of each **Task** we will define to which **Workspace** the pods have access to. Take a look at the following example:
 
 ```yaml
 spec:
@@ -191,7 +191,14 @@ The buildah task is available as Cluster Task:
 
 Use the predefined *buildah* ClusterTask to enhance your pipeline to build and push a docker image. Add the task to your already defined pipeline *build-go*.
 
-Make sure to replace `<uuid>` with a corresponding uuid.
+Make sure to replace `<uuid>` with a corresponding uuid, when editing the file `<lab04/build-go-pipeline.yaml>`.
+
+{{% alert title="Note" color="info" %}}
+You can find the uuid of your disk partition by running (on your Linux system)
+```bash
+sudo lsblk -f
+```
+{{% /alert %}}
 
 ```yaml
 apiVersion: tekton.dev/v1beta1
