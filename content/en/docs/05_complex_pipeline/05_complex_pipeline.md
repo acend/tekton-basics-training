@@ -135,6 +135,12 @@ spec:
 
 ## Task {{% param sectionnumber %}}.2: Create the pipeline
 
+Make a new directory `lab05` for this lab in your workspace directory.
+
+```bash
+mkdir lab05
+```
+
 Create a *Pipeline* resource `java-pipeline` with a single step to checkout the [awesome-apps](https://github.com/acend/awesome-apps) repository. We can again reuse the already predefined *Task* **git-clone**. Try to parameterize as much as possible already, create parameters for the repository's URL and the corresponding subfolder (this time we will build the application in the `java-quarkus` subfolder).
 
 Create a file named `lab05/pipeline.yaml` with the following content:
