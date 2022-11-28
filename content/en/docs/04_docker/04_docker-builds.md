@@ -191,7 +191,7 @@ The buildah task is available as Cluster Task:
 
 Use the predefined *buildah* ClusterTask to enhance your pipeline to build and push a docker image. Add the task to your already defined pipeline *build-go*.
 
-Make sure to replace `<uuid>` with a corresponding uuid. TIP: Get an example uuid by typing `uuid`.
+Make sure to replace `<uuid>` with a corresponding uuid. TIP: Get an example uuid by typing `uuidgen`.
 
 ```yaml
 apiVersion: tekton.dev/v1beta1
