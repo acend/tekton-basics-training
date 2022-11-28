@@ -54,7 +54,7 @@ Your task as the new CI officer is to implement the first step of your pipeline 
 Let's check if the task is already defined and available in either the cluster or your namespace:
 
 ```bash
-{{% param cliToolName %}} --namespace $USER get clustertask git-clone
+{{% param cliToolName %}} get clustertask git-clone --namespace $USER 
 ```
 
 The git-clone task is available as clustertask.
@@ -86,13 +86,13 @@ spec:
 Create the pipeline
 
 ```bash
-{{% param cliToolName %}} --namespace $USER apply -f lab04/build-go-pipeline.yaml
+{{% param cliToolName %}} apply -f lab04/build-go-pipeline.yaml --namespace $USER 
 ```
 
 and run it
 
 ```bash
-tkn --namespace $USER pipeline start build-go
+tkn pipeline start build-go --namespace $USER 
 ```
 
 The pipeline will fail, with the following error:
@@ -165,15 +165,16 @@ spec:
 Again apply your changes
 
 ```bash
-{{% param cliToolName %}} --namespace $USER apply -f lab04/build-go-pipeline.yaml
+{{% param cliToolName %}} apply -f lab04/build-go-pipeline.yaml --namespace $USER 
 ```
 
 and run it, with the following configuration
 
 ```bash
-tkn --namespace $USER pipeline start build-go \
+tkn pipeline start build-go \
     --workspace name=ws-1,emptyDir= \
-    --use-param-defaults
+    --use-param-defaults \
+    --namespace $USER
 ```
 
 {{% alert title="Note" color="primary" %}}We configure the workspace as an emptyDir for test purposes and to show how to configure pipelineruns via CLI. You will learn about pipelineruns soon.{{% /alert %}}
@@ -186,7 +187,7 @@ We have now a pipeline with a task that clones a git repository to our workspace
 The buildah task is available as Cluster Task:
 
 ```bash
-{{% param cliToolName %}} get clustertask buildah
+{{% param cliToolName %}} get clustertask buildah --namespace $USER
 ```
 
 Use the predefined *buildah* ClusterTask to enhance your pipeline to build and push a docker image. Add the task to your already defined pipeline *build-go*.
@@ -258,7 +259,7 @@ spec:
 Again apply your changes
 
 ```bash
-{{% param cliToolName %}} --namespace $USER apply -f lab04/build-go-pipeline.yaml
+{{% param cliToolName %}} apply -f lab04/build-go-pipeline.yaml --namespace $USER 
 ```
 
 We can trigger the pipeline by creating a **PipelineRun** resource, referencing our created pipeline *build-go*.
@@ -309,12 +310,12 @@ spec:
 Let's create the `PipelineRun` which will instantly start our pipeline:
 
 ```bash
-{{% param cliToolName %}} --namespace $USER create -f lab04/build-docker-pipelinerun.yaml
+{{% param cliToolName %}} create -f lab04/build-docker-pipelinerun.yaml --namespace $USER 
 ```
 
 Check the logs and verify if your image was built correctly!
 ```bash
-tkn --namespace $USER pipelinerun logs
+tkn pipelinerun logs --namespace $USER 
 ```
 and choose the last run.
 
@@ -324,5 +325,5 @@ and choose the last run.
 Delete all the resources created during this chapter in your namespace.
 
 ```bash
-{{% param cliToolName %}} --namespace $USER delete pipeline build-go
+{{% param cliToolName %}} delete pipeline build-go --namespace $USER 
 ```

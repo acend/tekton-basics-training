@@ -22,7 +22,7 @@ Then create a new file called `lab068/task.yaml` with the following content
 Let's create the task resource first
 
 ```bash
-{{% param cliToolName %}} apply -f lab068/task.yaml -n $USER
+{{% param cliToolName %}} apply -f lab068/task.yaml --namespace $USER 
 ```
 
 
@@ -44,7 +44,7 @@ Then add two parameters to the `trivy-scanner` task.
 Next create the pipeline resource, use following command for this:
 
 ```bash
-{{% param cliToolName %}} apply -f lab068/pipeline.yaml -n $USER
+{{% param cliToolName %}} apply -f lab068/pipeline.yaml --namespace $USER 
 ```
 
 
@@ -62,13 +62,13 @@ Create a new file `lab068/pipelinerun.yaml` and define the **PipelineRun** to ha
 
 Create the *PipelineRun* resource
 ```bash
-{{% param cliToolName %}} apply -f lab068/pipelinerun.yaml -n $USER
+{{% param cliToolName %}} apply -f lab068/pipelinerun.yaml --namespace $USER 
 ```
 
 Check the *PipelineRun* log output with following command:
 
 ```bash
-tkn pipelinerun logs trivy-scanner-run
+tkn pipelinerun logs trivy-scanner-run --namespace $USER 
 ```
 
 You should see the following output:
@@ -102,7 +102,7 @@ Clean up all `Task` and `Pipeline` resources created in this chapter:
 
 
 ```bash
-{{% param cliToolName %}} -n $USER delete pipeline trivy-scanner-pipeline
-{{% param cliToolName %}} -n $USER delete pipelinerun trivy-scanner-run
-{{% param cliToolName %}} -n $USER delete task trivy-scanner
+{{% param cliToolName %}} delete pipeline trivy-scanner-pipeline --namespace $USER 
+{{% param cliToolName %}} delete pipelinerun trivy-scanner-run --namespace $USER 
+{{% param cliToolName %}} delete task trivy-scanner --namespace $USER 
 ```

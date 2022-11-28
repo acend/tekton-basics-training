@@ -28,13 +28,13 @@ mkdir lab066
 First we need to create the Slack Notification task, for this we take one of the community tasks. Use the following command to create the task.
 
 ```bash
-{{% param cliToolName %}} apply -f https://api.hub.tekton.dev/v1/resource/tekton/task/send-to-webhook-slack/0.1/raw -n $USER
+{{% param cliToolName %}} apply -f https://api.hub.tekton.dev/v1/resource/tekton/task/send-to-webhook-slack/0.1/raw --namespace $USER 
 ```
 
 Next create a secret which contains the URL for the Slack webhook. **Ask your teacher for the URL!**
 
 ```bash
-{{% param cliToolName %}} create secret generic webhook-secret --from-literal=url=<ask your teacher for url> -n $USER
+{{% param cliToolName %}} create secret generic webhook-secret --from-literal=url=<ask your teacher for url> --namespace $USER 
 ```
 
 To check if everything is working as expected, create the following *TaskRun* to test the Slack notification.
@@ -65,7 +65,7 @@ Next create the file for the *PipelineRun* `lab/066pipelinerun.yaml`.
 
 And then start your pipeline by creating a new *PipelineRun*. After a short time your message should be visible in your Slack channel.
 ```bash
-{{% param cliToolName %}} create -f lab066/pipelinerun.yaml -n $USER
+{{% param cliToolName %}} create -f lab066/pipelinerun.yaml --namespace $USER 
 ```
 
 
@@ -99,7 +99,7 @@ And then we can append it to the existing failure message.
 
 And then create a new *PipelineRun*. As soon the pipeline is failing, you get the message including the link to the logs.
 ```bash
-{{% param cliToolName %}} create -f lab066/pipelinerun.yaml -n $USER
+{{% param cliToolName %}} create -f lab066/pipelinerun.yaml --namespace $USER 
 ```
 
 {{% /details %}}
@@ -108,8 +108,8 @@ And then create a new *PipelineRun*. As soon the pipeline is failing, you get th
 ## Task {{% param sectionnumber %}}.5: CleanUp
 
 ```bash
-{{% param cliToolName %}} delete -f https://api.hub.tekton.dev/v1/resource/tekton/task/send-to-webhook-slack/0.1/raw -n $USER
-{{% param cliToolName %}} delete -f lab066/taskrun.yaml -n $USER
-{{% param cliToolName %}} delete secret webhook-secret -n $USER
-{{% param cliToolName %}} delete -f lab066/pipelinerun.yaml -n $USER
+{{% param cliToolName %}} delete -f https://api.hub.tekton.dev/v1/resource/tekton/task/send-to-webhook-slack/0.1/raw --namespace $USER 
+{{% param cliToolName %}} delete -f lab066/taskrun.yaml --namespace $USER 
+{{% param cliToolName %}} delete secret webhook-secret --namespace $USER 
+{{% param cliToolName %}} delete -f lab066/pipelinerun.yaml --namespace $USER 
 ```

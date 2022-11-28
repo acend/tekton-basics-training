@@ -82,8 +82,8 @@ mkdir $HOME/.ssh && ssh-keygen -t ed25519 -C "$USER" -f "$HOME/.ssh/id_ed25519" 
 Next create a Kubernetes secret which contains our private shh key and annotate the secret.
 
 ```bash
-{{% param cliToolName %}} create secret generic git-ssh-key --from-file=ssh-privatekey=$HOME/.ssh/id_ed25519 --type=kubernetes.io/ssh-auth -n $USER
-{{% param cliToolName %}} annotate secrets git-ssh-key tekton.dev/git-0=ssh.{{% param giteaUrl %}}:2222 -n $USER
+{{% param cliToolName %}} create secret generic git-ssh-key --from-file=ssh-privatekey=$HOME/.ssh/id_ed25519 --type=kubernetes.io/ssh-auth --namespace $USER
+{{% param cliToolName %}} annotate secrets git-ssh-key tekton.dev/git-0=ssh.{{% param giteaUrl %}}:2222 --namespace $USER
 ```
 
 Afterwards open Gitea in your browser and add your public key to your personal account. For this, copy the public key which we created before:
@@ -105,7 +105,7 @@ The last thing we need is to link our Kubernetes secret to the pipelines Service
 Enter the following command to add the `git-ssh-key` secret to the `pipeline` service account.
 
 ```bash
-{{% param cliToolName %}}  patch serviceaccount pipeline -p '{"secrets": [{"name": "git-ssh-key"}]}'
+{{% param cliToolName %}} patch serviceaccount pipeline -p '{"secrets": [{"name": "git-ssh-key"}]}' --namespace $USER
 ```
 
 
@@ -118,7 +118,7 @@ First create a new file for the pipeline `pipeline.yaml` with a simple Git clone
 
 
 ```bash
-{{% param cliToolName %}} apply -f lab063/pipeline.yaml
+{{% param cliToolName %}} apply -f lab063/pipeline.yaml --namespace $USER
 ```
 
 
@@ -127,7 +127,7 @@ Next create the file for the pipeline run `pipelinerun.yaml`.
 
 And then apply the newly create pipeline run to the cluster
 ```bash
-{{% param cliToolName %}} create -f lab063/pipelinerun.yaml
+{{% param cliToolName %}} create -f lab063/pipelinerun.yaml --namespace $USER
 ```
 
 
@@ -136,6 +136,6 @@ And then apply the newly create pipeline run to the cluster
 Clean up all `Pipeline` and `PipelineRun` resources created in this chapter:
 
 ```bash
-{{% param cliToolName %}} --namespace $USER delete -f lab063/pipeline.yaml
-{{% param cliToolName %}} --namespace $USER delete -f lab063/pipelinerun.yaml
+{{% param cliToolName %}} delete -f lab063/pipeline.yaml --namespace $USER
+{{% param cliToolName %}} delete -f lab063/pipelinerun.yaml --namespace $USER
 ```
