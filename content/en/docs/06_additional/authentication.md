@@ -26,6 +26,7 @@ Each Secret type supports multiple credentials covering multiple domains and est
 
 To consume these Secrets, Tekton performs credential initialization within every Pod it instantiates, before executing any Steps in the Run. During credential initialization, Tekton accesses each Secret associated with the Run and aggregates them into a /tekton/creds directory. Tekton then copies or symlinks files from this directory into the user’s $HOME directory.
 
+
 ### Understanding credential selection
 
 A Run might require multiple types of authentication. For example, a Run might require access to multiple private Git and Docker repositories. You must properly annotate each Secret to specify the domains for which Tekton can use the credentials that the Secret contains. Tekton ignores all Secrets that are not properly annotated.
