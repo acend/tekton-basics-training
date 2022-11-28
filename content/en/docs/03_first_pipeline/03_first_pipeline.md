@@ -77,7 +77,7 @@ tkn --namespace $USER task start test
 ```
 which will result in something similar to:
 
-```bash
+```
 TaskRun started: test-run-<pod>
 
 In order to track the TaskRun progress run:
@@ -90,7 +90,7 @@ Remember the resource `TaskRun` which is an instantiation of a `Task` running on
 tkn --namespace $USER taskrun list
 ```
 
-To inspect the logs and verify that our task has done everything we wanted it to we use:
+To inspect the logs and verify that our task has done everything we wanted it to, we use:
 
 ```bash
 tkn taskrun logs <taskrun-name> -f -n $USER
@@ -98,7 +98,7 @@ tkn taskrun logs <taskrun-name> -f -n $USER
 
 You should see that the tasks greets us, just like we declared it to.
 
-```bash
+```
 [echo] Hello, world
 ```
 
@@ -113,7 +113,7 @@ When we started our first `Task` in the previous chapter, the Tekton operator in
 
 You should find one completed `Pod` in your namespace:
 
-```bash
+```
 NAME                     READY   STATUS      RESTARTS   AGE
 test-run-<taskrun>-pod   0/1     Completed   0          12m
 ```
@@ -132,7 +132,7 @@ And also explore the `Pod` resource
 {{% param cliToolName %}} -n $USER describe pod test-run-<taskrun>-pod
 ```
 
-Under `Init Containers` you will find the `place-scripts` container, which is responsible to copy the actually script from our `Task` to a mounted persistent volume (`/tekton/scripts`).
+Under `Init Containers` you will find the `place-scripts` container, which is responsible to copy the actual script from our `Task` to a mounted persistent volume (`/tekton/scripts`).
 The container `step-echo` will then execute this script.
 
 If we have a closer look at the Arguments within the `place-scripts` init container, you'll find a base 64 encoded string:
@@ -230,19 +230,28 @@ Again create the Task:
 {{% param cliToolName %}} --namespace $USER apply -f lab03/test-task-param.yaml
 ```
 
-And run it, if you want you can overwrite the default value, with your value:
+And run it, if you want you can overwrite the default value with your value:
 
 ```bash
 tkn --namespace $USER task start test-param
 ```
 
-And check the logs, whether the correct name was used
+Check the logs, whether the correct name was used
+
+{{% alert title="Note" color="info" %}}
+The previous command output contains the command to check the logs.
+Otherwise you can find the taskrun ID by running:
+```
+tkn --namespace $USER taskrun list
+```
+{{% /alert %}}
+
 
 ```bash
 tkn taskrun logs <taskrun> -f -n $USER
 ```
 
-Consult the `tkn task start` help, to find out how you could pass a parameter directly to the cli.
+Consult the `tkn task start` help, to find out how you could pass a parameter directly to the CLI.
 
 ```bash
 tkn task start --help
@@ -350,9 +359,9 @@ tkn pipelinerun logs <pipelinerun> -f -n <username>
 The logoutput should then look similar to:
 
 ```bash
-[testref : echo] Hello, Chuck Norris
+[inline : echo] Hello, Chuck Norris (inline)
 
-[inline : echo] Hello, Chuck Norris Pipeline
+[testref : echo] Hello, Chuck Norris
 ```
 
 

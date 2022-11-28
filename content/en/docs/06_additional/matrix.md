@@ -4,6 +4,8 @@ weight: 69
 sectionnumber: 6.9
 ---
 
+{{% alert title="Note" color="primary" %}}This is a non functional demo lab. The matrix feature is an alpha state feature which is currently not activated in our cluster.{{% /alert %}}
+
 
 ## {{% param sectionnumber %}}.1: Matrix
 

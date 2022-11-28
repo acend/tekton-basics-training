@@ -26,7 +26,8 @@ Each Secret type supports multiple credentials covering multiple domains and est
 
 To consume these Secrets, Tekton performs credential initialization within every Pod it instantiates, before executing any Steps in the Run. During credential initialization, Tekton accesses each Secret associated with the Run and aggregates them into a /tekton/creds directory. Tekton then copies or symlinks files from this directory into the user’s $HOME directory.
 
-Understanding credential selection
+
+### Understanding credential selection
 
 A Run might require multiple types of authentication. For example, a Run might require access to multiple private Git and Docker repositories. You must properly annotate each Secret to specify the domains for which Tekton can use the credentials that the Secret contains. Tekton ignores all Secrets that are not properly annotated.
 
@@ -72,7 +73,7 @@ mkdir lab063
 
 A common use case is authentication in Git with an private shh key. In this example we are going to create a SSH keypair and configure our Gitea account to allow cloning private repositories with this particular key.
 
-First create a new SSH keypair with following command:
+First create a new SSH keypair with the following command:
 
 ```bash
 mkdir $HOME/.ssh && ssh-keygen -t ed25519 -C "$USER" -f "$HOME/.ssh/id_ed25519" -P "" -q
@@ -87,7 +88,7 @@ Next create a Kubernetes secret which contains our private shh key and annotate 
 
 Afterwards open Gitea in your browser and add your public key to your personal account. For this, copy the public key which we created before:
 
-Display and copy the public key with following command:
+Display and copy the public key with the following command:
 
 ```bash
 cat "$HOME/.ssh/id_ed25519.pub"
@@ -98,10 +99,10 @@ Now add a new key with `Add Key`. Set a name for the key and paste your public k
 
 ![Add SSH Key in Gitea](../ssh.gif)
 
-Now your Gitea account is configured to work with your new created SSH key.
+Now your Gitea account is configured to work with your newly created SSH key.
 
 The last thing we need is to link our Kubernetes secret to the pipelines Service Account.
-Enter following command to add the `git-ssh-key` secret to the `pipeline` service account.
+Enter the following command to add the `git-ssh-key` secret to the `pipeline` service account.
 
 ```bash
 {{% param cliToolName %}}  patch serviceaccount pipeline -p '{"secrets": [{"name": "git-ssh-key"}]}'
