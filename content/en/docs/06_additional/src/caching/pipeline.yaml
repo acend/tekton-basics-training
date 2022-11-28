@@ -54,11 +54,11 @@ spec:
         - name: file
           value: go/awesome-go
         - name: giteaUrl
-          value: 'https://gitea.training.openshift.ch/'
+          value: 'https://gitea.training.openshift.ch'
         - name: username
-          value: user5
+          value: <username>
         - name: password
-          value: oN8Lq8CMnx
+          value: <password>
         - name: version
           value: 1.0.0
         - name: filename

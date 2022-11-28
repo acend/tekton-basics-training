@@ -17,15 +17,17 @@ spec:
   workspaces:
   - name: source
   steps:
-  - name: build
-    image: docker.io/library/golang:alpine
-    workingDir: $(workspaces.source.path)/go
-    script: |
-      echo "building go for $(params.GOOS)/$(params.GOARCH)"
-      go build main.go -o awesome-go
-      ls -lah
-    env:
-    - name: GOOS
-      value: "$(params.GOOS)"
-    - name: GOARCH
-      value: "$(params.GOARCH)"
+    - env:
+        - name: GOOS
+          value: $(params.GOOS)
+        - name: GOARCH
+          value: $(params.GOARCH)
+        - name: GO111MODULE
+          value: 'off'
+      image: 'docker.io/library/golang:alpine'
+      name: build
+      resources: {}
+      script: |
+        echo "building go for $(params.GOOS)/$(params.GOARCH)"
+        go build -o awesome-go main.go
+      workingDir: $(workspaces.source.path)/go
