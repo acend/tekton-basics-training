@@ -7,29 +7,29 @@ sectionnumber: 6.8
 
 ## {{% param sectionnumber %}}.1: Security Scan Task
 
-In this short section we will show you how tom implement a security scan for your built image. For this we are going to use the Aquasecurity Trivy scanner. Trivy is a simple and comprehensive scanner for vulnerabilities in container images.
+In this short section we will show you how to implement a security scan for your built image. For this we are going to use the Aquasecurity Trivy scanner. Trivy is a simple and comprehensive scanner for vulnerabilities in container images.
 
 Start with a new directory lab068 in your workspace directory.
 
 ```bash
 mkdir lab068
 ```
-Then create a new file called `lab068/task.yaml` with following content
+Then create a new file called `lab068/task.yaml` with the following content
 
 {{< readfile file="src/security/task.yaml" code="true" lang="yaml"   >}}
 
 
-Lets create the task ressource first
+Let's create the task resource first
 
 ```bash
-{{% param cliToolName %}} apply -f lab068/task.yaml -n $USER
+{{% param cliToolName %}} apply -f lab068/task.yaml --namespace $USER 
 ```
 
 
 ## {{% param sectionnumber %}}.2: Create Security Scan Pipeline
 
-Create a new *Pipeline* ressource in `lab08/pipeline.yaml` which reference the task `trivy-scanner` from above
-Add one parameter to the pipeline
+Create a new *Pipeline* resource in `lab08/pipeline.yaml` which reference the task `trivy-scanner` from above.
+Add one parameter to the pipeline.
 
 * `image`: Parameter which defines the image to be scanned by Trivy
 
@@ -41,10 +41,10 @@ Then add two parameters to the `trivy-scanner` task.
 
 {{< readfile file="src/security/pipeline.yaml"  code="true" lang="yaml"  >}}
 
-Next create the pipeline ressource, use following command for this
+Next create the pipeline resource, use following command for this:
 
 ```bash
-{{% param cliToolName %}} apply -f lab068/pipeline.yaml -n $USER
+{{% param cliToolName %}} apply -f lab068/pipeline.yaml --namespace $USER 
 ```
 
 
@@ -53,27 +53,27 @@ Next create the pipeline ressource, use following command for this
 Create a new file `lab068/pipelinerun.yaml` and define the **PipelineRun** to have:
 
 * A `metadata.name: trivy-scanner-run`
-* `spec.params.image` parameter for the image wich is going to be scanned (in this case  `alpine`)
+* `spec.params.image` parameter for the image which is going to be scanned (in this case  `alpine`)
 * `pipelineRef` referencing the already defined *Pipeline*
 
 {{% details title="Solution" %}}
 
 {{< readfile file="src/security/pipeline-run.yaml"  code="true" lang="yaml"  >}}
 
-Create the *PipelineRun* ressource
+Create the *PipelineRun* resource
 ```bash
-{{% param cliToolName %}} apply -f lab068/pipelinerun.yaml -n $USER
+{{% param cliToolName %}} apply -f lab068/pipelinerun.yaml --namespace $USER 
 ```
 
-Check the PipelineRun log output with following command:
+Check the *PipelineRun* log output with following command:
 
 ```bash
-tkn pipelinerun logs trivy-scanner-run
+tkn pipelinerun logs trivy-scanner-run --namespace $USER 
 ```
 
-You should see following output
+You should see the following output:
 
-{{% alert title="Note" color="primary" %}}It can happen that the pipeline fails because Trivy find an unfixed CVE in the scanned image.{{% /alert %}}
+{{% alert title="Note" color="primary" %}}It can happen that the pipeline fails because Trivy finds an unfixed CVE in the scanned image.{{% /alert %}}
 
 ```bash
 Running trivy task with command below
@@ -102,7 +102,7 @@ Clean up all `Task` and `Pipeline` resources created in this chapter:
 
 
 ```bash
-{{% param cliToolName %}} -n $USER delete pipeline trivy-scanner-pipeline
-{{% param cliToolName %}} -n $USER delete pipelinerun trivy-scanner-run
-{{% param cliToolName %}} -n $USER delete task trivy-scanner
+{{% param cliToolName %}} delete pipeline trivy-scanner-pipeline --namespace $USER 
+{{% param cliToolName %}} delete pipelinerun trivy-scanner-run --namespace $USER 
+{{% param cliToolName %}} delete task trivy-scanner --namespace $USER 
 ```

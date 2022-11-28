@@ -4,6 +4,8 @@ weight: 69
 sectionnumber: 6.9
 ---
 
+{{% alert title="Note" color="primary" %}}This is a non functional demo lab. The matrix feature is an alpha state feature which is currently not activated in our cluster.{{% /alert %}}
+
 
 ## {{% param sectionnumber %}}.1: Matrix
 
@@ -71,7 +73,7 @@ First we need to create the go build task. The Task has following properties:
 Use following command to create a new *TaskRun*
 
 ```bash
-{{% param cliToolName %}} apply -f lab069/task.yaml
+{{% param cliToolName %}} apply -f lab069/task.yaml --namespace $USER 
 ```
 
 
@@ -80,13 +82,13 @@ Next create the file for the pipeline run `lab069/pipeline.yaml`.
 
 
 ```bash
-{{% param cliToolName %}} apply -f lab069/pipeline.yaml
+{{% param cliToolName %}} apply -f lab069/pipeline.yaml --namespace $USER 
 ```
 
 
 ## Task {{% param sectionnumber %}}.5: Cleanp
 
 ```bash
-{{% param cliToolName %}} delete -f lab069/task.yaml -n $USER
-{{% param cliToolName %}} delete -f lab069/pipeline.yaml -n $USER
+{{% param cliToolName %}} delete -f lab069/task.yaml --namespace $USER 
+{{% param cliToolName %}} delete -f lab069/pipeline.yaml --namespace $USER 
 ```

@@ -24,7 +24,7 @@ Create a new file `lab064/task.yaml` with the content of the example above, and 
 Use following command to create the task in our cluster.
 
 ```bash
-{{% param cliToolName %}} apply -f lab064/task.yaml -n $USER
+{{% param cliToolName %}} apply -f lab064/task.yaml --namespace $USER 
 ```
 
 Next create the file `lab064/secret.yaml` which contains our secret.
@@ -34,17 +34,17 @@ Next create the file `lab064/secret.yaml` which contains our secret.
 And again, apply the file against our cluster.
 
 ```bash
-{{% param cliToolName %}} apply -f lab064/secret.yaml -n $USER
+{{% param cliToolName %}} apply -f lab064/secret.yaml --namespace $USER 
 ```
 
-Because we didn't specify any parameters for the task, we don't need to create a pipeline. We can easily trigger the task with the tekton cli.
-Just run folloing command in your console.
+Because we didn't specify any parameters for the task, we don't need to create a pipeline. We can easily trigger the task with the Tekton CLI.
+Just run the following command in your console.
 
 ```bash
-tkn task start secret-test --showlog -n $USER
+tkn task start secret-test --showlog --namespace $USER 
 ```
 
-After a while you should see following ouput
+After a while you should see the following output
 
 ```console
 TaskRun started: secret-test-run-wdd6b
@@ -53,9 +53,9 @@ Waiting for logs to be available...
 ```
 
 
-## Task {{% param sectionnumber %}}.2: Cleanp
+## Task {{% param sectionnumber %}}.2: CleanUp
 
 ```bash
-{{% param cliToolName %}} delete -f lab064/task.yaml -n $USER
-{{% param cliToolName %}} delete -f lab064/secret.yaml -n $USER
+{{% param cliToolName %}} delete -f lab064/task.yaml --namespace $USER 
+{{% param cliToolName %}} delete -f lab064/secret.yaml --namespace $USER 
 ```
