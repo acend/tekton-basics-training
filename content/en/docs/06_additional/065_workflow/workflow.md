@@ -33,8 +33,8 @@ The defined **Pipeline** will clone the repository and afterwards build the appl
 Apply the *Pipeline* Resource and start the *Pipeline* with the *PipelineRun* resource. You can reuse the *PipelineRun* resource for all the upcoming examples.
 
 ```bash
-{{% param cliToolName %}} apply -f pipeline.yaml -n $USER
-{{% param cliToolName %}} apply -f pipelinerun.yaml -n $USER
+{{% param cliToolName %}} apply -f pipeline.yaml --namespace $USER
+{{% param cliToolName %}} apply -f pipelinerun.yaml --namespace $USER
 ```
 
 
@@ -95,5 +95,5 @@ The last example we are going to look at is how we can guarantee a *Task's* exec
 Remove all the resources from the lab:
 
 ```bash
-{{% param cliToolName %}} delete pipeline,pipelinerun --selector=ch.acend/lab="tekton-basics" -n $USER
+{{% param cliToolName %}} delete pipeline,pipelinerun --selector=ch.acend/lab="tekton-basics" --namespace $USER
 ```

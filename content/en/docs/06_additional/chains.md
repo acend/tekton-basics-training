@@ -39,14 +39,14 @@ spec:
 Create the Task in your namespace:
 
 ```bash
-{{% param cliToolName %}} --namespace $USER apply -f chains-task.yaml
+{{% param cliToolName %}} apply -f chains-task.yaml --namespace $USER
 ```
 
 And start it:
 
 
 ```bash
-tkn --namespace $USER task start tekton-chains-task
+tkn task start tekton-chains-task --namespace $USER
 ```
 
 After the Task ran successfully we can now check for the Tekton Chains annotations.
@@ -58,12 +58,12 @@ export TASKRUN_UID=$(tkn tr describe --last -o  jsonpath='{.metadata.uid}' --nam
 
 Then use the following command to safe the signature into a file with the name `signature`:
 ```bash
-tkn tr describe --last -o jsonpath="{.metadata.annotations.chains\.tekton\.dev/signature-taskrun-$TASKRUN_UID}" > signature
+tkn tr describe --last -o jsonpath="{.metadata.annotations.chains\.tekton\.dev/signature-taskrun-$TASKRUN_UID}" --namespace $USER > signature
 ```
 
 And do the same for the payload:
 ```bash
-tkn tr describe --last -o jsonpath="{.metadata.annotations.chains\.tekton\.dev/payload-taskrun-$TASKRUN_UID}" | base64 -d > payload
+tkn tr describe --last -o jsonpath="{.metadata.annotations.chains\.tekton\.dev/payload-taskrun-$TASKRUN_UID}" --namespace $USER | base64 -d > payload
 ```
 
 Explore the contents of both files
