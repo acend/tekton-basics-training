@@ -44,7 +44,7 @@ For tasks which are often reused on a cluster's scale, Tekton introduces another
 
 Another new feature we are going to take a look at is the [**Tekton Hub**](https://hub.tekton.dev/). The hub contains a collection of widely used definitions which can be installed and reused, similar to a Helm or Docker repository.
 
-Read the definition of the *git-clone* task already defined in the [hub](https://hub.tekton.dev/tekton/task/git-clone).
+Read the definition of the *git-clone* task already defined in the [hub](https://hub.tekton.dev/tekton/task/git-clone). If you are on your own k8s cluster you will have to deploy this for the next steps.
 
 
 ## Task {{% param sectionnumber %}}.3: Add the task
@@ -181,7 +181,7 @@ tkn --namespace $USER pipeline start build-go \
 
 ## Task {{% param sectionnumber %}}.6: Create the docker image
 
-We have now a pipeline with a task that clones a git repository to our workspace. It is your job now to alter the pipeline to build a docker container with the predefined **Task**/**ClusterTask** called *buildah*. You can read the documentation again on the [Tekton Hub](https://hub.tekton.dev/tekton/task/buildah).
+We have now a pipeline with a task that clones a git repository to our workspace. It is your job now to alter the pipeline to build a docker container with the predefined **Task**/**ClusterTask** called *buildah*. You can read the documentation again on the [Tekton Hub](https://hub.tekton.dev/tekton/task/buildah). Deploy it if needed.
 
 The buildah task is available as Cluster Task:
 
@@ -191,7 +191,7 @@ The buildah task is available as Cluster Task:
 
 Use the predefined *buildah* ClusterTask to enhance your pipeline to build and push a docker image. Add the task to your already defined pipeline *build-go*.
 
-Make sure to replace `<uuid>` with a corresponding uuid.
+Make sure to replace `<uuid>` with a corresponding uuid. TIP: Get an example uuid by typing `uuid`.
 
 ```yaml
 apiVersion: tekton.dev/v1beta1

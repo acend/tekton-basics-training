@@ -190,7 +190,7 @@ tkn -n $USER task delete test
 
 In the next task you will create a new Task  `Task` similar to the previous one and personalize your greeting with your name.
 
-As we've learned in [lab 1](../../02_introduction/02_introduction/), parameters can be added in the `spec.params` map like the following:
+As we've learned in [lab 2](../../02_introduction/02_introduction/), parameters can be added in the `spec.params` map like the following:
 
 ```yaml
   params:
@@ -351,9 +351,9 @@ tkn pipelinerun logs <pipelinerun> -f -n <username>
 The logoutput should then look similar to:
 
 ```bash
-[testref : echo] Hello, Chuck Norris
+[inline : echo] Hello, Chuck Norris (inline)
 
-[inline : echo] Hello, Chuck Norris Pipeline
+[testref : echo] Hello, Chuck Norris
 ```
 
 

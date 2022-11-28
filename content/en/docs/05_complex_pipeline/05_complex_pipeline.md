@@ -135,14 +135,20 @@ spec:
 
 ## Task {{% param sectionnumber %}}.2: Create the pipeline
 
-Create a *Pipeline* resource `java-pipeline` with a single step to checkout the [awesome-apps](https://github.com/acend/awesome-apps) repository. We can again reuse the already predefined *Task* **git-clone**. Try to parameterize as much as possible already, create parameters for the repository's URL and the corresponding subfolder (this time we will build the application in the `java-quarkus` subfolder).
+Create a new directory `lab05`.
+
+```bash
+mkdir lab05
+```
+
+Create the file `lab05/pipeline.yaml` with a *Pipeline* resource `java-pipeline` with a single step to checkout the [awesome-apps](https://github.com/acend/awesome-apps) repository. We can again reuse the already predefined *Task* **git-clone**. Try to parameterize as much as possible already, create parameters for the repository's URL and the corresponding subfolder (this time we will build the application in the `java-quarkus` subfolder).
 
 {{< readfile file="src/pipeline.yaml" code="true" lang="yaml" >}}
 
 Apply the created *Pipeline* to the cluster in your namespace:
 
 ```bash
-{{% param cliToolName %}} create -f pipeline.yaml -n $USER
+{{% param cliToolName %}} create -f lab05/pipeline.yaml -n $USER
 ```
 
 
