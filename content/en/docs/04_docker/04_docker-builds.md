@@ -194,9 +194,9 @@ Use the predefined *buildah* ClusterTask to enhance your pipeline to build and p
 Make sure to replace `<uuid>` with a corresponding uuid, when editing the file `<lab04/build-go-pipeline.yaml>`.
 
 {{% alert title="Note" color="info" %}}
-You can find the uuid of your disk partition by running (on your Linux system)
+You can create a uuid by running (on your Linux system)
 ```bash
-sudo lsblk -f
+cat /proc/sys/kernel/random/uuid
 ```
 {{% /alert %}}
 
