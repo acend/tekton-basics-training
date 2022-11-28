@@ -6,15 +6,15 @@ sectionnumber: 6.7
 
 ## {{% param sectionnumber %}}.1: Tekton Chains
 
-Tekton Chains allows you to manage your supply chain security when using Tekton as your CICD System. It basically observes all TaskRuns and PipelineRuns, takes a snapshot of them, signs them and stores them somewhere. It allows you to cryptographically prove what steps and commands, in what containers were executed, during a specific Task- or PipelineRun.
+Tekton Chains allows you to manage your supply chain security when using Tekton as your CICD System. It basically observes all TaskRuns, takes a snapshot of them, signs them and stores them somewhere. It allows you to cryptographically prove what steps and commands, in what containers were executed, during a specific TaskRun.
 
 In addition to that Tekton Chains also supports signing the resulting OCI images.
 
 Read the [documentation](https://tekton.dev/docs/chains/) for additional Information.
 
-We've already created a Keypair, which Tekton Chains uses to sign your TaskRuns and PipelineRuns using the `cosign` tool. This created a secret in the `openshift-pipelines` namespace. And we configured Tekton Chains to store the signatures and payloads as annotations to the corresponding TaksRuns and PipelineRuns.
+We've already created a Keypair, which Tekton Chains uses to sign your TaskRuns using the `cosign` tool. This created a secret in the `openshift-pipelines` namespace. And we configured Tekton Chains to store the signatures and payloads as annotations to the corresponding TaksRuns.
 
-You might have noticed the Tekton Chains annotations in your TaksRun and PipelineRun Resources, since Tektion Chains was running and signing the whole day.
+You might have noticed the Tekton Chains annotations in your TaksRun Resources, since Tekton Chains was running and signing the whole day.
 
 
 ## Task {{% param sectionnumber %}}.2: TaskRun
@@ -86,11 +86,6 @@ To verify the signature we can now simply execute the following command, where `
 ```bash
 cosign verify-blob --key cosign.pub --signature ./signature ./payload
 ```
-
-
-## Task {{% param sectionnumber %}}.3: PipelineRun
-
-Similar to TaskRuns explore a PipelineRun and verify whether the annotations are set or not.
 
 
 ## {{% param sectionnumber %}}.4: Read the docs about Signing OCI Images

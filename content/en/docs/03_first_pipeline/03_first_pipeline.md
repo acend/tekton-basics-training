@@ -206,7 +206,6 @@ Create a new file with the name `lab03/test-task-param.yaml`.
 We add a parameter in the task's `spec.params` map to accept a parameter of type `string` with the name `name`. The added parameter is used in the step to print "Hello, $NAME" to the console!
 
 ```yaml
-
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
