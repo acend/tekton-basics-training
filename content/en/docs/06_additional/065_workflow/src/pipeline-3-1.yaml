@@ -1,0 +1,47 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  labels:
+    ch.acend/lab: "tekton-basics"
+  name: workflow-pipeline
+spec:
+  params:
+    - name: language
+      description: Programming language used
+      default: java
+    - name: repository
+      description: Repository to checkout
+      default: https://github.com/acend/awesome-apps
+    - name: application
+      description: Application subpath in repository
+      default: java-quarkus
+  tasks:
+    - name: git-clone
+      params:
+      - name: url
+        value: $(params.repository)
+      - name: revision
+        value: feature/quarkus-app
+      workspaces:
+      - name: output
+        workspace: ws-1
+      taskRef:
+        name: git-clone
+        kind: ClusterTask
+    - name: react-clone
+      runAfter:
+      - git-clone
+      params: 
+      when:
+      - input: $(tasks.git-clone.results.url)
+        operator: in
+        values: [ "https://github.com/acend/awesome-apps" ]
+      taskSpec:
+        steps:
+        - image: bash:latest
+          script: |
+            #!/usr/bin/env bash
+            echo "It's awesome!"
+  workspaces:
+  - name: ws-1
+  - name: maven-settings
