@@ -37,14 +37,14 @@ And again, apply the file against our cluster.
 {{% param cliToolName %}} apply -f lab064/secret.yaml -n $USER
 ```
 
-Because we didn't specify any parameters for the task, we don't need to create a pipeline. We can easily trigger the task with the tekton cli.
-Just run folloing command in your console.
+Because we didn't specify any parameters for the task, we don't need to create a pipeline. We can easily trigger the task with the Tekton CLI.
+Just run the following command in your console.
 
 ```bash
 tkn task start secret-test --showlog -n $USER
 ```
 
-After a while you should see following ouput
+After a while you should see the following output
 
 ```console
 TaskRun started: secret-test-run-wdd6b
@@ -53,7 +53,7 @@ Waiting for logs to be available...
 ```
 
 
-## Task {{% param sectionnumber %}}.2: Cleanp
+## Task {{% param sectionnumber %}}.2: CleanUp
 
 ```bash
 {{% param cliToolName %}} delete -f lab064/task.yaml -n $USER

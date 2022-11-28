@@ -16,12 +16,12 @@ The following custom resources will be new in this chapter. Read the first three
 
 We are already familiar with resources defining pipelines and their building blocks. But starting pipelines manually should not be the idea of any automation software.
 
-Tekton Triggers give us additional concepts to bring more possibilities to react to certain events and run our pipelines. At it's base there are three new concepts: EventListener, Trigger and Triggerbinding.
+Tekton Triggers give us additional concepts to bring more possibilities to react to certain events and run our pipelines. At its base there are three new concepts: EventListener, Trigger and Triggerbinding.
 
 
 ## {{% param sectionnumber %}}.1.1: EventListener
 
-The Tekton **EventListener** is a sink which will listen to events at a specified port on the Kubernetes cluster. It automatically creates a service, your addressable sink, and specifies one or more *Triggers*. The defined *Triggers* can extract fields from the event payload via *TriggerBindings* and *TriggerTemplates* give you the possibility to create Tekton resources like *TaskRuns* or *PipelineRuns* with the data binded. If necessary the data binded can be intercepted and altered with one or more *Interceptors*.
+The Tekton **EventListener** is a sink which will listen to events at a specified port on the Kubernetes cluster. It automatically creates a service, your addressable sink, and specifies one or more *Triggers*. The defined *Triggers* can extract fields from the event payload via *TriggerBindings* and *TriggerTemplates*, giving you the possibility to create Tekton resources like *TaskRuns* or *PipelineRuns* with the data binded. If necessary the data binded can be intercepted and altered with one or more *Interceptors*.
 
 ```yaml
 apiVersion: triggers.tekton.dev/v1beta1
@@ -45,7 +45,7 @@ spec:
 
 ## {{% param sectionnumber %}}.1.2: Trigger / TriggerTemplate
 
-The reaction on an event detected by a *EventListener* is defined in the **Trigger** resource. A *Trigger* specifies a TriggerTemplate, a TriggerBinding, and optionally an Interceptor
+The reaction on an event detected by an *EventListener* is defined in the **Trigger** resource. A *Trigger* specifies a TriggerTemplate, a TriggerBinding, and optionally an Interceptor.
 
 The **TriggerTemplate** specifies what resources should be instantiated or executed when the *EventListener* detects an event.
 A **TriggerTemplate** is a resource that specifies a blueprint for the resource, such as a TaskRun or *PipelineRun*, that you want to instantiate and/or execute when your *EventListener* detects an event. It exposes parameters that you can use anywhere within your resource’s template.
@@ -137,12 +137,14 @@ spec:
 
 Create a *Pipeline* resource `java-pipeline` with a single step to checkout the [awesome-apps](https://github.com/acend/awesome-apps) repository. We can again reuse the already predefined *Task* **git-clone**. Try to parameterize as much as possible already, create parameters for the repository's URL and the corresponding subfolder (this time we will build the application in the `java-quarkus` subfolder).
 
+Create a file named `lab05/pipeline.yaml` with the following content:
+
 {{< readfile file="src/pipeline.yaml" code="true" lang="yaml" >}}
 
 Apply the created *Pipeline* to the cluster in your namespace:
 
 ```bash
-{{% param cliToolName %}} create -f pipeline.yaml -n $USER
+{{% param cliToolName %}} create -f lab05/pipeline.yaml -n $USER
 ```
 
 
@@ -152,10 +154,12 @@ The entire functionality of CI/CD automation comes from reacting to certain even
 
 Create a **EventListener** called *java-pipeline-listener* resource binding a **TriggerBinding** *java-pipeline-pipelinebinding* and defining the **TriggerTemplate** *java-pipeline-triggertemplate* you are going to create.
 
+Create a file in `lab05/eventlistener.yaml` with the following content:
+
 {{< readfile file="src/eventlistener.yaml" code="true" lang="yaml" >}}
 
 ```bash
-{{% param cliToolName %}} create -f eventlistener.yaml -n $USER
+{{% param cliToolName %}} create -f lab05/eventlistener.yaml -n $USER
 ```
 
 After you have created the **EventListener** you should see that there was already a service created for you.
@@ -171,17 +175,19 @@ This should list the service `el-java-pipeline-listener` created for you in your
 
 ## {{% param sectionnumber %}}.4: ServiceAccount and Role
 
-If you take a closer look at the object, you can see there is a **ServiceAccount** *tekton-trigger* defined in the EventListener above. Of course the cluster has to react to certain event. To do that it needs to observe and even create some resources. For example the **PipelineRun** created from the event.
+If you take a closer look at the object, you can see there is a **ServiceAccount** *tekton-trigger* defined in the EventListener above. Of course the cluster has to react to a certain event. To do that it needs to observe and even create some resources. For example the **PipelineRun** created from the event.
 
-We have a minimialistic ServiceAccount with Role and RoleBinding for you to enable you to cover all the default use cases:
+We have a minimialistic ServiceAccount with Role and RoleBinding to enable you to cover all the default use cases. Just create a file `lab05/sa.yaml` with the following content:
 
 {{< readfile file="src/sa.yaml" code="true" lang="yaml" >}}
 
 The `ServiceAccount` and it's bindings will be defined and created by your instructor. Verify that they already exist in your namespace:
 
 ```bash
-$ oc get serviceaccounts
+{{% param cliToolName %}} get serviceaccounts
+```
 
+```bash
 NAME             SECRETS   AGE
 ...
 tekton-trigger   1         134m
@@ -192,15 +198,15 @@ If they are not created in your namespace, talk to the instructors.
 
 ## Task {{% param sectionnumber %}}.5: Bind the parameters with a TriggerBinding
 
-After creating the needed ServiceAccounts with it's Role and RoleBinding, we are going to take a look at the **TriggerBinding**. Create the **TriggerBinding** *java-pipeline-pipelinebinding* binding the REST body's fields `repository`, `application`, `context` and `dockerfile` to the trigger. An example incoming HTTP request to trigger your Pipeline could look like this:
+After creating the needed ServiceAccounts with its Role and RoleBinding, we are going to take a look at the **TriggerBinding**. Create the **TriggerBinding** *java-pipeline-pipelinebinding* binding the REST body's fields `repository`, `application`, `context` and `dockerfile` to the trigger. An example incoming HTTP request to trigger your Pipeline could look like this:
 
 ```json
-{ 
-  "repository": "https://github.com/acend/awesome-apps", 
-  "application": "java-quarkus", 
-  "image": "ttl.sh/$(uuidgen):1h", 
-  "context": "/workspace/source/java-quarkus", 
-  "dockerfile": "./Dockerfile" 
+{
+  "repository": "https://github.com/acend/awesome-apps",
+  "application": "java-quarkus",
+  "image": "ttl.sh/$(uuidgen):1h",
+  "context": "/workspace/source/java-quarkus",
+  "dockerfile": "./Dockerfile"
 }
 ```
 
