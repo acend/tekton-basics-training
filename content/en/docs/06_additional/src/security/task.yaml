@@ -7,8 +7,6 @@ metadata:
 spec:
   description: >-
     Trivy image scanner
-  workspaces:
-    - name: manifest-dir
   params:
     - name: ARGS
       description: The Arguments to be passed to Trivy command.
@@ -29,5 +27,3 @@ spec:
           echo "Running trivy task with command below"
           echo "$cmd"
           eval "$cmd"
-      args:
-        - "$(params.ARGS)"

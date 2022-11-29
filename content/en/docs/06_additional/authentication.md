@@ -123,11 +123,19 @@ First create a new file for the pipeline `pipeline.yaml` with a simple Git clone
 
 
 Next create the file for the pipeline run `pipelinerun.yaml`.
+
+{{% alert title="Note" color="primary" %}}Make sure you replace the `repo-url` with the corresponding URL from your Gitea{{% /alert %}}
+
 {{< readfile file="src/authentication/pipelinerun.yaml"  code="true" lang="yaml" >}}
 
 And then apply the newly create pipeline run to the cluster
 ```bash
 {{% param cliToolName %}} create -f lab063/pipelinerun.yaml --namespace $USER
+```
+
+Then check if your *PipelineRun* was successful by listing all Runs with the Tekton CLI
+```bash
+tkn pr ls --namespace $USER
 ```
 
 

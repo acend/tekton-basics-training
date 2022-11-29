@@ -6,7 +6,7 @@ metadata:
     ch.acend/lab: "tekton-basics"
 spec:
   pipelineRef:
-    name: build-go
+    name: private-clone
   podTemplate:
     dnsPolicy: None
     dnsConfig:

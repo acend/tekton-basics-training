@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: build-go
+  name: private-clone
   labels:
     ch.acend/lab: "tekton-basics"
 spec:
