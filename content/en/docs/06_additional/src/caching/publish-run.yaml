@@ -1,0 +1,24 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: upload-go-build-
+  labels:
+    tekton.dev/pipeline: upload-go-build
+spec:
+  params:
+    - name: repository
+      value: 'https://github.com/acend/awesome-apps'
+    - name: application
+      value: go
+  pipelineRef:
+    name: upload-go-build
+  workspaces:
+    - name: ws-1
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
+          volumeMode: Filesystem
