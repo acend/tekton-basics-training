@@ -17,7 +17,7 @@ You can use *Workspaces* for different use cases:
 * Use Workspaces as cache between Tasks
 * Promote build artifacts between Tasks
 
-Here is an example how you can pass data between *Tasks* with *Claims*, *Secrets* and *ConfigMaps*
+Here is an example how you can pass data between *Tasks* with *Claims*, *Secrets* and *ConfigMaps*.
 
 Let's start with the Kubernetes basic resources.
 First, we can define a PVC for our workspace. PVCs are the first choice if you need to persist data between Tasks.
@@ -175,16 +175,16 @@ All tasks are executed in sequence and share the same workspace
 
 {{< readfile file="src/caching/pipeline.yaml"  code="true" lang="yaml"  >}}
 
-And apply the pipeline to the cluster
+And apply the pipeline to the cluster:
 
 ```bash
 {{% param cliToolName %}} apply -f lab061/pipeline.yaml --namespace $USER
 ```
 
-Create a new PipelineRun `lab061/pipelinerun.yaml` with following content:
+Create a new PipelineRun `lab061/pipelinerun.yaml` with the following content:
 {{< readfile file="src/caching/publish-run.yaml"  code="true" lang="yaml"  >}}
 
-And apply the newly created file to the cluster with following command
+And apply the newly created file to the cluster with the following command
 
 ```bash
 {{% param cliToolName %}} create -f lab061/pipelinerun.yaml --namespace $USER
