@@ -35,7 +35,7 @@ spec:
         - $(params.file)
         - >-
           $(params.giteaUrl)/api/packages/$(params.username)/generic/test/$(params.version)/$(params.filename)
-      image: curlimages/curl
+      image: registry.puzzle.ch/docker.io/curl
       name: upload
       workingDir: $(workspaces.source.path)
   workspaces:

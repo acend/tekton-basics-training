@@ -12,7 +12,7 @@ spec:
       description: The Arguments to be passed to Trivy command.
       type: array
     - name: TRIVY_IMAGE
-      default: docker.io/aquasec/trivy:latest
+      default: registry.puzzle.ch/docker.io/trivy
       description: Trivy scanner image to be used
     - name: IMAGE_PATH
       description: Image or Path to be scanned by trivy.

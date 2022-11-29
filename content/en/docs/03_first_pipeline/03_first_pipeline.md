@@ -17,7 +17,7 @@ First create a new directory `lab03` for lab 3 in your workspace directory.
 mkdir lab03
 ```
 
-Then create a new file `lab03/test-task.yaml` containing a `Task` resource which uses a `bash:latest` image to print `Hello, world` to standard out, with the following content:
+Then create a new file `lab03/test-task.yaml` containing a `Task` resource which uses a `registry.access.redhat.com/ubi7/ubi-minimal:7.8-366` image to print `Hello, world` to standard out, with the following content:
 
 ```yaml
 apiVersion: tekton.dev/v1beta1
@@ -26,7 +26,7 @@ metadata:
   name: test
 spec:
   steps:
-  - image: bash:latest
+  - image: registry.access.redhat.com/ubi7/ubi-minimal:7.8-366
     name: echo
     resources: {}
     script: |
@@ -216,7 +216,7 @@ spec:
     name: name
     type: string
   steps:
-  - image: bash:latest
+  - image: registry.access.redhat.com/ubi7/ubi-minimal:7.8-366
     name: echo
     resources: {}
     script: |
@@ -319,7 +319,7 @@ spec:
           name: name
           type: string
         steps:
-        - image: bash:latest
+        - image: registry.access.redhat.com/ubi7/ubi-minimal:7.8-366
           name: echo
           resources: {}
           script: |
@@ -391,7 +391,7 @@ spec:
         - name: name
           type: string
         steps:
-        - image: bash:latest
+        - image: registry.access.redhat.com/ubi7/ubi-minimal:7.8-366
           name: echo
           resources: {}
           script: |
