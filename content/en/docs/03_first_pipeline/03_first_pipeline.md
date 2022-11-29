@@ -190,7 +190,7 @@ tkn task delete test --namespace $USER
 
 In the next task you will create a new Task  `Task` similar to the previous one and personalize your greeting with your name.
 
-As we've learned in [lab 1](../../02_introduction/02_introduction/), parameters can be added in the `spec.params` map like the following:
+As we've learned in [lab 2](../../02_introduction/02_introduction/), parameters can be added in the `spec.params` map like the following:
 
 ```yaml
   params:
