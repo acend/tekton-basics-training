@@ -9,4 +9,4 @@ spec:
     name: trivy-scanner-pipeline
   params:
   - name: image
-    value: "alpine"
+    value: "registry.puzzle.ch/docker.io/alpine"
