@@ -19,7 +19,13 @@ You might have noticed the Tekton Chains annotations in your TaksRun Resources, 
 
 ## Task {{% param sectionnumber %}}.2: TaskRun
 
-Let's again simply create a Task `chains-task.yaml` with the following content:
+Create a new directory lab067 for this in your workspace directory.
+
+```bash
+mkdir lab067
+```
+
+Let's again simply create a Task `lab067/chains-task.yaml` with the following content:
 
 ```yaml
 apiVersion: tekton.dev/v1beta1
@@ -39,7 +45,7 @@ spec:
 Create the Task in your namespace:
 
 ```bash
-{{% param cliToolName %}} apply -f chains-task.yaml --namespace $USER
+{{% param cliToolName %}} apply -f lab067/chains-task.yaml --namespace $USER
 ```
 
 And start it:
@@ -58,12 +64,12 @@ export TASKRUN_UID=$(tkn tr describe --last -o  jsonpath='{.metadata.uid}' --nam
 
 Then use the following command to safe the signature into a file with the name `signature`:
 ```bash
-tkn tr describe --last -o jsonpath="{.metadata.annotations.chains\.tekton\.dev/signature-taskrun-$TASKRUN_UID}" --namespace $USER > signature
+tkn tr describe --last -o jsonpath="{.metadata.annotations.chains\.tekton\.dev/signature-taskrun-$TASKRUN_UID}" --namespace $USER > lab067/signature
 ```
 
 And do the same for the payload:
 ```bash
-tkn tr describe --last -o jsonpath="{.metadata.annotations.chains\.tekton\.dev/payload-taskrun-$TASKRUN_UID}" --namespace $USER | base64 -d > payload
+tkn tr describe --last -o jsonpath="{.metadata.annotations.chains\.tekton\.dev/payload-taskrun-$TASKRUN_UID}" --namespace $USER | base64 -d > lab067/payload
 ```
 
 Explore the contents of both files.
@@ -79,12 +85,12 @@ chmod +x cosign-linux-amd64
 mv cosign-linux-amd64 /usr/local/bin/cosign
 ```
 
-Then create a file with the name `cosign.pub`, containing the public Key provided by the Teacher.
+Then create a file with the name `lab067/cosign.pub`, containing the public Key provided by the Teacher.
 
 To verify the signature we can now simply, execute the following command, where `signature` and `payload` are the two files containing the signature and payload of your TaksRun.
 
 ```bash
-cosign verify-blob --key cosign.pub --signature ./signature ./payload
+cosign verify-blob --key lab067/cosign.pub --signature ./lab067/signature ./lab067/payload
 ```
 
 
