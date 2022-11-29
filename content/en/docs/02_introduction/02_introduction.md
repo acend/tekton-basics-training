@@ -57,7 +57,7 @@ spec:
     - description: Greeting message
       name: greet
   steps:
-    - image: bash:latest
+    - image: registry.access.redhat.com/ubi7/ubi-minimal:7.8-366
       name: greet
       resources: {}
       script: |

@@ -28,7 +28,7 @@ metadata:
   name: tekton-chains-task
 spec:
   steps:
-  - image: bash:latest
+  - image: registry.access.redhat.com/ubi7/ubi-minimal:7.8-366
     name: echo
     resources: {}
     script: |
