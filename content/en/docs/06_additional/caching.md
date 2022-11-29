@@ -20,7 +20,14 @@ You can use *Workspaces* for different use cases:
 Here is an example how you can pass data between *Tasks* with *Claims*, *Secrets* and *ConfigMaps*.
 
 Let's start with the Kubernetes basic resources.
-First, we can define a PVC for our workspace. PVCs are the first choice if you need to persist data between Tasks.
+
+Create a new directory lab061 for this in your workspace directory.
+
+```bash
+mkdir lab061
+```
+
+First, we can define a PVC (`lab061/pvc.yaml`) for our workspace. PVCs are the first choice if you need to persist data between Tasks.
 
 ```yaml
 apiVersion: v1
@@ -36,7 +43,13 @@ spec:
     - ReadWriteOnce
 ```
 
-The next workspace is created with a ConfigMap. This method is most suitable if you want to mount simple strings or configuration into your pipelines. But keep in mind that a workspace defined with a ConfigMap is read only!
+Apply the PVC
+
+```bash
+{{% param cliToolName %}} apply -f lab061/pvc.yaml --namespace $USER
+```
+
+The next workspace is created with a ConfigMap (`lab061/configmap.yaml`). This method is most suitable if you want to mount simple strings or configuration into your pipelines. But keep in mind that a workspace defined with a ConfigMap is read only!
 
 ```yaml
 apiVersion: v1
@@ -47,7 +60,13 @@ data:
   message: hello world
 ```
 
-Finally the last workspace definition is done by a Secret. This method is most suitable if you want to mount confident data into your pipelines. But keep in mind that a workspace defined with a *Secret* is read only!
+Apply the ConfigMap
+
+```bash
+{{% param cliToolName %}} apply -f lab061/configmap.yaml --namespace $USER
+```
+
+Finally the last workspace definition is done by a Secret (`lab061/secret.yaml`). This method is most suitable if you want to mount confident data into your pipelines. But keep in mind that a workspace defined with a *Secret* is read only!
 
 ```yaml
 apiVersion: v1
@@ -61,7 +80,13 @@ data:
   message: aGVsbG8gc2VjcmV0
 ```
 
-Now we are going to use the defined workspace within a *TaskRun*.
+Apply the Secret
+
+```bash
+{{% param cliToolName %}} apply -f lab061/secret.yaml --namespace $USER
+```
+
+Now we are going to use the defined workspace within a *TaskRun* `lab061/taskrun.yaml`.
 In the example below you can see different methods how to use and mount a *Workspace* :
 
 * The *PersistentVolumeClaim* `my-pvc` is referenced two times in the *TaskRun* (With and without a SubPath)
@@ -133,6 +158,12 @@ spec:
       mountPath: /baz/bar/quux
     - name: custom5
       mountPath: /my/secret/volume
+```
+
+Then create the Taskrun and verify the logs
+
+```bash
+{{% param cliToolName %}} create -f lab061/taskrun.yaml --namespace $USER
 ```
 
 
