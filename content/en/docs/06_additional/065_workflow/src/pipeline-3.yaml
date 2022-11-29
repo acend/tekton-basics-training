@@ -21,7 +21,7 @@ spec:
       - name: url
         value: $(params.repository)
       - name: revision
-        value: feature/quarkus-app
+        value: main
       workspaces:
       - name: output
         workspace: ws-1
@@ -37,7 +37,7 @@ spec:
       - name: GOALS
         value: ["package"]
       - name: MAVEN_IMAGE
-        value: maven:3.8.4-openjdk-17
+        value: registry.puzzle.ch/docker.io/maven-acend:3.8.4-openjdk17
       workspaces:
       - name: source
         workspace: ws-1
@@ -45,7 +45,7 @@ spec:
         workspace: maven-settings
       taskRef:
         name: maven
-        kind: Task
+        kind: ClusterTask
     - name: test
       runAfter:
       - git-clone
@@ -55,7 +55,7 @@ spec:
       - name: GOALS
         value: ["test"]
       - name: MAVEN_IMAGE
-        value: maven:3.8.4-openjdk-17
+        value: registry.puzzle.ch/docker.io/maven-acend:3.8.4-openjdk17
       workspaces:
       - name: source
         workspace: ws-1
@@ -63,7 +63,7 @@ spec:
         workspace: maven-settings
       taskRef:
         name: maven
-        kind: Task
+        kind: ClusterTask
     - name: react-java
       when:
       - input: $(params.language)

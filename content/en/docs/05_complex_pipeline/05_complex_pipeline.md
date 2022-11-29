@@ -241,7 +241,7 @@ At last, create the **TriggerTemplate** bringing it all together to trigger the 
 Expose the service created by the **EventListener** and fire a HTTP request against the endpoint created!
 
 ```bash
-{{% param cliToolName %}} expose svc el-java-pipeline-listener --hostname='trigger-$USER.$APPDOMAIN' --namespace $USER 
+{{% param cliToolName %}} expose svc el-java-pipeline-listener --hostname="trigger-$USER.$APPDOMAIN" --namespace $USER 
 ```
 
 ```bash
