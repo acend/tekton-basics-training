@@ -245,7 +245,7 @@ Expose the service created by the **EventListener** and fire a HTTP request agai
 ```
 
 ```bash
-curl -X POST -d '{ "repository": "https://github.com/acend/awesome-apps", "application": "java-quarkus", "image": "ttl.sh/$(uuidgen):1h", "context": "/workspace/source/java-quarkus", "dockerfile": "./Dockerfile" }' trigger-$USER.$APPDOMAIN
+curl -X POST -d '{ "repository": "https://github.com/acend/awesome-apps", "application": "java-quarkus", "image": "ttl.sh/$(cat /proc/sys/kernel/random/uuid):1h", "context": "/workspace/source/java-quarkus", "dockerfile": "./Dockerfile" }' trigger-$USER.$APPDOMAIN
 ```
 
 
