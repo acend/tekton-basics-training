@@ -186,7 +186,7 @@ Create a new PipelineRun `lab061/pipelinerun.yaml` with following content:
 And apply the newly created file to the cluster with following command
 
 ```bash
-{{% param cliToolName %}} apply -f lab061/pipelinerun.yaml --namespace $USER
+{{% param cliToolName %}} create -f lab061/pipelinerun.yaml --namespace $USER
 ```
 
 Finally you can navigate in Gitea to the release page and check if the release was uploaded successfully.
