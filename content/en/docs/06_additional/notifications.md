@@ -25,10 +25,11 @@ Start with a new directory `lab066` in your workspace directory.
 mkdir lab066
 ```
 
-First we need to create the Slack Notification task, for this we take one of the community tasks. Use the following command to create the task.
+First we need to create the Slack Notification task, for this we take one of the community tasks and modify it. Create a new filed called `lab066/webhook.yaml`
+{{< readfile file="src/notifications/notification-task.yaml"  code="true" lang="yaml"  >}}
 
 ```bash
-{{% param cliToolName %}} apply -f https://api.hub.tekton.dev/v1/resource/tekton/task/send-to-webhook-slack/0.1/raw --namespace $USER
+{{% param cliToolName %}} apply -f webhook.yaml --namespace $USER
 ```
 
 Next create a secret which contains the URL for the Slack webhook. **Ask your teacher for the URL!**
