@@ -251,6 +251,8 @@ spec:
     taskRef:
       kind: ClusterTask
       name: buildah
+    runAfter:
+    - git-clone
     workspaces:
     - name: source
       workspace: ws-1
