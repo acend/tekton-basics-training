@@ -380,7 +380,7 @@ spec:
   params:
     - name: name
       description: The name to be greeted as
-      default: Chuck Norris (inline)
+      default: Chuck Norris (Pipeline Param)
   tasks:
     - name: inline
       params:
