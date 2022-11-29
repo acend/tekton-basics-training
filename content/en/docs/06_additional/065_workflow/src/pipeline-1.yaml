@@ -45,7 +45,7 @@ spec:
         workspace: maven-settings
       taskRef:
         name: maven
-        kind: Task
+        kind: ClusterTask
   workspaces:
   - name: ws-1
   - name: maven-settings
