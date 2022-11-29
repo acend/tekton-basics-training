@@ -29,7 +29,7 @@ First we need to create the Slack Notification task, for this we take one of the
 {{< readfile file="src/notifications/notification-task.yaml"  code="true" lang="yaml"  >}}
 
 ```bash
-{{% param cliToolName %}} apply -f webhook.yaml --namespace $USER
+{{% param cliToolName %}} apply -f lab066/webhook.yaml --namespace $USER
 ```
 
 Next create a secret which contains the URL for the Slack webhook. **Ask your teacher for the URL!**
