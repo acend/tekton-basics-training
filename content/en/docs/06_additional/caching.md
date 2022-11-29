@@ -137,7 +137,7 @@ spec:
 ```
 
 
-## {{% param sectionnumber %}}.2 Artifcat publishing
+## Task {{% param sectionnumber %}}.2 Artifcat publishing
 
 A common question is `How can I store my artifacts like test reports in Tekton?`
 Unfortunately Tekton doesn't offer artifact managment. If you want to store your artefacts (e.g. Test or security scan reports, build artifacts) you have to do this by yourself. For example store your reports on a S3 compatible storage.
@@ -177,6 +177,28 @@ All tasks are executed in sequence and share the same workspace
 And apply the pipeline to the cluster
 
 ```bash
-{{% param cliToolName %}} apply -f lab061/pipeline.yaml
+{{% param cliToolName %}} apply -f lab061/pipeline.yaml --namespace $USER
 ```
 
+Create a new PipelineRun `lab061/pipelinerun.yaml` with following content:
+{{< readfile file="src/caching/publish-run.yaml"  code="true" lang="yaml"  >}}
+
+And apply the newly created file to the cluster with following command
+
+```bash
+{{% param cliToolName %}} apply -f lab061/pipelinerun.yaml --namespace $USER
+```
+
+Finally you can navigate in Gitea to the release page and check if the release was uploaded successfully.
+You can check with following URL `https://gitea.training.openshift.ch/<username>/-/packages`. Just replace the `<username>` with your user.
+
+
+## Task {{% param sectionnumber %}}.3: Cleanup
+
+Clean up all resources created in this chapter:
+
+```bash
+{{% param cliToolName %}} delete -f lab061/pipeline.yaml --namespace $USER 
+{{% param cliToolName %}} delete -f lab061/pipeline.yaml --namespace $USER 
+{{% param cliToolName %}} delete -f lab061/pipelinerun.yaml --namespace $USER 
+```
