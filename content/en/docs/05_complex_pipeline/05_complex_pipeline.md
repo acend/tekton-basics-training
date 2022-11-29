@@ -135,6 +135,12 @@ spec:
 
 ## Task {{% param sectionnumber %}}.2: Create the pipeline
 
+Make a new directory `lab05` for this lab in your workspace directory.
+
+```bash
+mkdir lab05
+```
+
 Create a *Pipeline* resource `java-pipeline` with a single step to checkout the [awesome-apps](https://github.com/acend/awesome-apps) repository. We can again reuse the already predefined *Task* **git-clone**. Try to parameterize as much as possible already, create parameters for the repository's URL and the corresponding subfolder (this time we will build the application in the `java-quarkus` subfolder).
 
 Create a file named `lab05/pipeline.yaml` with the following content:
@@ -144,7 +150,7 @@ Create a file named `lab05/pipeline.yaml` with the following content:
 Apply the created *Pipeline* to the cluster in your namespace:
 
 ```bash
-{{% param cliToolName %}} create -f lab05/pipeline.yaml -n $USER
+{{% param cliToolName %}} apply -f lab05/pipeline.yaml --namespace $USER 
 ```
 
 
@@ -159,7 +165,7 @@ Create a file in `lab05/eventlistener.yaml` with the following content:
 {{< readfile file="src/eventlistener.yaml" code="true" lang="yaml" >}}
 
 ```bash
-{{% param cliToolName %}} create -f lab05/eventlistener.yaml -n $USER
+{{% param cliToolName %}} apply -f lab05/eventlistener.yaml --namespace $USER 
 ```
 
 After you have created the **EventListener** you should see that there was already a service created for you.
@@ -184,7 +190,7 @@ We have a minimialistic ServiceAccount with Role and RoleBinding to enable you t
 The `ServiceAccount` and it's bindings will be defined and created by your instructor. Verify that they already exist in your namespace:
 
 ```bash
-{{% param cliToolName %}} get serviceaccounts
+{{% param cliToolName %}} get serviceaccounts --namespace $USER 
 ```
 
 ```bash
@@ -215,7 +221,7 @@ If you don't remember how the **TriggerBinding** should look like, take a look a
 {{< readfile file="src/triggerbinding.yaml" code="true" lang="yaml" >}}
 
 ```bash
-{{% param cliToolName %}} create -f triggerbinding.yaml -n $USER
+{{% param cliToolName %}} create -f triggerbinding.yaml --namespace $USER 
 ```
 
 
@@ -226,7 +232,7 @@ At last, create the **TriggerTemplate** bringing it all together to trigger the 
 {{< readfile file="src/triggertemplate.yaml" code="true" lang="yaml" >}}
 
 ```bash
-{{% param cliToolName %}} create -f triggertemplate.yaml -n $USER
+{{% param cliToolName %}} create -f triggertemplate.yaml --namespace $USER 
 ```
 
 
@@ -235,7 +241,7 @@ At last, create the **TriggerTemplate** bringing it all together to trigger the 
 Expose the service created by the **EventListener** and fire a HTTP request against the endpoint created!
 
 ```bash
-{{% param cliToolName %}} -n $USER expose svc el-java-pipeline-listener --hostname='trigger-$USER.$APPDOMAIN'
+{{% param cliToolName %}} expose svc el-java-pipeline-listener --hostname='trigger-$USER.$APPDOMAIN' --namespace $USER 
 ```
 
 ```bash
@@ -248,6 +254,6 @@ curl -X POST -d '{ "repository": "https://github.com/acend/awesome-apps", "appli
 Remove all the resources created in this lab again:
 
 ```bash
-{{% param cliToolName %}} -n $USER delete pipeline,eventlistener,serviceaccount,role,rolebinding,clusterrole,clusterrolebinding,triggerbinding,triggertemplate --selector='ch.acend/lab=tekton-basics'
+{{% param cliToolName %}} delete pipeline,eventlistener,serviceaccount,role,rolebinding,clusterrole,clusterrolebinding,triggerbinding,triggertemplate --selector='ch.acend/lab=tekton-basics' --namespace $USER 
 
 ```

@@ -37,19 +37,19 @@ spec:
 Create the test Task in your namespace:
 
 ```bash
-{{% param cliToolName %}} --namespace $USER apply -f lab03/test-task.yaml
+{{% param cliToolName %}} apply -f lab03/test-task.yaml --namespace $USER 
 ```
 
 Your task resource should be created and ready in your namespace! Verify the creation of the resource:
 
 ```bash
-{{% param cliToolName %}} --namespace $USER get tasks
+{{% param cliToolName %}} get tasks --namespace $USER 
 ```
 
 Instead of using `{{% param cliToolName %}}` you can also list the task using the Tekton CLI:
 
 ```bash
-tkn --namespace $USER task list
+tkn task list --namespace $USER
 ```
 
 which will result in something similar to:
@@ -62,7 +62,7 @@ test                 12 seconds ago
 Use the following command to get a list of subcommands the task command provides:
 
 ```bash
-tkn --namespace $USER task --help
+tkn task --help --namespace $USER 
 ```
 
 {{% alert title="Note" color="primary" %}}Again always make sure to specify the namespace you're working in explicitly by passing the `--namespace, -n` parameter{{% /alert %}}
@@ -73,7 +73,7 @@ tkn --namespace $USER task --help
 After creating and verifying the resource you should be all set to start your first task. To start the task we utilize the `tkn` Tekton CLI:
 
 ```bash
-tkn --namespace $USER task start test
+tkn task start test --namespace $USER
 ```
 which will result in something similar to:
 
@@ -87,13 +87,13 @@ tkn taskrun logs test-run-<pod> -f -n <username>
 Remember the resource `TaskRun` which is an instantiation of a `Task` running on your cluster? You can see your run by listing all `TaskRun` resources with the `tkn` command:
 
 ```bash
-tkn --namespace $USER taskrun list
+tkn taskrun list --namespace $USER
 ```
 
 To inspect the logs and verify that our task has done everything we wanted it to, we use:
 
 ```bash
-tkn taskrun logs <taskrun-name> -f -n $USER
+tkn taskrun logs <taskrun-name> -f --namespace $USER
 ```
 
 You should see that the tasks greets us, just like we declared it to.
@@ -108,7 +108,7 @@ You should see that the tasks greets us, just like we declared it to.
 When we started our first `Task` in the previous chapter, the Tekton operator in the background took our `Task` definition and translated it into a `Pod`, which ran in our namespace.
 
 ```bash
-{{% param cliToolName %}} -n $USER get pod
+{{% param cliToolName %}} get pod --namespace $USER
 ```
 
 You should find one completed `Pod` in your namespace:
@@ -123,13 +123,13 @@ As you can see, the name of the pod corresponds to the **name** of the `TaskRun`
 And since the `TaskRun` is a `Pod` we can also have a look at the pod logs with the following command:
 
 ```bash
-{{% param cliToolName %}} -n $USER logs test-run-<taskrun>-pod
+{{% param cliToolName %}} logs test-run-<taskrun>-pod --namespace $USER
 ```
 
 And also explore the `Pod` resource
 
 ```bash
-{{% param cliToolName %}} -n $USER describe pod test-run-<taskrun>-pod
+{{% param cliToolName %}} describe pod test-run-<taskrun>-pod --namespace $USER
 ```
 
 Under `Init Containers` you will find the `place-scripts` container, which is responsible to copy the actual script from our `Task` to a mounted persistent volume (`/tekton/scripts`).
@@ -176,13 +176,13 @@ Enough background for now.
 Remove your created task again:
 
 ```bash
-{{% param cliToolName %}} -n $USER delete task test
+{{% param cliToolName %}} delete task test --namespace $USER
 ```
 
 or us the Tekton CLI, to achieve the same:
 
 ```bash
-tkn -n $USER task delete test
+tkn task delete test --namespace $USER
 ```
 
 
@@ -190,7 +190,7 @@ tkn -n $USER task delete test
 
 In the next task you will create a new Task  `Task` similar to the previous one and personalize your greeting with your name.
 
-As we've learned in [lab 1](../../02_introduction/02_introduction/), parameters can be added in the `spec.params` map like the following:
+As we've learned in [lab 2](../../02_introduction/02_introduction/), parameters can be added in the `spec.params` map like the following:
 
 ```yaml
   params:
@@ -206,7 +206,6 @@ Create a new file with the name `lab03/test-task-param.yaml`.
 We add a parameter in the task's `spec.params` map to accept a parameter of type `string` with the name `name`. The added parameter is used in the step to print "Hello, $NAME" to the console!
 
 ```yaml
-
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
@@ -228,13 +227,13 @@ spec:
 Again create the Task:
 
 ```bash
-{{% param cliToolName %}} --namespace $USER apply -f lab03/test-task-param.yaml
+{{% param cliToolName %}} apply -f lab03/test-task-param.yaml --namespace $USER
 ```
 
 And run it, if you want you can overwrite the default value with your value:
 
 ```bash
-tkn --namespace $USER task start test-param
+tkn task start test-param --namespace $USER
 ```
 
 Check the logs, whether the correct name was used
@@ -243,13 +242,13 @@ Check the logs, whether the correct name was used
 The previous command output contains the command to check the logs.
 Otherwise you can find the taskrun ID by running:
 ```
-tkn --namespace $USER taskrun list
+tkn taskrun list --namespace $USER
 ```
 {{% /alert %}}
 
 
 ```bash
-tkn taskrun logs <taskrun> -f -n $USER
+tkn taskrun logs <taskrun> -f --namespace $USER
 ```
 
 Consult the `tkn task start` help, to find out how you could pass a parameter directly to the CLI.
@@ -261,7 +260,7 @@ tkn task start --help
 Start the task again and say `Hello, acend`
 
 ```bash
-tkn --namespace $USER task start test-param -p name=acend
+tkn task start test-param -p name=acend --namespace $USER
 ```
 
 Check the logs for verification.
@@ -270,7 +269,7 @@ Check the logs for verification.
 {{% alert title="Note" color="primary" %}}Instead of passing the explicit `taskrun` to the `logs` command, just leave the taskrun out, which allows you to choose the taskrun with your arrow keys
 
 ```bash
-tkn --namespace $USER taskrun logs -f
+tkn taskrun logs -f --namespace $USER
 ```
 ```bash
 ? Select taskrun:  [Use arrows to move, type to filter]
@@ -334,18 +333,18 @@ spec:
 Let's now create the pipeline and apply it to the cluster:
 
 ```bash
-{{% param cliToolName %}} --namespace $USER apply -f lab03/first-pipeline.yaml
+{{% param cliToolName %}} apply -f lab03/first-pipeline.yaml --namespace $USER
 ```
 
 Use the following command to verify, whether the pipeline was created:
 ```bash
-tkn --namespace $USER pipeline list
+tkn pipeline list --namespace $USER
 ```
 
 Similar to the `TaskRun` creation we can start pipelines with the `tkn` cli:
 
 ```bash
-tkn --namespace $USER pipeline start test-pipeline
+tkn pipeline start test-pipeline --namespace $USER 
 ```
 
 Start your pipeline and verify the output. Copy the command from the pipeline start command output, which looks similar to:
@@ -381,7 +380,7 @@ spec:
   params:
     - name: name
       description: The name to be greeted as
-      default: Chuck Norris (inline)
+      default: Chuck Norris (Pipeline Param)
   tasks:
     - name: inline
       params:
@@ -409,19 +408,19 @@ spec:
 Apply the changes:
 
 ```bash
-{{% param cliToolName %}} --namespace $USER apply -f lab03/first-pipeline.yaml
+{{% param cliToolName %}} apply -f lab03/first-pipeline.yaml --namespace $USER
 ```
 
 
 Run the pipeline and see if your parameters apply to your results printed out to the console!
 
 ```bash
-tkn --namespace $USER pipeline start test-pipeline
+tkn pipeline start test-pipeline --namespace $USER
 
-tkn pipelinerun logs $pipelinerun -f -n $USER
+tkn pipelinerun logs $pipelinerun -f --namespace $USER 
 ```
 
-Similar to the `task start` command, you can directly pass the parameters using the `-p` option: `tkn --namespace $USER pipeline start test-pipeline -p name=Pipelineparam` or use the option `--use-param-defaults` to use the default values.
+Similar to the `task start` command, you can directly pass the parameters using the `-p` option: `tkn pipeline start test-pipeline -p name=Pipelineparam --namespace $USER` or use the option `--use-param-defaults` to use the default values.
 
 
 ## Task {{% param sectionnumber %}}.8: Cleanup
@@ -430,6 +429,6 @@ Clean up all `Task` and `Pipeline` resources created in this chapter:
 
 
 ```bash
-{{% param cliToolName %}} --namespace $USER delete pipeline test-pipeline
-{{% param cliToolName %}} --namespace $USER delete task test-param
+{{% param cliToolName %}} delete pipeline test-pipeline --namespace $USER
+{{% param cliToolName %}} delete task test-param --namespace $USER
 ```

@@ -151,7 +151,7 @@ First we are going to reuse the go build task from the previous lab. Create a ne
 Use following command to create a new *TaskRun*
 
 ```bash
-{{% param cliToolName %}} apply -f lab061/build-task.yaml
+{{% param cliToolName %}} apply -f lab061/build-task.yaml --namespace $USER
 ```
 
 Next create a new Task file named `lab061/upload-task.yaml` with following content:
@@ -161,7 +161,7 @@ Next create a new Task file named `lab061/upload-task.yaml` with following conte
 And apply the newly created file to the cluster with following command
 
 ```bash
-{{% param cliToolName %}} apply -f lab061/upload-task.yaml
+{{% param cliToolName %}} apply -f lab061/upload-task.yaml --namespace $USER
 ```
 
 Finally we can create our Pipeline called `lab061/pipeline.yaml` ressource which executes the following tasks:
