@@ -19,7 +19,7 @@ A common use case is to notify your team about successful or failed pipelines. I
 ## Example {{% param sectionnumber %}}.2: Slack notifications
 
 In this section we are going to show you how to implement a Slack channel notification for your pipelines.
-Start with a new directory lab066 in your workspace directory.
+Start with a new directory `lab066` in your workspace directory.
 
 ```bash
 mkdir lab066
@@ -28,17 +28,19 @@ mkdir lab066
 First we need to create the Slack Notification task, for this we take one of the community tasks. Use the following command to create the task.
 
 ```bash
-{{% param cliToolName %}} apply -f https://api.hub.tekton.dev/v1/resource/tekton/task/send-to-webhook-slack/0.1/raw --namespace $USER 
+{{% param cliToolName %}} apply -f https://api.hub.tekton.dev/v1/resource/tekton/task/send-to-webhook-slack/0.1/raw --namespace $USER
 ```
 
 Next create a secret which contains the URL for the Slack webhook. **Ask your teacher for the URL!**
 
 ```bash
-{{% param cliToolName %}} create secret generic webhook-secret --from-literal=url=<ask your teacher for url> --namespace $USER 
+{{% param cliToolName %}} create secret generic webhook-secret --from-literal=url=<ask your teacher for url> --namespace $USER
 ```
 
 To check if everything is working as expected, create the following *TaskRun* to test the Slack notification.
 You can change the message text as you want.
+
+Just copy the content below in the `lab066/taskrun.yaml` file.
 
 {{< readfile file="src/notifications/taskrun.yaml"  code="true" lang="yaml"  >}}
 
@@ -53,19 +55,19 @@ Now you should see a new notification in the Slack channel.
 
 ## Example {{% param sectionnumber %}}.3: Slack notifications on failure
 
-Now it is time for a more complex example. Let's take a closer look the following *PipelineRun*.
+Now it's time for a more complex example. Let's take a closer look at the following *PipelineRun*.
 The pipeline contains one single *Task* called fifty-fifty. The *Task* does nothing more than exit either with `0` or `1`.
 
 Based on the exit condition `$(tasks.inline.status)` one of the two `finally` tasks is executed.
 You can find a complete list of all accessible *Task* variables [here](https://tekton.dev/docs/pipelines/variables/#variables-available-in-a-task).
 Pipelines Variable substitution is a common concept, as you can see next *PipelineRun* definition in the message text. All available Pipeline variables are defined [here](https://tekton.dev/docs/pipelines/variables/#variables-available-in-a-pipeline).
 
-Next create the file for the *PipelineRun* `lab/066pipelinerun.yaml`.
+Next create the file for the *PipelineRun* `lab066/pipelinerun.yaml`.
 {{< readfile file="src/notifications/pr.yaml" code="true" lang="yaml"  >}}
 
 And then start your pipeline by creating a new *PipelineRun*. After a short time your message should be visible in your Slack channel.
 ```bash
-{{% param cliToolName %}} create -f lab066/pipelinerun.yaml --namespace $USER 
+{{% param cliToolName %}} create -f lab066/pipelinerun.yaml --namespace $USER
 ```
 
 
@@ -81,7 +83,7 @@ OpenShift provides simple access to resources via the Browser URL, for example:
 
 Let's examine this. The first part is the cluster URL, followed by the *Namespace*, resource type and the name.
 
-`https://[cluster]/k8s/ns/[namespace]/[ressource]/[name]/logs`
+`https://[cluster]/k8s/ns/[namespace]/[resource]/[name]/logs`
 
 Together with Tektons variable substitution we can include this link into the Slack notification message.
 
@@ -99,7 +101,7 @@ And then we can append it to the existing failure message.
 
 And then create a new *PipelineRun*. As soon the pipeline is failing, you get the message including the link to the logs.
 ```bash
-{{% param cliToolName %}} create -f lab066/pipelinerun.yaml --namespace $USER 
+{{% param cliToolName %}} create -f lab066/pipelinerun.yaml --namespace $USER
 ```
 
 {{% /details %}}
@@ -108,8 +110,8 @@ And then create a new *PipelineRun*. As soon the pipeline is failing, you get th
 ## Task {{% param sectionnumber %}}.5: CleanUp
 
 ```bash
-{{% param cliToolName %}} delete -f https://api.hub.tekton.dev/v1/resource/tekton/task/send-to-webhook-slack/0.1/raw --namespace $USER 
-{{% param cliToolName %}} delete -f lab066/taskrun.yaml --namespace $USER 
-{{% param cliToolName %}} delete secret webhook-secret --namespace $USER 
-{{% param cliToolName %}} delete -f lab066/pipelinerun.yaml --namespace $USER 
+{{% param cliToolName %}} delete -f https://api.hub.tekton.dev/v1/resource/tekton/task/send-to-webhook-slack/0.1/raw --namespace $USER
+{{% param cliToolName %}} delete -f lab066/taskrun.yaml --namespace $USER
+{{% param cliToolName %}} delete secret webhook-secret --namespace $USER
+{{% param cliToolName %}} delete -f lab066/pipelinerun.yaml --namespace $USER
 ```

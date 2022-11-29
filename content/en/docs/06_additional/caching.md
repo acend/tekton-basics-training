@@ -13,13 +13,13 @@ At its base the Workspace is just another Kubernetes resource being shared and m
 
 You can use *Workspaces* for different use cases:
 
-* Pass arbritary data between Tasks
+* Pass arbitrary data between Tasks
 * Use Workspaces as cache between Tasks
 * Promote build artifacts between Tasks
 
-Here is an example how you can pass data between *Tasks* with *Claims*, *Secrets* and *ConfigMaps*
+Here is an example how you can pass data between *Tasks* with *Claims*, *Secrets* and *ConfigMaps*.
 
-Let's start with the Kubernetes basic ressources.
+Let's start with the Kubernetes basic resources.
 First, we can define a PVC for our workspace. PVCs are the first choice if you need to persist data between Tasks.
 
 ```yaml
@@ -48,7 +48,6 @@ data:
 ```
 
 Finally the last workspace definition is done by a Secret. This method is most suitable if you want to mount confident data into your pipelines. But keep in mind that a workspace defined with a *Secret* is read only!
-
 
 ```yaml
 apiVersion: v1
@@ -140,7 +139,7 @@ spec:
 ## Task {{% param sectionnumber %}}.2 Artifcat publishing
 
 A common question is `How can I store my artifacts like test reports in Tekton?`
-Unfortunately Tekton doesn't offer artifact managment. If you want to store your artefacts (e.g. Test or security scan reports, build artifacts) you have to do this by yourself. For example store your reports on a S3 compatible storage.
+Unfortunately Tekton doesn't offer artifact management. If you want to store your artifacts (e.g. Test or security scan reports, build artifacts) you have to do this by yourself. For example store your reports on a S3 compatible storage.
 
 Following example shows how to use a generic Task to store artifacts on our Gitea instance.
 
@@ -164,7 +163,7 @@ And apply the newly created file to the cluster with following command
 {{% param cliToolName %}} apply -f lab061/upload-task.yaml --namespace $USER
 ```
 
-Finally we can create our Pipeline called `lab061/pipeline.yaml` ressource which executes the following tasks:
+Finally we can create our Pipeline called `lab061/pipeline.yaml` resource which executes the following tasks:
 
 * `git-clone` checkout our awesome app Repository
 * `build-task` build the go binary
@@ -176,16 +175,16 @@ All tasks are executed in sequence and share the same workspace
 
 {{< readfile file="src/caching/pipeline.yaml"  code="true" lang="yaml"  >}}
 
-And apply the pipeline to the cluster
+And apply the pipeline to the cluster:
 
 ```bash
 {{% param cliToolName %}} apply -f lab061/pipeline.yaml --namespace $USER
 ```
 
-Create a new PipelineRun `lab061/pipelinerun.yaml` with following content:
+Create a new PipelineRun `lab061/pipelinerun.yaml` with the following content:
 {{< readfile file="src/caching/publish-run.yaml"  code="true" lang="yaml"  >}}
 
-And apply the newly created file to the cluster with following command
+And apply the newly created file to the cluster with the following command
 
 ```bash
 {{% param cliToolName %}} create -f lab061/pipelinerun.yaml --namespace $USER
@@ -200,7 +199,7 @@ You can check with following URL `https://gitea.training.openshift.ch/<username>
 Clean up all resources created in this chapter:
 
 ```bash
-{{% param cliToolName %}} delete -f lab061/pipeline.yaml --namespace $USER 
-{{% param cliToolName %}} delete -f lab061/pipeline.yaml --namespace $USER 
-{{% param cliToolName %}} delete -f lab061/pipelinerun.yaml --namespace $USER 
+{{% param cliToolName %}} delete -f lab061/pipeline.yaml --namespace $USER
+{{% param cliToolName %}} delete -f lab061/pipeline.yaml --namespace $USER
+{{% param cliToolName %}} delete -f lab061/pipelinerun.yaml --namespace $USER
 ```

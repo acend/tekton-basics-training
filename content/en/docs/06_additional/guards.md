@@ -79,34 +79,34 @@ Create a new file with the name `lab062/pipeline.yaml` with the following conten
 Enter the following commands in the CLI to create the *Task* and the *Pipeline*
 
 ```bash
-{{% param cliToolName %}} apply -f lab062/task.yaml --namespace $USER 
-{{% param cliToolName %}} apply -f lab062/pipeline.yaml --namespace $USER 
+{{% param cliToolName %}} apply -f lab062/task.yaml --namespace $USER
+{{% param cliToolName %}} apply -f lab062/pipeline.yaml --namespace $USER
 ```
 
 Now we are going to start the pipeline directly from the CLI. For this you can use the following command:
 After that the Tekton CLI will ask you to provide the parameters.
 
 ```bash
-tkn p start test-when --showlog --namespace $USER 
+tkn p start test-when --showlog --namespace $USER
 ```
 
 As you can see, with the parameter value `Chuck Norris`, both tasks were executed.
 
 ```bash
-tkn p start test-when --showlog --namespace $USER 
+tkn p start test-when --showlog --namespace $USER
 
 ? Value for param `name` of type `string`? (Default is `Chuck Norris`) Chuck Norris
 PipelineRun started: test-when-run-g59fv
 Waiting for logs to be available...
-[task-2 : echo] Hello, world
-
 [inline : task-1] Hello, Chuck Norris
+
+[task-2 : echo] Hello, Chuck
 ```
 
 Now you can try to execute the run with another parameter value, for example `Nelson Mandela`. In this case only the first task `task-1` will be executed.
 
 ```bash
-tkn p start test-when --showlog --namespace $USER 
+tkn p start test-when --showlog --namespace $USER
 
 ? Value for param `name` of type `string`? (Default is `Chuck Norris`) Nelson Mandela
 PipelineRun started: test-when-run-2r4d8
@@ -120,6 +120,6 @@ Waiting for logs to be available...
 Don't forget to clean up your workspace after you finished by executing the following commands in the CLI.
 
 ```bash
-{{% param cliToolName %}} delete -f lab062/task.yaml --namespace $USER 
-{{% param cliToolName %}} delete -f lab062/pipeline.yaml --namespace $USER 
+{{% param cliToolName %}} delete -f lab062/task.yaml --namespace $USER
+{{% param cliToolName %}} delete -f lab062/pipeline.yaml --namespace $USER
 ```
