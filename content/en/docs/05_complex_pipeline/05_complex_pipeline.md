@@ -249,7 +249,7 @@ curl -X POST -d '{ "repository": "https://github.com/acend/awesome-apps", "appli
 ```
 
 
-## Task {{% param sectionnumber %}}.5: Cleanup
+## Task {{% param sectionnumber %}}.8: Cleanup
 
 Remove all the resources created in this lab again:
 
