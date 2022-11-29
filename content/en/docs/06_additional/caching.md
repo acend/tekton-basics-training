@@ -146,7 +146,7 @@ Following example shows how to use a generic Task to store artifacts on our Gite
 
 First we are going to reuse the go build task from the previous lab. Create a new file called `lab061/build-task.yaml`
 
-{{< readfile file="src/matrix/task.yaml"  code="true" lang="yaml"  >}}
+{{< readfile file="src/caching/task.yaml"  code="true" lang="yaml"  >}}
 
 Use following command to create a new *TaskRun*
 
