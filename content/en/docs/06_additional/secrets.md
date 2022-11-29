@@ -11,20 +11,20 @@ In lab 3 we learned how to build a parametrized *Task*. In this first section of
 
 {{< readfile file="../03_first_pipeline/src/test-parameterized-task.yaml"  code="true" lang="yaml"   >}}
 
-Start with a new directory lab064 in your workspace directory.
+Start with a new directory `lab064` in your workspace directory.
 
 ```bash
 mkdir lab064
 ```
 
-Create a new file `lab064/task.yaml` with the content of the example above, and reference the secret as `name` parameter.
+Create a new file `lab064/task.yaml` with the content of the example below, and reference the secret as `name` parameter.
 
 {{< readfile file="src/secrets/task.yaml"  code="true" lang="yaml"  >}}
 
 Use following command to create the task in our cluster.
 
 ```bash
-{{% param cliToolName %}} apply -f lab064/task.yaml --namespace $USER 
+{{% param cliToolName %}} apply -f lab064/task.yaml --namespace $USER
 ```
 
 Next create the file `lab064/secret.yaml` which contains our secret.
@@ -34,14 +34,14 @@ Next create the file `lab064/secret.yaml` which contains our secret.
 And again, apply the file against our cluster.
 
 ```bash
-{{% param cliToolName %}} apply -f lab064/secret.yaml --namespace $USER 
+{{% param cliToolName %}} apply -f lab064/secret.yaml --namespace $USER
 ```
 
 Because we didn't specify any parameters for the task, we don't need to create a pipeline. We can easily trigger the task with the Tekton CLI.
 Just run the following command in your console.
 
 ```bash
-tkn task start secret-test --showlog --namespace $USER 
+tkn task start secret-test --showlog --namespace $USER
 ```
 
 After a while you should see the following output
@@ -56,6 +56,6 @@ Waiting for logs to be available...
 ## Task {{% param sectionnumber %}}.2: CleanUp
 
 ```bash
-{{% param cliToolName %}} delete -f lab064/task.yaml --namespace $USER 
-{{% param cliToolName %}} delete -f lab064/secret.yaml --namespace $USER 
+{{% param cliToolName %}} delete -f lab064/task.yaml --namespace $USER
+{{% param cliToolName %}} delete -f lab064/secret.yaml --namespace $USER
 ```

@@ -9,7 +9,7 @@ sectionnumber: 6.8
 
 In this short section we will show you how to implement a security scan for your built image. For this we are going to use the Aquasecurity Trivy scanner. Trivy is a simple and comprehensive scanner for vulnerabilities in container images.
 
-Start with a new directory lab068 in your workspace directory.
+Start with a new directory `lab068` in your workspace directory.
 
 ```bash
 mkdir lab068
@@ -22,13 +22,13 @@ Then create a new file called `lab068/task.yaml` with the following content
 Let's create the task resource first
 
 ```bash
-{{% param cliToolName %}} apply -f lab068/task.yaml --namespace $USER 
+{{% param cliToolName %}} apply -f lab068/task.yaml --namespace $USER
 ```
 
 
 ## {{% param sectionnumber %}}.2: Create Security Scan Pipeline
 
-Create a new *Pipeline* resource in `lab08/pipeline.yaml` which reference the task `trivy-scanner` from above.
+Create a new *Pipeline* resource in `lab068/pipeline.yaml` which reference the task `trivy-scanner` from above.
 Add one parameter to the pipeline.
 
 * `image`: Parameter which defines the image to be scanned by Trivy
@@ -41,10 +41,10 @@ Then add two parameters to the `trivy-scanner` task.
 
 {{< readfile file="src/security/pipeline.yaml"  code="true" lang="yaml"  >}}
 
-Next create the pipeline resource, use following command for this:
+Next create the pipeline resource, use the following command for this:
 
 ```bash
-{{% param cliToolName %}} apply -f lab068/pipeline.yaml --namespace $USER 
+{{% param cliToolName %}} apply -f lab068/pipeline.yaml --namespace $USER
 ```
 
 
@@ -62,13 +62,13 @@ Create a new file `lab068/pipelinerun.yaml` and define the **PipelineRun** to ha
 
 Create the *PipelineRun* resource
 ```bash
-{{% param cliToolName %}} apply -f lab068/pipelinerun.yaml --namespace $USER 
+{{% param cliToolName %}} apply -f lab068/pipelinerun.yaml --namespace $USER
 ```
 
-Check the *PipelineRun* log output with following command:
+Check the *PipelineRun* log output with the following command:
 
 ```bash
-tkn pipelinerun logs trivy-scanner-run --namespace $USER 
+tkn pipelinerun logs trivy-scanner-run --namespace $USER
 ```
 
 You should see the following output:
@@ -102,7 +102,7 @@ Clean up all `Task` and `Pipeline` resources created in this chapter:
 
 
 ```bash
-{{% param cliToolName %}} delete pipeline trivy-scanner-pipeline --namespace $USER 
-{{% param cliToolName %}} delete pipelinerun trivy-scanner-run --namespace $USER 
-{{% param cliToolName %}} delete task trivy-scanner --namespace $USER 
+{{% param cliToolName %}} delete pipeline trivy-scanner-pipeline --namespace $USER
+{{% param cliToolName %}} delete pipelinerun trivy-scanner-run --namespace $USER
+{{% param cliToolName %}} delete task trivy-scanner --namespace $USER
 ```

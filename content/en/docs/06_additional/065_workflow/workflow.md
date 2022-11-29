@@ -13,11 +13,17 @@ In this lab we are going to dive into the possibilities to control the flow of y
 
 ## {{% param sectionnumber %}}.1: Step sequence
 
-The classic imperative approach for pipelines is a sequence of steps. We usually tend to think imperative anyways, so this is very convenient. In this section we are going to work with the following default Java **Pipeline**:
+For starters create the new folder `lab065`:
+```bash
+mkdir lab065
+```
+
+The classic imperative approach for pipelines is a sequence of steps. We usually tend to think imperative anyways, so this is very convenient. In this section we are going to work with the following default Java **Pipeline**.
+For this copy the content below into `lab065/pipeline.yaml`.
 
 {{< readfile file="src/pipeline-1.yaml"  code="true" lang="yaml" >}}
 
-We can trigger the pipeline with the **PipelineRun**:
+We can trigger the pipeline with the **PipelineRun**. You can create it by copying the content below into `lab065/pipelinerun.yaml`.
 
 {{< readfile file="src/pipelinerun-1.yaml" code="true" lang="yaml" >}}
 
@@ -33,8 +39,8 @@ The defined **Pipeline** will clone the repository and afterwards build the appl
 Apply the *Pipeline* Resource and start the *Pipeline* with the *PipelineRun* resource. You can reuse the *PipelineRun* resource for all the upcoming examples.
 
 ```bash
-{{% param cliToolName %}} apply -f pipeline.yaml --namespace $USER
-{{% param cliToolName %}} apply -f pipelinerun.yaml --namespace $USER
+{{% param cliToolName %}} apply -f lab065/pipeline.yaml --namespace $USER
+{{% param cliToolName %}} create -f lab065/pipelinerun.yaml --namespace $USER
 ```
 
 

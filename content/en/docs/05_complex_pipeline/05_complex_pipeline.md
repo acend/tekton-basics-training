@@ -241,15 +241,15 @@ At last, create the **TriggerTemplate** bringing it all together to trigger the 
 Expose the service created by the **EventListener** and fire a HTTP request against the endpoint created!
 
 ```bash
-{{% param cliToolName %}} expose svc el-java-pipeline-listener --hostname="trigger-$USER.$APPDOMAIN" --namespace $USER 
+{{% param cliToolName %}} expose svc el-java-pipeline-listener --hostname="trigger-$USER.{{% param appDomain %}}" --namespace $USER
 ```
 
 ```bash
-curl -X POST -d '{ "repository": "https://github.com/acend/awesome-apps", "application": "java-quarkus", "image": "ttl.sh/$(uuidgen):1h", "context": "/workspace/source/java-quarkus", "dockerfile": "./Dockerfile" }' trigger-$USER.$APPDOMAIN
+curl -X POST -d '{ "repository": "https://github.com/acend/awesome-apps", "application": "java-quarkus", "image": "ttl.sh/$(cat /proc/sys/kernel/random/uuid):1h", "context": "/workspace/source/java-quarkus", "dockerfile": "./Dockerfile" }' trigger-$USER.{{% param appDomain %}}
 ```
 
 
-## Task {{% param sectionnumber %}}.5: Cleanup
+## Task {{% param sectionnumber %}}.8: Cleanup
 
 Remove all the resources created in this lab again:
 
