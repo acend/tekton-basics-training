@@ -170,6 +170,8 @@ Finally we can create our Pipeline called `lab061/pipeline.yaml` ressource which
 * `build-task` build the go binary
 * `upload` upload the binary to our Gitea server
 
+{{% alert title="Note" color="primary" %}}Make sure you replace `<username>` and `<password>` with your credentials!{{% /alert %}}
+
 All tasks are executed in sequence and share the same workspace
 
 {{< readfile file="src/caching/pipeline.yaml"  code="true" lang="yaml"  >}}
@@ -186,7 +188,7 @@ Create a new PipelineRun `lab061/pipelinerun.yaml` with following content:
 And apply the newly created file to the cluster with following command
 
 ```bash
-{{% param cliToolName %}} apply -f lab061/pipelinerun.yaml --namespace $USER
+{{% param cliToolName %}} create -f lab061/pipelinerun.yaml --namespace $USER
 ```
 
 Finally you can navigate in Gitea to the release page and check if the release was uploaded successfully.

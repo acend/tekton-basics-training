@@ -49,5 +49,7 @@ spec:
     workspaces:
     - name: source
       workspace: ws-1
+    runAfter:
+    - git-clone
   workspaces:
   - name: ws-1

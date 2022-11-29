@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: build-go-matrix
+  name: upload-go-build
   labels:
     ch.acend/lab: "tekton-basics"
 spec:
@@ -12,16 +12,6 @@ spec:
     - name: application
       description: Application subpath in repository
       default: go
-    - name: os
-      type: array
-      default:
-        - linux
-        - windows
-    - name: arch
-      type: array
-      default:
-        - amd64
-        - arm
   workspaces:
   - name: ws-1
   tasks:
