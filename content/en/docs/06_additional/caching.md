@@ -97,28 +97,28 @@ spec:
   taskSpec:
     steps:
     - name: write
-      image: ubuntu
+      image: registry.access.redhat.com/ubi7/ubi-minimal:7.8-366
       script: echo $(workspaces.custom.volume) > $(workspaces.custom.path)/foo
     - name: read
-      image: ubuntu
+      image: registry.access.redhat.com/ubi7/ubi-minimal:7.8-366
       script: cat $(workspaces.custom.path)/foo | grep $(workspaces.custom.volume)
     - name: write2
-      image: ubuntu
+      image: registry.access.redhat.com/ubi7/ubi-minimal:7.8-366
       script: echo $(workspaces.custom2.path) > $(workspaces.custom2.path)/foo
     - name: read2
-      image: ubuntu
+      image: registry.access.redhat.com/ubi7/ubi-minimal:7.8-366
       script: cat $(workspaces.custom2.path)/foo | grep $(workspaces.custom2.path)
     - name: write3
-      image: ubuntu
+      image: registry.access.redhat.com/ubi7/ubi-minimal:7.8-366
       script: echo $(workspaces.custom3.path) > $(workspaces.custom3.path)/foo
     - name: read3
-      image: ubuntu
+      image: registry.access.redhat.com/ubi7/ubi-minimal:7.8-366
       script: cat $(workspaces.custom3.path)/foo | grep $(workspaces.custom3.path)
     - name: readconfigmap
-      image: ubuntu
+      image: registry.access.redhat.com/ubi7/ubi-minimal:7.8-366
       script: cat $(workspaces.custom4.path)/my-message.txt | grep "hello world"
     - name: readsecret
-      image: ubuntu
+      image: registry.access.redhat.com/ubi7/ubi-minimal:7.8-366
       script: |
         #!/usr/bin/env bash
         set -xe
@@ -145,7 +145,7 @@ Following example shows how to use a generic Task to store artifacts on our Gite
 
 First we are going to reuse the go build task from the previous lab. Create a new file called `lab061/build-task.yaml`
 
-{{< readfile file="src/matrix/task.yaml"  code="true" lang="yaml"  >}}
+{{< readfile file="src/caching/task.yaml"  code="true" lang="yaml"  >}}
 
 Use following command to create a new *TaskRun*
 
