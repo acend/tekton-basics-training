@@ -67,7 +67,8 @@ tkn version
 which should result in something similar to
 
 ```
-Client version: 0.26.1
+Client version: 0.27.0
+Chains version: v0.9.0
 Pipeline version: v0.37.5
 Triggers version: v0.20.2
 Operator version: v0.60.1
