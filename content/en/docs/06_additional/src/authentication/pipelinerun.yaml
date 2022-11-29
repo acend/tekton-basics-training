@@ -16,5 +16,5 @@ spec:
   - emptyDir: {}
     name: ws-1
   params:
-  - name: repo-url
+  - name: repository
     value: ssh://1000820005@ssh.gitea.training.openshift.ch:2222/user5555/awesome-apps.git
