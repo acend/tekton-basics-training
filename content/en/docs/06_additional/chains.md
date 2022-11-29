@@ -8,7 +8,7 @@ sectionnumber: 6.7
 
 Tekton Chains allows you to manage your supply chain security when using Tekton as your CICD System. It basically observes all TaskRuns, takes a snapshot of them, signs them and stores them somewhere. It allows you to cryptographically prove what steps and commands, in what containers were executed, during a specific TaskRun.
 
-In addition to that Tekton Chains also supports signing the resulting OCI images.
+In addition to that, Tekton Chains also supports signing the resulting OCI images.
 
 Read the [documentation](https://tekton.dev/docs/chains/) for additional Information.
 
@@ -66,7 +66,7 @@ And do the same for the payload:
 tkn tr describe --last -o jsonpath="{.metadata.annotations.chains\.tekton\.dev/payload-taskrun-$TASKRUN_UID}" --namespace $USER | base64 -d > payload
 ```
 
-Explore the contents of both files
+Explore the contents of both files.
 
 
 ## {{% param sectionnumber %}}.3: Verify Signature
@@ -75,13 +75,13 @@ First need to install the cosign tool in your Webshell:
 
 ```bash
 wget "https://github.com/sigstore/cosign/releases/download/v1.6.0/cosign-linux-amd64"
-chmod +x cosign-linux-amd64 
+chmod +x cosign-linux-amd64
 mv cosign-linux-amd64 /usr/local/bin/cosign
 ```
 
 Then create a file with the name `cosign.pub`, containing the public Key provided by the Teacher.
 
-To verify the signature we can now simply execute the following command, where `signature` and `payload` are the two files containing the signature and payload of your TaksRun.
+To verify the signature we can now simply, execute the following command, where `signature` and `payload` are the two files containing the signature and payload of your TaksRun.
 
 ```bash
 cosign verify-blob --key cosign.pub --signature ./signature ./payload
