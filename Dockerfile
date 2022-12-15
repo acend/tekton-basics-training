@@ -6,6 +6,13 @@ COPY . /src
 
 RUN hugo --environment ${TRAINING_HUGO_ENV} --minify
 
+RUN apt-get update \
+    && apt-get install -y imagemagick
+
+RUN find /src/public/docs/ -regex '.*\(jpg\|jpeg\|png\|gif\)' -exec mogrify -path /src/public -resize 800\> -unsharp 0.25x0.25+8+0.065 "{}" \;
+RUN mkdir /src/public/img
+RUN find /src/public/docs/ -regex '.*\(jpg\|jpeg\|png\|gif\)' -exec mogrify -path /src/public/img -resize 800\> -unsharp 0.25x0.25+8+0.065 "{}" \;
+
 FROM ubuntu:jammy AS wkhtmltopdf
 RUN apt-get update \
     && apt-get install -y curl \
