@@ -11,8 +11,6 @@ acendTraining:
         tag: ""
         tagsuffix: ""
       ingress:
-        annotations: 
-          kubernetes.io/ingress.class: nginx-public
         secretOverride: acend-wildcard
         appname: tekton-basics
         domain: training.acend.ch
@@ -25,8 +23,6 @@ acendTraining:
         tag: ""
         tagsuffix: "-openshift"
       ingress:
-        annotations: 
-          kubernetes.io/ingress.class: nginx-public
         secretOverride: acend-wildcard
         appname: tekton-basics-openshift
         domain: training.acend.ch
