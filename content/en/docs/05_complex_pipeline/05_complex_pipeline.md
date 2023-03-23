@@ -181,7 +181,7 @@ This should list the service `el-java-pipeline-listener` created for you in your
 
 ## {{% param sectionnumber %}}.4: ServiceAccount and Role
 
-If you take a closer look at the object, you can see there is a **ServiceAccount** *tekton-trigger* defined in the EventListener above. Of course the cluster has to react to a certain event. To do that it needs to observe and even create some resources. For example the **PipelineRun** created from the event.
+If you take a closer look at the object, you can see there is a **ServiceAccount** *pipeline* defined in the EventListener above. Of course the cluster has to react to a certain event. To do that it needs to observe and even create some resources. For example the **PipelineRun** created from the event.
 
 We have a minimialistic ServiceAccount with Role and RoleBinding to enable you to cover all the default use cases. Just create a file `lab05/sa.yaml` with the following content:
 
@@ -196,7 +196,7 @@ The `ServiceAccount` and it's bindings will be defined and created by your instr
 ```bash
 NAME             SECRETS   AGE
 ...
-tekton-trigger   1         134m
+pipeline         1         134m
 ```
 
 If they are not created in your namespace, talk to the instructors.
