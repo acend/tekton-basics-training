@@ -17,4 +17,4 @@ spec:
     name: ws-1
   params:
   - name: repository
-    value: ssh://1000820005@ssh.gitea.training.openshift.ch:2222/user5555/awesome-apps.git
+    value: ssh://1000820005@ssh.gitea.apps.training.openshift.ch:2222/user5555/awesome-apps.git

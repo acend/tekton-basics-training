@@ -222,7 +222,7 @@ And apply the newly created file to the cluster with the following command
 ```
 
 Finally you can navigate in Gitea to the release page and check if the release was uploaded successfully.
-You can check with following URL `https://gitea.training.openshift.ch/<username>/-/packages`. Just replace the `<username>` with your user.
+You can check with following URL `https://gitea.apps.training.openshift.ch/<username>/-/packages`. Just replace the `<username>` with your user.
 
 
 ## Task {{% param sectionnumber %}}.3: Cleanup
