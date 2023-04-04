@@ -2,6 +2,6 @@
 enabledModule = "base openshift"
 distroName = "OpenShift"
 cliToolName = "oc"
-appDomain = "training.openshift.ch"
-webConsoleURL = "https://console.training.openshift.ch/"
+appDomain = "apps.training.openshift.ch"
+webConsoleURL = "https://console.apps.training.openshift.ch/"
 giteaUrl = "gitea.apps.training.openshift.ch"
