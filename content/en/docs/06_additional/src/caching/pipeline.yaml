@@ -44,7 +44,7 @@ spec:
         - name: file
           value: go/awesome-go
         - name: giteaUrl
-          value: 'https://gitea.training.openshift.ch'
+          value: 'https://gitea.apps.training.openshift.ch'
         - name: username
           value: <username>
         - name: password

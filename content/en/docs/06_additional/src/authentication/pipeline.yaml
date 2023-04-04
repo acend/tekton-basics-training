@@ -8,7 +8,7 @@ spec:
   params:
     - name: repository
       description: Repository to checkout
-      default: ssh://1000820005@ssh.gitea.training.openshift.ch/user5555/awesome-apps.git
+      default: ssh://1000820005@ssh.gitea.apps.training.openshift.ch/user5555/awesome-apps.git
   workspaces:
   - name: ws-1
   tasks:
