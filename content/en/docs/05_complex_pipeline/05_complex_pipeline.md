@@ -183,7 +183,7 @@ This should list the service `el-java-pipeline-listener` created for you in your
 
 If you take a closer look at the object, you can see there is a **ServiceAccount** *pipeline* defined in the EventListener above. Of course the cluster has to react to a certain event. To do that it needs to observe and even create some resources. For example the **PipelineRun** created from the event.
 
-We have a minimialistic ServiceAccount with Role and RoleBinding to enable you to cover all the default use cases. Just create a file `lab05/sa.yaml` with the following content:
+We have a minimialistic ServiceAccount with Role and RoleBinding to enable you to cover all the default use cases.
 
 {{< readfile file="src/sa.yaml" code="true" lang="yaml" >}}
 
@@ -221,7 +221,7 @@ If you don't remember how the **TriggerBinding** should look like, take a look a
 {{< readfile file="src/triggerbinding.yaml" code="true" lang="yaml" >}}
 
 ```bash
-{{% param cliToolName %}} create -f triggerbinding.yaml --namespace $USER 
+{{% param cliToolName %}} apply -f lab05/triggerbinding.yaml --namespace $USER 
 ```
 
 
@@ -232,7 +232,7 @@ At last, create the **TriggerTemplate** bringing it all together to trigger the 
 {{< readfile file="src/triggertemplate.yaml" code="true" lang="yaml" >}}
 
 ```bash
-{{% param cliToolName %}} create -f triggertemplate.yaml --namespace $USER 
+{{% param cliToolName %}} apply -f lab05/triggertemplate.yaml --namespace $USER 
 ```
 
 
