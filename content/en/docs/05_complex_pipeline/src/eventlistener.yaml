@@ -5,7 +5,7 @@ metadata:
     ch.acend/lab: "tekton-basics"
   name: java-pipeline-listener
 spec:
-  serviceAccountName: tekton-trigger
+  serviceAccountName: pipeline
   triggers:
     - bindings:
       - ref: java-pipeline-pipelinebinding
