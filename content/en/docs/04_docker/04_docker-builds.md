@@ -187,7 +187,7 @@ We have now a pipeline with a task that clones a git repository to our workspace
 The buildah task is available as Cluster Task:
 
 ```bash
-{{% param cliToolName %}} get clustertask buildah --namespace $USER
+{{% param cliToolName %}} get clustertask buildah
 ```
 
 Use the predefined *buildah* ClusterTask to enhance your pipeline to build and push a docker image. Add the task to your already defined pipeline *build-go*.
