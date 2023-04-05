@@ -54,7 +54,7 @@ Your task as the new CI officer is to implement the first step of your pipeline 
 Let's check if the task is already defined and available in either the cluster or your namespace:
 
 ```bash
-{{% param cliToolName %}} get clustertask git-clone --namespace $USER 
+{{% param cliToolName %}} get clustertask git-clone 
 ```
 
 The git-clone task is available as clustertask.
@@ -187,7 +187,7 @@ We have now a pipeline with a task that clones a git repository to our workspace
 The buildah task is available as Cluster Task:
 
 ```bash
-{{% param cliToolName %}} get clustertask buildah --namespace $USER
+{{% param cliToolName %}} get clustertask buildah
 ```
 
 Use the predefined *buildah* ClusterTask to enhance your pipeline to build and push a docker image. Add the task to your already defined pipeline *build-go*.
