@@ -200,7 +200,7 @@ Finally we can create our Pipeline called `lab061/pipeline.yaml` resource which 
 * `build-task` build the go binary
 * `upload` upload the binary to our Gitea server
 
-{{% alert title="Note" color="primary" %}}Make sure you replace `<username>` and `<password>` with your credentials!{{% /alert %}}
+{{% alert title="Note" color="info" %}}Make sure you replace `<username>` and `<password>` with your credentials!{{% /alert %}}
 
 All tasks are executed in sequence and share the same workspace
 

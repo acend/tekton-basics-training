@@ -124,7 +124,7 @@ First create a new file for the pipeline `pipeline.yaml` with a simple Git clone
 
 Next create the file for the pipeline run `pipelinerun.yaml`.
 
-{{% alert title="Note" color="primary" %}}Make sure you replace the `repo-url` with the corresponding URL from your Gitea{{% /alert %}}
+{{% alert title="Note" color="info" %}}Make sure you replace the `repo-url` with the corresponding URL from your Gitea{{% /alert %}}
 
 {{< readfile file="src/authentication/pipelinerun.yaml"  code="true" lang="yaml" >}}
 
