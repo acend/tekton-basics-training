@@ -11,9 +11,9 @@ The first thing we're going to do is to explore our lab environment and get in t
 
 The namespace with the name corresponding to your username is going to be used for all the hands-on labs. And you will be using the `{{% param cliToolName %}} tool` or the OpenShift webconsole.
 
-{{% alert title="Note" color="primary" %}}You can also use your local installation of the cli tools. Make sure you completed [the setup](../../setup/) before you continue with this lab.{{% /alert %}}
+{{% alert title="Note" color="info" %}}You can also use your local installation of the cli tools. Make sure you completed [the setup](../../setup/) before you continue with this lab.{{% /alert %}}
 
-{{% alert title="Note" color="primary" %}}The URL and Credentials to the Web IDE will provided by the teacher. Use Chrome for the best experience.{{% /alert %}}
+{{% alert title="Note" color="info" %}}The URL and Credentials to the Web IDE will provided by the teacher. Use Chrome for the best experience.{{% /alert %}}
 
 
 Once you're successfully logged into the web IDE open a new Terminal by hitting `CTRL + SHIFT + ¨` or clicking the Menu button --> Terminal --> new Terminal and check the installed {{% param cliToolName %}}version by executing the following command:
@@ -146,7 +146,7 @@ Use "tkn [command] --help" for more information about a command.
 
 ### Task {{% param sectionnumber %}}.1: Autocompletion
 
-{{% alert title="Note" color="primary" %}}This step is only needed, when you're **not** working with the Web IDE we've provided. The autocompletion is already installed in the Web IDE{{% /alert %}}
+{{% alert title="Note" color="info" %}}This step is only needed, when you're **not** working with the Web IDE we've provided. The autocompletion is already installed in the Web IDE{{% /alert %}}
 
 If you are using the Tekton CLI on Linux or Mac OS X you can enable the autocompletion feature. With autocompletion it's even easier to learn the commands, subcommands and their flags. Last but not least it improves the productivity while using Tekton.
 

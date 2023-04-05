@@ -177,7 +177,7 @@ tkn pipeline start build-go \
     --namespace $USER
 ```
 
-{{% alert title="Note" color="primary" %}}We configure the workspace as an emptyDir for test purposes and to show how to configure pipelineruns via CLI. You will learn about pipelineruns soon.{{% /alert %}}
+{{% alert title="Note" color="info" %}}We configure the workspace as an emptyDir for test purposes and to show how to configure pipelineruns via CLI. You will learn about pipelineruns soon.{{% /alert %}}
 
 
 ## Task {{% param sectionnumber %}}.6: Create the docker image

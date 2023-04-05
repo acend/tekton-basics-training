@@ -65,7 +65,7 @@ Use the following command to get a list of subcommands the task command provides
 tkn task --help --namespace $USER 
 ```
 
-{{% alert title="Note" color="primary" %}}Again always make sure to specify the namespace you're working in explicitly by passing the `--namespace, -n` parameter{{% /alert %}}
+{{% alert title="Note" color="info" %}}Again always make sure to specify the namespace you're working in explicitly by passing the `--namespace, -n` parameter{{% /alert %}}
 
 
 ## Task {{% param sectionnumber %}}.2: Run your first Task
@@ -266,7 +266,7 @@ tkn task start test-param -p name=acend --namespace $USER
 Check the logs for verification.
 
 
-{{% alert title="Note" color="primary" %}}Instead of passing the explicit `taskrun` to the `logs` command, just leave the taskrun out, which allows you to choose the taskrun with your arrow keys
+{{% alert title="Note" color="info" %}}Instead of passing the explicit `taskrun` to the `logs` command, just leave the taskrun out, which allows you to choose the taskrun with your arrow keys
 
 ```bash
 tkn taskrun logs -f --namespace $USER

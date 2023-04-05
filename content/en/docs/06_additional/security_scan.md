@@ -73,7 +73,7 @@ tkn pipelinerun logs trivy-scanner-run --namespace $USER
 
 You should see the following output:
 
-{{% alert title="Note" color="primary" %}}It can happen that the pipeline fails because Trivy finds an unfixed CVE in the scanned image.{{% /alert %}}
+{{% alert title="Note" color="info" %}}It can happen that the pipeline fails because Trivy finds an unfixed CVE in the scanned image.{{% /alert %}}
 
 ```bash
 Running trivy task with command below
