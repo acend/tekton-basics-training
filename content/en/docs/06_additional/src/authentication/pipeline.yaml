@@ -21,3 +21,4 @@ spec:
         value: $(params.repository)
       taskRef:
         name: git-clone
+        kind: ClusterTask
