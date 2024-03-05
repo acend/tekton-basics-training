@@ -57,7 +57,7 @@ jobs:
             quay.io/acend/tekton-basics-training:latest-openshift
       - 
         name: 'Install Helm'
-        uses: azure/setup-helm@v3
+        uses: azure/setup-helm@v4
         with:
           version: v3.6.2
       -
