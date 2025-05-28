@@ -30,7 +30,7 @@ RUN wkhtmltopdf --enable-internal-links --enable-local-file-access \
     --header-html /pdf/header/index.html --footer-html /pdf/footer/index.html \
     /pdf/index.html /pdf.pdf
 
-FROM nginxinc/nginx-unprivileged:1.27-alpine
+FROM nginxinc/nginx-unprivileged:1.28-alpine
 
 LABEL maintainer acend.ch
 LABEL org.opencontainers.image.title "acend.ch's Tekton Basics Training"
